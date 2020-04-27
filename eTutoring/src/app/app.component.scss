@@ -1,0 +1,11 @@
+.screen{
+  display: grid;
+  grid-template-columns: 240px auto;
+
+  .sidebar{
+    grid-column: 1/2;
+  }
+  .dashboard{
+    grid-column: 2/3;
+  }
+}
