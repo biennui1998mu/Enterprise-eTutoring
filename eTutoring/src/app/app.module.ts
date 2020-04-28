@@ -11,6 +11,11 @@ import {MatExpansionModule} from '@angular/material/expansion';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatButtonModule} from '@angular/material/button';
+import { MeetingComponent } from './meeting/meeting.component';
+import {MatDialogModule} from '@angular/material/dialog';
+import {MatInputModule} from '@angular/material/input';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
 
 @NgModule({
   declarations: [
@@ -18,7 +23,8 @@ import {MatButtonModule} from '@angular/material/button';
     LoginComponent,
     DashboardComponent,
     SidebarComponent,
-    ClassComponent
+    ClassComponent,
+    MeetingComponent
   ],
   imports: [
     BrowserModule,
@@ -26,7 +32,11 @@ import {MatButtonModule} from '@angular/material/button';
     BrowserAnimationsModule,
     MatExpansionModule,
     MatFormFieldModule,
-    MatButtonModule
+    MatButtonModule,
+    MatDialogModule,
+    MatInputModule,
+    MatDatepickerModule,
+    MatNativeDateModule
   ],
   providers: [],
   bootstrap: [AppComponent]

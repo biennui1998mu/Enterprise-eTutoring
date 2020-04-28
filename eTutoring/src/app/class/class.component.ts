@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import {MeetingComponent} from '../meeting/meeting.component';
+import {MatDialog} from '@angular/material/dialog';
 
 @Component({
   selector: 'app-class',
@@ -7,9 +9,18 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ClassComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    public dialog: MatDialog
+  ) { }
 
   ngOnInit(): void {
+  }
+
+  createMeetingDialog(): void{
+    this.dialog.open(MeetingComponent, {
+      width: '350px',
+      height: '350px'
+    });
   }
 
 }

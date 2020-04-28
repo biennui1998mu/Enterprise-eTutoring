@@ -1,23 +1,25 @@
 <div class="container">
   <div class="leftBar">
     <div class="info">
-      <img class="img" src="https://lh3.googleusercontent.com/proxy/3uvg9rKIa3kQEvIEHLfRWI2oAE9lcYI2YJj_8QMv8znShtwf2bjApcUNHsKMVytt2W3eSKbDqZg2XLfotntPIMCxnkBNgzT9xeH1MJA3xaf60TvMoMQHf3FOi9DdM-a-vAY" alt="">
+      <img alt=""
+           class="img"
+           src="https://lh3.googleusercontent.com/proxy/3uvg9rKIa3kQEvIEHLfRWI2oAE9lcYI2YJj_8QMv8znShtwf2bjApcUNHsKMVytt2W3eSKbDqZg2XLfotntPIMCxnkBNgzT9xeH1MJA3xaf60TvMoMQHf3FOi9DdM-a-vAY">
       <p class="className">Son Lonely</p>
       <p class="user">sonndhgch16367@fpt.edu.vn</p>
     </div>
-    <button mat-raised-button class="button-custom">Dashboard</button>
+    <button class="button-custom" mat-raised-button>Dashboard</button>
     <div class="border-top">
-      <button mat-raised-button class="class">
+      <button class="class" mat-raised-button>
         <p class="className">Class: Enterprise</p>
         <p class="user tutor">Tutor: Lai Manh Dung</p>
         <p class="user student">Student: Son Lonely</p>
       </button>
-      <button mat-raised-button class="class">
+      <button class="class" mat-raised-button>
         <p class="className">Class: Enterprise</p>
         <p class="user tutor">Tutor: Lai Manh Dung</p>
         <p class="user student">Student: Son Lonely</p>
       </button>
-      <button mat-raised-button class="class">
+      <button class="class" mat-raised-button>
         <p class="className">Class: Enterprise</p>
         <p class="user tutor">Tutor: Lai Manh Dung</p>
         <p class="user student">Student: Son Lonely</p>
@@ -55,7 +57,17 @@
               Control meeting
             </mat-panel-description>
           </mat-expansion-panel-header>
-          <button mat-raised-button color="accent">Create</button>
+          <button (click)="createMeetingDialog()" color="accent" mat-raised-button>Create</button>
+          <div class="meetingList">
+            <div class="aMeet">
+              <p>Meeting to learn about using the scrum model with 2 people</p>
+              <p class="meeting-date">31-2-2021</p>
+            </div>
+            <div class="aMeet">
+              <p>Cà phê cà pháo</p>
+              <p class="meeting-date">1-4-2021</p>
+            </div>
+          </div>
         </mat-expansion-panel>
 
         <mat-expansion-panel>

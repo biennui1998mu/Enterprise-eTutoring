@@ -14,8 +14,8 @@ router.post('/', (req, res) => {
                         _id: meeting._id,
                         title: meeting.title,
                         classId: meeting.classId,
-                        startDate: meeting.startDate,
-                        endDate: meeting.endDate,
+                        address: meeting.address,
+                        date: meeting.date,
                         description: meeting.description
                     }
                 })
@@ -59,9 +59,9 @@ router.post('/create', (req, res) => {
     const meeting = new Meeting({
         title: req.body.title,
         classId: req.body.classId,
+        address: req.body.address,
         description: req.body.description,
-        startDate: Date.now(),
-        endDate: req.body.endDate
+        date: req.body.date
     });
     meeting.save()
         .then(result => {
@@ -69,9 +69,9 @@ router.post('/create', (req, res) => {
             return res.status(200).json({
                 title: result.title,
                 classId: result.classId,
+                address: result.address,
                 description: result.description,
-                startDate: result.startDate,
-                endDate: result.endDate
+                date: result.date
             });
         })
         .catch(err => {

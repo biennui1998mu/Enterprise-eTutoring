@@ -12,8 +12,8 @@ const meeting = new Schema({
         type: String,
         required: true
     },
-    startDate: Date,
-    endDate: Date,
+    address: String,
+    date: Date,
     description: String
 });
 
