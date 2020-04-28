@@ -5,7 +5,6 @@ const multer = require('multer');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const checkAuth = require('../middleware/check-auth');
-const friendRequest = require('../database/models/friendRequest');
 const User = require('../database/models/user');
 
 const storage = multer.diskStorage({
@@ -36,7 +35,7 @@ const upload = multer({
 
 // take all user from list user
 router.post('/', (req, res, next) => {
-    User.find({})
+    User.find()
         .exec()
         .then(users => {
             if (users.length >= 1) {
@@ -46,12 +45,12 @@ router.post('/', (req, res, next) => {
                         return {
                             _id: user._id,
                             username: user.username,
-                            password: user.password,
                             name: user.name,
-                            dob: user.dob,
-                            avatar: user.avatar,
-                            status: user.status,
-                            level: user.level
+                            level: user.level,
+                            createdAt: user.createdAt,
+                            updatedAt: user.updatedAt,
+                            activeAt: user.activeAt,
+                            avatar: user.avatar
                         }
                     })
                 };
@@ -76,9 +75,6 @@ router.post('/', (req, res, next) => {
 router.post('/view', checkAuth, (req, res, next) => {
     const id = req.userData.userId;
 
-    if (!id) {
-        // ... xu ly validate
-    }
     User.findById(id)
         .exec()
         .then(user => {
@@ -98,90 +94,23 @@ router.post('/view', checkAuth, (req, res, next) => {
         })
 });
 
-// search friend
-router.post('/friend', checkAuth, (req, res) => {
-    const friendId = req.body.friendId;
-
-    if (!friendId) {
-        // ... xu ly validate
-    }
-    User.findById(friendId)
-        .exec()
-        .then(user => {
-            if (user) {
-                return res.status(200).json(user)
-            } else {
-                return res.status(404).json({
-                    message: 'No friend found by id'
-                })
-            }
-        })
-        .catch(err => {
-            console.log(err);
-            return res.status(500).json({
-                error: err
-            })
-        })
-});
-
 // Search user by username or name
 router.post('/search', checkAuth, async (req, res) => {
     const input = req.body.input;
 
     try {
         const users = await User.find({
-            $and: [
-                {
-                    $or: [
-                        {username: new RegExp(input)},
-                        {name: new RegExp(input)}
-                    ]
-                },
-                {
-                    _id: {$ne: req.userData.userId} // not to get yourself :D
-                }
+            $or: [
+                {username: new RegExp(input)},
+                {name: new RegExp(input)}
             ]
         }).limit(10).exec();
 
         if (!users || users.length === 0) {
             return res.json([]);
         }
-        // parse to object for ease in use
-        const parsed = users.map(function (model) {
-            return model.toObject();
-        });
 
-        // get friend request to you that associated with found users
-        const getFriendRequest = await friendRequest.find({
-            $or: [
-                {
-                    requester: req.userData.userId,
-                    recipient: {$in: parsed.map(user => user._id)}
-                },
-                {
-                    recipient: req.userData.userId,
-                    requester: {$in: parsed.map(user => user._id)}
-                },
-            ]
-        }).exec();
-        // parse to object for ease in use
-        const requestWithMe = getFriendRequest.map(function (model) {
-            return model.toObject();
-        });
-
-        // Manually add custom friendRequest field to the return users model.
-        const finalReturn = parsed.map(user => {
-            const friendRequest = requestWithMe.find(request => {
-                return request.requester.toString() === user._id.toString() ||
-                    request.recipient.toString() === user._id.toString()
-            });
-
-            if (friendRequest) {
-                user.friendRequest = friendRequest;
-            }
-            return user;
-        });
-        return res.json(finalReturn);
+        return res.json(users);
     } catch (e) {
         console.log(e);
         return res.status(500).json([]);
@@ -211,24 +140,24 @@ router.post('/signUp', upload.single('avatar'), (req, res, next) => {
                             username: req.body.username,
                             password: hash,
                             name: req.body.name,
-                            dob: req.body.dob,
-                            Status: 2,
-                            level: user.level,
+                            level: req.body.level,
+                            createdAt: Date.now(),
+                            updatedAt: Date.now(),
+                            activeAt: Date.now(),
                             avatar: url + "uploads/sample.png"
                         });
                         user.save()
                             .then(result => {
                                 res.status(201).json({
-                                    message: 'Created account successfully',
-                                    createdUser: {
-                                        _id: result._id,
-                                        username: result.username,
-                                        password: result.password,
-                                        name: result.name,
-                                        dob: result.dob,
-                                        Status: result.Status,
-                                        avatar: result.avatar
-                                    }
+                                    _id: result._id,
+                                    username: result.username,
+                                    password: result.password,
+                                    name: result.name,
+                                    level: result.level,
+                                    createdAt: result.createdAt,
+                                    updatedAt: result.updatedAt,
+                                    activeAt: result.activeAt,
+                                    avatar: result.avatar
                                 })
                             })
                             .catch(err => {

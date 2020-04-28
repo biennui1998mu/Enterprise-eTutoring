@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
 
-const  userSchema = new Schema({
+const userSchema = new Schema({
     _id : mongoose.Schema.Types.ObjectId,
     username : {
         type: String,
@@ -14,10 +14,11 @@ const  userSchema = new Schema({
         select: false // loai field password ra khoi tat ca cac query default.
     },
     name : {type: String, required: true},
-    dob : {type: Date, required: true},
-    status: Number,
     level: Number,
-    avatar : String
+    createdAt: Date,
+    updatedAt: Date,
+    activeAt: Date,
+    avatar: String
 });
 
-module.exports = mongoose.model('User' ,userSchema);
+module.exports = mongoose.model('User', userSchema);

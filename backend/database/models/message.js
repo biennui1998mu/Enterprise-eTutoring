@@ -1,12 +1,25 @@
 const mongoose = require('mongoose');
+
 const Schema = mongoose.Schema;
 
-const chatSchema = new Schema({
+const message = new Schema({
     _id: mongoose.Schema.Types.ObjectId,
-    roomId: {type: mongoose.Schema.Types.ObjectId, ref: 'Room'},
-    message: String,
-    from: {type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true},
-    createdAt: {type: Date, default: Date.now}
+    classId: {
+        type: String,
+        required: true,
+        ref: 'Class'
+    },
+    // link with userId
+    byUser: {
+        type: String,
+        required: true,
+        ref: 'User'
+    },
+    createdAt: Date,
+    file: {
+        type: String,
+        ref: 'File'
+    }
 });
 
-module.exports = mongoose.model('Chat', chatSchema);
+module.exports = mongoose.model('Message', message);
