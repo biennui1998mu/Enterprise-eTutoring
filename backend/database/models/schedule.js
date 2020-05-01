@@ -1,9 +1,9 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const Schema = mongoose.Schema;
 
-const meeting = new Schema({
-    _id: mongoose.Schema.Types.ObjectId,
+const scheduleSchema = new Schema({
+    _id : mongoose.Schema.Types.ObjectId,
     title: {
         type: String,
         required: true
@@ -11,33 +11,33 @@ const meeting = new Schema({
     description: {
         type: String
     },
-    /**
-     * user create meeting
-     */
     createdBy: {
         type: String,
         required: true,
         ref: 'User'
     },
-    /**
-     * from classroom
-     */
     classroom: {
         type: String,
         required: true,
         ref: 'Class'
     },
     /**
-     * address meeting
+     * list of date that classroom
      */
-    address: {
-        type: String,
+    listDate: [{
+        type: Date,
+    }],
+    /**
+     * classroom start at
+     */
+    startAt: {
+        type: Date,
         required: true
     },
     /**
-     * time meeting
+     * classroom end at
      */
-    time: {
+    endAt: {
         type: Date,
         required: true
     },
@@ -46,8 +46,8 @@ const meeting = new Schema({
         default: Date.now
     },
     updatedAt: {
-        type: Date
+        type: Date,
     }
 });
 
-module.exports = mongoose.model('Meeting', meeting);
+module.exports = mongoose.model('Schedule', scheduleSchema);

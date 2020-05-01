@@ -4,18 +4,24 @@ const Schema = mongoose.Schema;
 
 const message = new Schema({
     _id: mongoose.Schema.Types.ObjectId,
-    classId: {
+    classroom: {
         type: String,
         required: true,
         ref: 'Class'
     },
-    // link with userId
     byUser: {
         type: String,
         required: true,
         ref: 'User'
     },
-    createdAt: Date,
+    createdAt: {
+        type: Date,
+        default: Date.now
+    },
+    quote: {
+        type: String,
+        ref: 'Message'
+    },
     file: {
         type: String,
         ref: 'File'

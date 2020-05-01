@@ -2,79 +2,74 @@ const express = require('express');
 const router = express.Router();
 const checkAuth = require('../middleware/check-auth');
 const Message = require('../database/models/message');
+const Classroom = require('../database/models/classroom');
+const User = require('../database/models/user');
 
-// take all message from class
+/**
+ * take all message from a classroom in database
+ */
 router.post('/', (req, res) => {
-    Message.find({classId: req.body.classId})
+    Message.find({
+        classroom: req.body.classId
+    })
         .exec()
-        .then( meeting => {
-            const response = {
-                count: meeting.length,
-                users: meeting.map(user => {
-                    return {
-                        _id: meeting._id,
-                        title: meeting.title,
-                        classId: meeting.classId,
-                        startDate: meeting.startDate,
-                        endDate: meeting.endDate,
-                        description: meeting.description
-                    }
-                })
-            };
-            res.status(200).json(response)
+        .then( messages => {
+            return res.json({
+                message: 'classroom\'s message',
+                data: messages
+            })
         })
         .catch(err => {
-            console.log(err);
-            res.status(500).json({
-                message: 'No meeting found',
+            return res.status(500).json({
+                message: 'SKY FALL',
                 error: err,
             })
         })
 });
 
-// Create message
-router.post('/create', checkAuth, (req, res) => {
+/**
+ * Create message
+ */
+router.post('/create', checkAuth, async (req, res) => {
+    const {classroom, byUser, quote, file} = req.body;
+
+    let classroomExist = await Classroom.findOne({
+        _id: classroom
+    })
+    if(!classroomExist || !classroom || typeof classroom !== 'string' || classroom.length === 0){
+        return res.json({
+            message: 'Classroom is not valid'
+        })
+    }
+
+    let userExist = await User.findOne({
+        _id: byUser
+    })
+    if(!userExist || !byUser || typeof byUser !== 'string' || byUser.length === 0){
+        return res.json({
+            message: 'User is not valid'
+        })
+    }
+
     const message = new Message({
-        classId: req.body.classId,
-        byUser: req.userData.userId,
-        description: req.body.description,
-        createdAt: Date.now(),
-        file: req.body.file
+        classroom,
+        byUser,
+        quote,
+        file
     });
+
     message.save()
         .then(result => {
-            console.log(result);
-            return res.status(200).json({
-                classId: result.classId,
-                byUser: result.byUser,
-                description: result.description,
-                createdAt: result.createdAt,
-                file: result.file
+            return res.json({
+                message: 'message created!',
+                data: result
             });
         })
         .catch(err => {
-            console.log(err);
-            res.status(500).json({
+            return res.status(500).json({
+                message: 'SKY FALL',
                 error: err
             });
-        });
-});
-
-// Delete meeting
-router.post('/delete/:messageId', (req, res) => {
-    const id = req.params.messageId;
-    Message.remove({_id: id})
-        .exec()
-        .then(result => {
-            res.status(200).json({
-                message: 'message was deleted',
-            });
-        })
-        .catch(err => {
-            console.log(err);
-            res.status(500).json({
-                Error: err,
-            })
         });
 });
 
