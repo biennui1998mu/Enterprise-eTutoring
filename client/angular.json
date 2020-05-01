@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "eTutoring": {
+    "client": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -127,5 +127,8 @@
       }
     }
   },
-  "defaultProject": "eTutoring"
+  "defaultProject": "client",
+  "cli": {
+    "analytics": false
+  }
 }
