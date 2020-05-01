@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ClassDiscussionComponent } from './class-discussion.component';
+import { FileIconComponent } from './file-icon.component';
 
-describe('ClassDiscussionComponent', () => {
-  let component: ClassDiscussionComponent;
-  let fixture: ComponentFixture<ClassDiscussionComponent>;
+describe('FileIconComponent', () => {
+  let component: FileIconComponent;
+  let fixture: ComponentFixture<FileIconComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ClassDiscussionComponent ]
+      declarations: [ FileIconComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ClassDiscussionComponent);
+    fixture = TestBed.createComponent(FileIconComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

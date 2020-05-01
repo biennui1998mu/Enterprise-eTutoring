@@ -1,0 +1,27 @@
+:host {
+  display: grid;
+  grid-template-areas: 'search' 'files';
+  grid-template-columns: 1fr;
+  grid-template-rows: max-content 400px;
+  grid-gap: 1rem;
+
+  .search-form {
+    grid-area: search;
+  }
+
+  .file-list {
+    grid-area: files;
+  }
+}
+
+.search-form {
+  .form-control {
+    font-size: 14px;
+  }
+}
+
+.file-list {
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 1rem;
+  overflow: auto;
+}

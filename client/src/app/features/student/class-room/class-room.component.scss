@@ -1,9 +1,9 @@
 :host {
-  height: inherit;
+  height: 100%;
   display: grid;
   grid-template-areas: 'top right' 'router right';
   grid-template-columns: auto 300px;
-  grid-template-rows: 113px auto;
+  grid-template-rows: 81px auto;
 
   .top-bar {
     grid-area: top;
@@ -40,4 +40,5 @@
 
 .right-bar {
   border-left: solid 1px rgba(0, 0, 0, .12);
+  z-index: 10;
 }
