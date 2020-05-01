@@ -1,0 +1,30 @@
+:host {
+  display: grid;
+  grid-template-areas: 'search' 'schedule';
+  grid-template-columns: 1fr;
+  grid-template-rows: max-content 400px;
+  grid-gap: 1rem;
+
+  .search-form {
+    grid-area: search;
+  }
+
+  .schedules-list {
+    grid-area: schedule;
+  }
+}
+
+.search-form {
+  .form-control {
+    font-size: 14px;
+  }
+}
+
+.schedules-list {
+  overflow: auto;
+
+  > * {
+    margin-bottom: 1rem;
+  }
+}
+
