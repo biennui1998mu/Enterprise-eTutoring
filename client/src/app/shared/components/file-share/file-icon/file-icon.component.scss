@@ -38,4 +38,16 @@
       }
     }
   }
+
+  &:hover .delete-indicator {
+    display: grid !important;
+  }
+}
+
+.delete-indicator {
+  width: 24px;
+  height: 24px;
+  margin-top: 0.25rem;
+  margin-right: 0.25rem;
+  z-index: 20;
 }

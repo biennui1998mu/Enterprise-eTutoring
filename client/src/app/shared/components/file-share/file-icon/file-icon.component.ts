@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 @Component({
   selector: 'app-file-icon',
@@ -22,10 +22,20 @@ export class FileIconComponent implements OnInit {
   @Input()
   source: string;
 
+  @Input()
+  isAbleDelete: boolean;
+
+  @Output()
+  fileIsDelete: EventEmitter<boolean> = new EventEmitter();
+
   constructor() {
   }
 
   ngOnInit(): void {
+  }
+
+  notifyDelete() {
+    this.fileIsDelete.emit(true);
   }
 
 }

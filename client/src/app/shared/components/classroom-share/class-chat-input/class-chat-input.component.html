@@ -1,3 +1,9 @@
+<div class="p1 flex ofx-auto file-list">
+  <app-file-icon [isAbleDelete]="true"></app-file-icon>
+  <app-file-icon [isAbleDelete]="true"></app-file-icon>
+  <app-file-icon [isAbleDelete]="true"></app-file-icon>
+</div>
+
 <div class="wrapper-input">
   <div #chatInput
        (keydown.enter)="sendChatMessage()"
@@ -10,16 +16,20 @@
     start the conversation...
   </span>
 </div>
+
 <div (click)="sendChatMessage()"
-     class="grid place-item-center br50 p05 cursor-pointer user-select-none send-btn"
+     class="grid place-item-center br50 p05 cursor-pointer user-select-none enter-btn chat-btn"
      matRipple
      matTooltip="Send message">
   <mat-icon>send</mat-icon>
 </div>
 
-<div (click)="sendChatMessage()"
-     class="grid place-item-center br50 p05 cursor-pointer user-select-none send-btn"
-     matRipple
-     matTooltip="Send file">
+<label class="grid place-item-center br50 p05 cursor-pointer user-select-none file-upload chat-btn"
+       matRipple
+       matTooltip="Send file">
+  <input #inputFile
+         (change)="fileUpload($event)"
+         hidden
+         type="file">
   <mat-icon>cloud_upload</mat-icon>
-</div>
+</label>

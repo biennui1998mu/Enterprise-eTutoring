@@ -1,0 +1,30 @@
+:host {
+  display: grid;
+  grid-template-areas: 'search' 'meetings';
+  grid-template-columns: 1fr;
+  grid-template-rows: max-content 400px;
+  grid-gap: 1rem;
+
+  .search-form {
+    grid-area: search;
+  }
+
+  .meetings-list {
+    grid-area: meetings;
+  }
+}
+
+.search-form {
+  .form-control {
+    font-size: 14px;
+  }
+}
+
+.meetings-list {
+  overflow: auto;
+
+  > * {
+    margin-bottom: 1rem;
+  }
+}
+

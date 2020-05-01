@@ -1,7 +1,7 @@
-<mat-accordion [displayMode]="'flat'"
-               [hideToggle]="true"
-               [multi]="true"
-               class="event-list">
+<mat-accordion [hideToggle]="true"
+               class="event-list"
+               displayMode="default"
+               multi="false">
 
   <mat-expansion-panel class="custom-meta">
     <mat-expansion-panel-header>
@@ -86,7 +86,7 @@
       </mat-panel-description>
     </mat-expansion-panel-header>
 
-    meeting list here
+    <app-meeting-viewer></app-meeting-viewer>
 
   </mat-expansion-panel>
 

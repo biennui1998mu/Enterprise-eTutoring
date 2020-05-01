@@ -6,19 +6,19 @@ import { SchedulePanelComponent } from './schedule-panel/schedule-panel.componen
 
 const component = [
   ScheduleViewerComponent,
+  SchedulePanelComponent,
 ];
 
 @NgModule({
   declarations: [
     ...component,
-    SchedulePanelComponent,
   ],
   imports: [
     CommonModule,
     MaterialsModule,
   ],
   exports: [
-    ScheduleViewerComponent,
+    ...component,
   ],
 })
 export class SchedulesShareModule {

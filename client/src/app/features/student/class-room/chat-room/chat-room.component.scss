@@ -16,6 +16,6 @@
 
   .chat-section {
     grid-area: chat;
-    max-height: 100px;
+    height: max-content;
   }
 }

@@ -11,3 +11,10 @@
     </small>
   </div>
 </div>
+
+<div (click)="notifyDelete()"
+     *ngIf="isAbleDelete"
+     class="absolute top0 right0 br50 none place-item-center text-danger bg-white delete-indicator mat-elevation-z2 cursor-pointer"
+     matRipple>
+  <i class="fa fa-times"></i>
+</div>
