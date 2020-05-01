@@ -1,0 +1,43 @@
+:host {
+  height: inherit;
+  display: grid;
+  grid-template-areas: 'top right' 'router right';
+  grid-template-columns: auto 300px;
+  grid-template-rows: 113px auto;
+
+  .top-bar {
+    grid-area: top;
+  }
+
+  .right-bar {
+    grid-area: right;
+  }
+
+  .router-section {
+    grid-area: router;
+  }
+}
+
+.top-bar {
+  border-bottom: 1px solid #cccccc;
+
+  .class-title {
+    font-size: 2rem;
+    line-height: 1.5;
+    margin-bottom: 0;
+    font-weight: lighter;
+  }
+
+  .class-description {
+    line-height: 1.5;
+    font-size: 0.7rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+}
+
+.right-bar {
+  border-left: solid 1px rgba(0, 0, 0, .12);
+}
