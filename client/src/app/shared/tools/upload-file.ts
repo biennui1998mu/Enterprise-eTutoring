@@ -183,6 +183,10 @@ export function getPreviewBase64(
     fileReader.onload = function (progressEvent) {
       resolve(progressEvent.target.result as string);
     };
+    fileReader.onerror = function (progressEvent) {
+      console.log(progressEvent);
+      resolve(null);
+    };
     fileReader.readAsDataURL(file);
   });
 }

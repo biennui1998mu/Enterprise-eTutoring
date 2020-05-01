@@ -1,7 +1,10 @@
-<div class="p1 flex ofx-auto file-list">
-  <app-file-icon [isAbleDelete]="true"></app-file-icon>
-  <app-file-icon [isAbleDelete]="true"></app-file-icon>
-  <app-file-icon [isAbleDelete]="true"></app-file-icon>
+<div *ngIf="fileInput.value" class="p1 flex ofx-auto file-list">
+  <app-file-icon (fileIsDelete)="deleteFileUpload()"
+                 [fileName]="filePreview?.info.filename"
+                 [fileSize]="filePreview?.info.size"
+                 [fileType]="filePreview?.info.type"
+                 [isAbleDelete]="true"
+                 [preview]="filePreview?.base64"></app-file-icon>
 </div>
 
 <div class="wrapper-input">
