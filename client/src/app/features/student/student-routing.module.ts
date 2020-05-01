@@ -9,7 +9,7 @@ const routes: Routes = [
   {
     path: '', component: StudentComponent, children: [
       {
-        path: 'class/:room-id', component: ClassRoomComponent, children: [
+        path: 'classroom/:room-id', component: ClassRoomComponent, children: [
           { path: '', pathMatch: 'full', component: ChatRoomComponent },
         ],
       },

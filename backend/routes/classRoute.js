@@ -1,151 +1,201 @@
 const express = require('express');
 const router = express.Router();
-const Class = require('../database/models/class');
+const checkAuth = require('../middleware/check-auth');
+const Classroom = require('../database/models/classroom');
+const User = require('../database/models/user')
 
-// take all user from list user
-router.post('/', (req, res) => {
-    Class.find()
-        .exec()
-        .then( allClass => {
-            if (allClass.length >= 1) {
-                const response = {
-                    count: allClass.length,
-                    users: allClass.map(user => {
-                        return {
-                            _id: allClass._id,
-                            title: allClass.title,
-                            studentId: allClass.studentId,
-                            tutorId: allClass.tutorId,
-                            startDate: allClass.startDate,
-                            endDate: allClass.endDate
-                        }
-                    })
-                };
-                res.status(200).json(response)
-            } else {
-                res.status(200).json({
-                    message: 'No class found',
-                })
-            }
+/**
+ * take all classroom exist from database
+ */
+router.post('/', checkAuth, async (req, res) => {
+    const idUserLogin = req.userData._id;
 
+    const checkUser = await User.findOne({
+        _id: idUserLogin
+    }).exec()
+
+    if (!checkUser || checkUser.level !== 1) {
+        return res.json({
+            message: 'User is not have enough ability to view all classroom || ' +
+                'it\'s mean user is not a staff'
         })
-        .catch(err => {
-            console.log(err);
-            res.status(500).json({
-                message: 'No class found',
-                error: err,
-            })
-        })
+    }
+
+    const listClass = await Classroom.find().exec()
+
+    if (!listClass) {
+        return res.json({
+            message: 'No classroom found',
+        });
+    }
+
+    return res.json({
+        message: 'List classroom',
+        data: listClass
+    })
 });
 
-// take class info
+/**
+ * take classroom info
+ */
 router.post('/view', (req, res) => {
-    const id = req.body.classId;
+    const classroomId = req.body.classroomId;
 
-    Class.findById(id)
+    Classroom.findOne({
+        _id: classroomId
+    })
         .exec()
-        .then( aClass => {
-            if (aClass) {
-                return res.status(200).json(aClass)
-            } else {
-                return res.status(404).json({
-                    message: 'No Class found by id'
+        .then( classroom => {
+            if (!classroom) {
+                return res.json({
+                    message: 'No classroom found by id'
                 })
             }
+            return res.json({
+                message: 'classroom info!',
+                data: classroom
+            })
         })
         .catch(err => {
-            console.log(err);
             return res.status(500).json({
+                message: 'SKY FALL',
                 error: err
             })
         })
 });
 
-// Search class
+/**
+ * Search classroom by title
+ */
 router.post('/search', async (req, res) => {
     const input = req.body.title;
 
     try {
-        const listClass = await Class.find({
+        const listClass = await Classroom.find({
             title: input
         }).limit(10).exec();
 
         if (!listClass || listClass.length === 0) {
-            return res.json([]);
+            return res.json({
+                message: 'no classroom founded!',
+                data: []
+            });
         }
-
-        return res.json(listClass);
+        return res.json({
+            message: 'classroom founded!',
+            data: listClass
+        });
     } catch (e) {
-        console.log(e);
-        return res.status(500).json([]);
+        return res.status(500).json({
+            message: 'SKY FALL',
+            data: []
+        });
     }
 });
 
-// Create class
-router.post('/create', (req, res) => {
-    const aClass = new Class({
-        title: req.body.title,
-        studentId: req.body.studentId,
-        tutorId: req.body.tutorId,
-        startDate: Date.now(),
-        endDate: req.body.endDate
+/**
+ * Create classroom
+ */
+router.post('/create', checkAuth, async (req, res) => {
+    const {title, description, student, tutor} = req.body;
+
+    if (!title || typeof title !== 'string' || title.length === 0) {
+        return res.json({
+            message: 'title invalid!'
+        })
+    }
+
+    let studentExist = await User.findOne({
+        $and: [
+            {_id: student.toString()},
+            {level: 3}
+        ]
+    })
+    if (!student || typeof student !== 'string' || student.length === 0 || !studentExist) {
+        return res.json({
+            message: 'student invalid!'
+        })
+    }
+
+    let tutorExist = await User.findOne({
+        $and: [
+            {_id: tutor.toString()},
+            {level: 2}
+        ]
+    })
+    if (!tutor || typeof tutor !== 'string' || tutor.length === 0 || !tutorExist) {
+        return res.json({
+            message: 'tutor invalid!'
+        })
+    }
+
+    const classroom = new Classroom({
+        title,
+        description,
+        student,
+        tutor
     });
-    aClass.save()
+    classroom.save()
         .then(result => {
-            console.log(result);
-            return res.status(200).json({
-                title: result.title,
-                studentId: result.studentId,
-                tutorId: result.tutorId,
-                startDate: result.startDate,
-                endDate: result.endDate
+            return res.json({
+                message: 'a classroom has been create!',
+                data: result
             });
         })
         .catch(err => {
-            console.log(err);
             res.status(500).json({
+                message: 'SKY FALL',
                 error: err
             });
         });
 });
 
-// Update class
+/**
+ * Update classroom
+ */
 router.post('/update/:classId', (req, res) => {
-    const id = req.params.classId;
+    const classId = req.params.classId;
     const updateOps = {...req.body};
 
-    // console.log(updateOps);
-
-    Class.update({_id: id}, {$set: updateOps})
+    Classroom.update({
+        _id: classId
+    }, {
+        $set: {
+            updateOps,
+            updatedAt: Date.now
+        }
+    })
         .exec()
         .then(result => {
-            console.log(result);
-            return res.status(200).json({
+            return res.json({
                 message: 'Class updated',
+                data: result
             });
         })
         .catch(err => {
-            console.log(err);
             return res.status(500).json({
-                Error: err
+                message: 'SKY FALL',
+                error: err
             });
         });
 });
 
-// Delete class
-router.post('/delete/:classId', (req, res, next) => {
-    const id = req.params.classId;
-    Class.remove({_id: id})
+/**
+ * Delete classroom
+ */
+router.post('/delete/:classId', (req, res) => {
+    const classroomId = req.params.classroomId;
+    Classroom.remove({_id: classroomId})
         .exec()
         .then(result => {
-            res.status(200).json({
+            return res.json({
                 message: 'Class was deleted',
             });
         })
         .catch(err => {
-            console.log(err);
-            res.status(500).json({
-                Error: err,
+            return res.status(500).json({
+                message: 'SKY FALL',
+                error: err,
             })
         });
 });
