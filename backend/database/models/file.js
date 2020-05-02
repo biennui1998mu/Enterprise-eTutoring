@@ -3,7 +3,6 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const file = new Schema({
-    _id: mongoose.Schema.Types.ObjectId,
     /**
      * files name
      */
