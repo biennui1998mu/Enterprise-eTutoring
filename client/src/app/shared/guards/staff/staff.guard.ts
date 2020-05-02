@@ -1,19 +1,53 @@
 import { Injectable } from '@angular/core';
-import { CanActivateChild, CanLoad, Route, UrlSegment, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree } from '@angular/router';
-import { Observable } from 'rxjs';
+import {
+  ActivatedRouteSnapshot,
+  CanActivateChild,
+  CanLoad,
+  Route,
+  Router,
+  RouterStateSnapshot,
+  UrlSegment,
+} from '@angular/router';
+import { TokenService } from '../../services/token.service';
+import { UserQuery, UserService } from '../../services/state/user';
+import { USER_TYPE } from '../../interface/User';
+import { isFullyAuthorizedLevel } from '../guard.helper';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class StaffGuard implements CanActivateChild, CanLoad {
+  constructor(
+    private tokenService: TokenService,
+    private userQuery: UserQuery,
+    private userService: UserService,
+    private router: Router,
+  ) {
+  }
+
   canActivateChild(
     next: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-    return true;
+    state: RouterStateSnapshot,
+  ): Promise<boolean> {
+    if (isFullyAuthorizedLevel(this.userQuery, this.tokenService, USER_TYPE.staff)) {
+      return new Promise<boolean>(resolve => resolve(true));
+    }
+    // else redirect to home, erase all info
+    this.userService.reset();
+    this.tokenService.clearToken();
+    return this.router.navigate(['/login']);
   }
+
   canLoad(
     route: Route,
-    segments: UrlSegment[]): Observable<boolean> | Promise<boolean> | boolean {
-    return true;
+    segments: UrlSegment[],
+  ): Promise<boolean> {
+    if (isFullyAuthorizedLevel(this.userQuery, this.tokenService, USER_TYPE.staff)) {
+      return new Promise<boolean>(resolve => resolve(true));
+    }
+    // else redirect to home, erase all info
+    this.userService.reset();
+    this.tokenService.clearToken();
+    return this.router.navigate(['/login']);
   }
 }

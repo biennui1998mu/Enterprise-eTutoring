@@ -18,24 +18,10 @@ export class TableExtendedCellComponent implements AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.matDialog.open<UserDialogInfoComponent, PopupUserInfo, PopupUserInfo>(
-      UserDialogInfoComponent, {
-        height: 'max-content',
-        maxHeight: '600px',
-        width: '100%',
-        maxWidth: '700px',
-        data: {
-          user: null,
-          action: 'new',
-        },
-      },
-    ).afterClosed().subscribe(
-      data => console.log(data),
-    );
   }
 
   editUser() {
-    console.log('123');
+    // TODO: mapping to API
     this.matDialog.open<UserDialogInfoComponent, PopupUserInfo, PopupUserInfo>(
       UserDialogInfoComponent, {
         height: 'max-content',

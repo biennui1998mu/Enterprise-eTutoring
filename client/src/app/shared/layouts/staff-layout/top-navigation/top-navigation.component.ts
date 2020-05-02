@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { AccountMenuComponent } from '../account-menu/account-menu.component';
+import { UserQuery } from '../../../services/state/user';
 
 @Component({
   selector: 'app-top-navigation',
@@ -10,9 +11,11 @@ import { AccountMenuComponent } from '../account-menu/account-menu.component';
 export class TopNavigationComponent implements OnInit {
 
   isUserMenuOpen: boolean = false;
+  user = this.userQuery.select();
 
   constructor(
     private dialog: MatDialog,
+    private userQuery: UserQuery,
   ) {
   }
 

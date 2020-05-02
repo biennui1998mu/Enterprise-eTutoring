@@ -1,0 +1,25 @@
+.content {
+  display: grid;
+  grid-template-areas: 'avatar form';
+  grid-template-columns: 150px auto;
+  grid-template-rows: 1fr;
+  grid-gap: 1.5rem;
+
+  .avatar-section {
+    grid-area: avatar;
+
+    img, .img-placeholder {
+      width: 150px;
+      height: 150px;
+    }
+  }
+
+  .form-section {
+    grid-area: form;
+  }
+}
+
+.action {
+  justify-content: flex-end;
+  margin-bottom: -16px;
+}

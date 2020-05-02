@@ -17,6 +17,12 @@ export interface User {
   createdAt: Date;
   updatedAt?: Date;
   activeAt?: Date;
+
+  /**
+   * only used in creating new / updating user as
+   * we need a field to contain the user uploading avatar file.
+   */
+  avatarNew?: File;
 }
 
 export enum USER_TYPE {

@@ -7,6 +7,7 @@ import { host } from 'src/app/shared/api';
 import { APIResponse } from '../../../interface/API-Response';
 import { User } from '../../../interface/User';
 import { UserInterfaceService } from '../user-interface';
+import { Router } from '@angular/router';
 
 @Injectable({ providedIn: 'root' })
 export class UserService {
@@ -18,6 +19,7 @@ export class UserService {
     private http: HttpClient,
     private tokenService: TokenService,
     private uiStateService: UserInterfaceService,
+    private router: Router,
   ) {
   }
 
@@ -38,5 +40,15 @@ export class UserService {
       }),
       map(response => response.data),
     );
+  }
+
+  logout() {
+    this.tokenService.clearToken();
+    this.reset();
+    this.router.navigateByUrl('/login');
+  }
+
+  reset() {
+    this.userStore.reset();
   }
 }

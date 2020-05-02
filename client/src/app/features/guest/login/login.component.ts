@@ -40,7 +40,6 @@ export class LoginComponent implements OnInit {
       this.loginForm.value,
     ).subscribe(data => {
       if (data) {
-        // TODO redirect?
         this.navigateSuccess(data);
       }
     });

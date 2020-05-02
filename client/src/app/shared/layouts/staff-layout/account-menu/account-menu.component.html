@@ -1,7 +1,7 @@
 <mat-list role="list">
   <small class="tt-capitalize whitespace-nowrap of-hidden text-overflow-ellipsis"
          mat-subheader>
-    quick access
+    {{(user | async)?.username}}
   </small>
   <mat-divider></mat-divider>
 

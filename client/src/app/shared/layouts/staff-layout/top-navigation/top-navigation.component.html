@@ -13,12 +13,13 @@
 
   <div (click)="openUserMenu()"
        [class.active]="isUserMenuOpen"
+       [matTooltip]="(user | async)?.name"
        class="flex align-items-center pr1 user-section">
     <div class="br50 mr05 of-hidden user-avatar">
-      <img alt=""
+      <img [alt]="(user | async)?.name"
+           [src]="(user | async)?.avatar"
            class="w100pct h100pct br50 obj-pos-center obj-fit-cover"
-           mat-list-icon
-           src="https://material.angular.io/assets/img/examples/shiba1.jpg">
+           mat-list-icon>
     </div>
     <i class="fa text-muted fa-caret-down"></i>
   </div>

@@ -23,7 +23,7 @@ export class TokenService {
   }
 
   /**
-   * if null => not authorize
+   * if null => not authorize or token invalid
    */
   get decodedToken(): {
     _id: string,
