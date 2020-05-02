@@ -1,18 +1,21 @@
 import { Injectable } from '@angular/core';
 import { Store, StoreConfig } from '@datorama/akita';
+import { SnackBarModel } from '../../../interface/SnackBarModel';
 
 export interface UserInterfaceState {
-  key: string;
+  errorAnnouncement: SnackBarModel;
+  infoAnnouncement: SnackBarModel;
 }
 
 export function createInitialState(): UserInterfaceState {
   return {
-    key: ''
+    errorAnnouncement: null,
+    infoAnnouncement: null,
   };
 }
 
 @Injectable({ providedIn: 'root' })
-@StoreConfig({ name: 'user-interface' })
+@StoreConfig({ name: 'user-interface', resettable: true })
 export class UserInterfaceStore extends Store<UserInterfaceState> {
 
   constructor() {

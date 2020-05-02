@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../../../shared/services/state/user';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { User, USER_TYPE } from '../../../shared/interface/User';
 
 @Component({
   selector: 'app-login',
@@ -22,6 +24,7 @@ export class LoginComponent implements OnInit {
   constructor(
     private userService: UserService,
     private fb: FormBuilder,
+    private router: Router,
   ) {
   }
 
@@ -36,7 +39,26 @@ export class LoginComponent implements OnInit {
     this.userService.login(
       this.loginForm.value,
     ).subscribe(data => {
-      console.log(data);
+      if (data) {
+        // TODO redirect?
+        this.navigateSuccess(data);
+      }
     });
+  }
+
+  private navigateSuccess(user: User) {
+    let navigateArray = [];
+    if (
+      user.level === USER_TYPE.student ||
+      user.level === USER_TYPE.tutor
+    ) {
+      navigateArray = ['/client', 'dashboard'];
+    } else if (user.level === USER_TYPE.staff) {
+      navigateArray = ['/staff', 'dashboard'];
+    }
+
+    if (navigateArray.length > 0) {
+      this.router.navigate(navigateArray);
+    }
   }
 }

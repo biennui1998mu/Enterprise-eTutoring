@@ -17,7 +17,7 @@ export function createInitialState(): User {
 }
 
 @Injectable({ providedIn: 'root' })
-@StoreConfig({ name: 'user' })
+@StoreConfig({ name: 'user', resettable: true })
 export class UserStore extends Store<User> {
 
   constructor() {

@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpHeaders } from '@angular/common/http';
+import * as jwtDecoder from 'jwt-decode';
 
 @Injectable({
   providedIn: 'root',
@@ -19,6 +20,27 @@ export class TokenService {
   set token(token: string) {
     this._token = token;
     TokenService.setToken(token);
+  }
+
+  /**
+   * if null => not authorize
+   */
+  get decodedToken(): {
+    _id: string,
+    username: string,
+    name: string;
+  } {
+    const token = this.token;
+    if (!token) {
+      return null;
+    }
+
+    try {
+      return jwtDecoder(token);
+    } catch (e) {
+      console.error(e);
+      return null;
+    }
   }
 
   /**

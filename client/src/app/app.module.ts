@@ -9,6 +9,7 @@ import { AkitaNgDevtools } from '@datorama/akita-ngdevtools';
 import { AkitaNgRouterStoreModule } from '@datorama/akita-ng-router-store';
 import { environment } from '../environments/environment';
 import { CoreModule } from './shared/modules/core/core.module';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 @NgModule({
   declarations: [
@@ -19,6 +20,7 @@ import { CoreModule } from './shared/modules/core/core.module';
     BrowserModule,
     BrowserAnimationsModule,
     CoreModule,
+    MatSnackBarModule,
     AppRoutingModule,
     MDBBootstrapModule.forRoot(),
     environment.production ? [] : AkitaNgDevtools,
