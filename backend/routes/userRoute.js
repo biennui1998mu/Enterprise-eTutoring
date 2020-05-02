@@ -146,11 +146,11 @@ router.post('/search', checkAuth, async (req, res) => {
 router.post('/signup', upload.single('avatar'), async (req, res) => {
     const {username, password, name, level} = req.body;
 
-    const checkUser = await User.find({
+    const checkUser = await User.findOne({
         username: username
     }).exec()
 
-    if (checkUser || checkUser.length >= 1) {
+    if (checkUser) {
         return res.json({
             message: 'username exist!'
         })
