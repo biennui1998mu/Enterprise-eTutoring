@@ -18,6 +18,12 @@ module.exports = async (req, res, next) => {
                 message: 'User does not exist',
             });
         }
+        if(user.level !== 0){
+            return res.status(401).json({
+                message: 'Thief',
+            });
+        }
+
         req.userData = user; // return mongoose **object** so be careful as it's not JSON Object
         next();
     } catch (error) {

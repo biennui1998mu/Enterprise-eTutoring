@@ -31,7 +31,7 @@ router.post('/', (req, res) => {
  * Create message
  */
 router.post('/create', checkAuth, async (req, res) => {
-    const {classroom, byUser, quote, file} = req.body;
+    const {classroom, byUser, content, quote, file} = req.body;
 
     let classroomExist = await Classroom.findOne({
         _id: classroom
@@ -48,6 +48,12 @@ router.post('/create', checkAuth, async (req, res) => {
     if(!userExist || !byUser || typeof byUser !== 'string' || byUser.length === 0){
         return res.json({
             message: 'User is not valid'
+        })
+    }
+
+    if(!content || typeof content !== 'string' || content.length === 0){
+        return res.json({
+            message: 'content of message invalid'
         })
     }
 
