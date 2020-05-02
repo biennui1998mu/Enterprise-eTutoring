@@ -8,7 +8,7 @@
       <a [routerLinkActiveOptions]="{exact: true}"
          class="cursor-pointer side-link"
          mat-list-item
-         routerLink="/student"
+         routerLink="/client/dashboard"
          routerLinkActive="active">
         <mat-icon mat-list-icon>home</mat-icon>
         <div mat-line>Dashboard</div>
@@ -16,7 +16,7 @@
       <a [routerLinkActiveOptions]="{exact: true}"
          class="cursor-pointer side-link"
          mat-list-item
-         routerLink="/student/settings"
+         routerLink="/client/settings"
          routerLinkActive="active">
         <mat-icon mat-list-icon>settings</mat-icon>
         <div mat-line>Settings</div>
@@ -35,7 +35,7 @@
       </div>
 
       <a [routerLinkActive]="'active'"
-         [routerLink]="['/student', 'classroom', '123']"
+         [routerLink]="['/client', 'classroom', '123']"
          class="side-link cursor-pointer"
          mat-list-item>
         <div class="grid br04 place-item-center bg-info text-white mat-elevation-z1 brief-icon">
@@ -51,7 +51,7 @@
         </div>
       </a>
       <a [routerLinkActive]="'active'"
-         [routerLink]="['/student', 'classroom', '456']"
+         [routerLink]="['/client', 'classroom', '456']"
          class="side-link cursor-pointer"
          mat-list-item>
         <div class="grid br04 place-item-center bg-info text-white mat-elevation-z1 brief-icon">

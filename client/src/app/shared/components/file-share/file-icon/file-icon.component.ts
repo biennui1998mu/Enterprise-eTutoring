@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { KBToMB } from '../../../tools/upload-file';
+import { KBToMB } from '../../../tools/upload.helper';
 
 @Component({
   selector: 'app-file-icon',

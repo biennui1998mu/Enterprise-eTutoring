@@ -1,18 +1,21 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { StudentComponent } from './student.component';
+import { ClientComponent } from './client.component';
 import { ClassRoomComponent } from './class-room/class-room.component';
 import { ChatRoomComponent } from './class-room/chat-room/chat-room.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
 
 
 const routes: Routes = [
   {
-    path: '', component: StudentComponent, children: [
+    path: '', component: ClientComponent, children: [
+      { path: 'dashboard', component: DashboardComponent },
       {
         path: 'classroom/:room-id', component: ClassRoomComponent, children: [
           { path: '', pathMatch: 'full', component: ChatRoomComponent },
         ],
       },
+      { path: '', pathMatch: 'full', redirectTo: '/client/dashboard' },
     ],
   },
 ];
@@ -21,5 +24,5 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class StudentRoutingModule {
+export class ClientRoutingModule {
 }

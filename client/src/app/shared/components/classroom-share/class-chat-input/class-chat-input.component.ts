@@ -1,6 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { extractInfo, FileUploadInfo, getPreviewBase64, IsFileSmallerThan } from '../../../tools/upload-file';
+import { extractInfo, FileUploadInfo, getPreviewBase64, IsFileSmallerThan } from '../../../tools';
 
 @Component({
   selector: 'app-class-chat-input',
