@@ -28,6 +28,7 @@ const meetingRoutes = require('./routes/meetingRoute');
 const messageRoutes = require('./routes/messageRoute');
 const scheduleRoutes = require('./routes/scheduleRoute');
 const userRoutes = require('./routes/userRoute');
+const statisticRoutes = require('./routes/statisticRoute');
 
 const corsOptions = {
     origin: '*',
@@ -53,6 +54,7 @@ app.use('/meeting', meetingRoutes);
 app.use('/message', messageRoutes);
 app.use('/schedule', scheduleRoutes);
 app.use('/user', userRoutes);
+app.use('/statistic', statisticRoutes);
 
 app.use((req, res, next) => {
     const error = new Error('not found');
