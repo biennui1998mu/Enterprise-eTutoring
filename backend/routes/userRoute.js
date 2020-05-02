@@ -143,7 +143,7 @@ router.post('/search', checkAuth, async (req, res) => {
 /**
  * sign up
  */
-router.post('/signUp', upload.single('avatar'), async (req, res) => {
+router.post('/signup', upload.single('avatar'), async (req, res) => {
     const {username, password, name, level} = req.body;
 
     const checkUser = await User.find({
@@ -206,7 +206,7 @@ router.post('/signUp', upload.single('avatar'), async (req, res) => {
 /**
  * sign in
  */
-router.post('/signIn', async (req, res) => {
+router.post('/signin', async (req, res) => {
     const {username, password} = req.body;
 
     const user = await User.findOne({
