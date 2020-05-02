@@ -6,7 +6,6 @@ const Schema = mongoose.Schema;
 const url = `${process.env.PROTOCOL}://${process.env.HOST_NAME}:${process.env.PORT}/`;
 
 const userSchema = new Schema({
-    _id: mongoose.Schema.Types.ObjectId,
     username: {
         type: String,
         required: true,

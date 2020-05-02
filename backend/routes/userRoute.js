@@ -244,13 +244,13 @@ router.post('/signin', async (req, res) => {
             expiresIn: 604800
         });
 
-    await User.updateOne({
-        username: username
-    }, {
-        $set: {
-            activeAt: Date.now
-        }
-    }).exec();
+    user.activeAt = Date.now()
+    
+    try{
+        await user.save();
+    }catch (e) {
+        return e;
+    }
 
     return res.json({
         message: 'Login successfully',
