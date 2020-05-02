@@ -33,3 +33,18 @@ body {
     padding: 0.5rem;
   }
 }
+
+mat-icon.mat-icon {
+  &.fa, &.fas {
+    display: grid;
+    place-content: center;
+    // fontawesom is bigger than default mat-icon (24px) so we have to set it smaller
+    font-size: 18px !important;
+  }
+}
+
+.setting-modal-box {
+  mat-dialog-container {
+    padding: 0;
+  }
+}
