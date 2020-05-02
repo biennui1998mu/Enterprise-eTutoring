@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatIconModule } from '@angular/material/icon';
+import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatSelectModule } from '@angular/material/select';
@@ -17,7 +17,6 @@ import {
 import { MAT_MOMENT_DATE_FORMATS, MomentDateAdapter } from '@angular/material-moment-adapter';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatCardModule } from '@angular/material/card';
-import { MatTableModule } from '@angular/material/table';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
@@ -41,7 +40,6 @@ const modules = [
   MatNativeDateModule,
   MatCheckboxModule,
   MatCardModule,
-  MatTableModule,
   MatStepperModule,
   MatChipsModule,
   MatAutocompleteModule,
@@ -70,7 +68,14 @@ const modules = [
      */
     { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
     { provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS },
+    MatIconRegistry,
   ],
 })
 export class MaterialsModule {
+  constructor(
+    public matIconRegistry: MatIconRegistry,
+  ) {
+    matIconRegistry.registerFontClassAlias('fa', 'fa');
+    matIconRegistry.registerFontClassAlias('fas', 'fas');
+  }
 }
