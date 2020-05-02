@@ -6,7 +6,7 @@ const message = new Schema({
     classroom: {
         type: String,
         required: true,
-        ref: 'Class'
+        ref: 'Classroom'
     },
     byUser: {
         type: String,

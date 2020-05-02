@@ -4,6 +4,8 @@ const checkAuth = require('../middleware/check-auth');
 
 const User = require('../database/models/user');
 const Classroom = require('../database/models/classroom');
+const File = require('../database/models/file');
+const Message = require('../database/models/message');
 
 router.post('/tutor', checkAuth, async (req,res)=> {
     const userId = req.userData._id;
@@ -28,12 +30,12 @@ router.post('/tutor', checkAuth, async (req,res)=> {
         tutor: checkTutor
     }).exec();
 
-    const message = await Classroom.find({
-        classroom: classroom
+    const message = await Message.find({
+        classroom: classroom._id
     }).exec();
 
-    const file = await Classroom.find({
-        classroom: classroom
+    const file = await File.find({
+        classroom: classroom._id
     }).exec();
 
     return res.json({
