@@ -7,6 +7,9 @@ import { ClassChatInputComponent } from './class-chat-input/class-chat-input.com
 import { DisscusionPillComponent } from './disscusion-pill/disscusion-pill.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ResourceShareModule } from '../resource-share/resource-share.module';
+import { SchedulesShareModule } from '../schedules-share/schedules-share.module';
+import { MeetingsShareModule } from '../meetings-share/meetings-share.module';
+import { FileShareModule } from '../file-share/file-share.module';
 
 const components = [
   ClassMetaComponent,
@@ -28,6 +31,9 @@ const components = [
     ResourceShareModule,
     MaterialsModule,
     MDBBootstrapModule,
+    SchedulesShareModule,
+    MeetingsShareModule,
+    FileShareModule,
   ],
 })
 export class ClassroomShareModule {

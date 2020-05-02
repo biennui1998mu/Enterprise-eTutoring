@@ -1,0 +1,14 @@
+<label class="ph1 m0 search-form">
+  <input class="form-control"
+         placeholder="Find meeting name..."
+         type="text">
+</label>
+
+<div class="ph1 flex flex-d-col justify-flex-start meetings-list">
+  <button (click)="createNew()"
+      class="btn btn-block btn-outline-success tt-capitalize mb02 mt02">
+    <i class="fa fa-plus mr02"></i>
+    Create
+  </button>
+  <app-meeting-panel></app-meeting-panel>
+</div>

@@ -1,13 +1,23 @@
-<div [matTooltip]="'Dockumental Docker Mastering'"
-     class="content cursor-pointer user-select-none grid place-item-center">
-  <i class="text-muted fa fa-file-word fa-2x"></i>
+<div [matTooltip]="fileName"
+     [ngStyle]="getStyle()"
+     class="content br06 cursor-pointer of-hidden user-select-none grid place-item-center">
+  <i *ngIf="!isImage"
+     [ngClass]="getIcon()"
+     class="text-muted fa fa-2x"></i>
 
   <div class="file-info">
     <div class="fw-bold overflow-hidden text-overflow-ellipsis whitespace-nowrap file-name">
-      Dockumental Docker Mastering
+      {{fileName}}
     </div>
     <small class="text-muted file-size">
-      12MB
+      {{getSize()}}
     </small>
   </div>
+</div>
+
+<div (click)="notifyDelete()"
+     *ngIf="isAbleDelete"
+     class="absolute top0 right0 br50 none place-item-center text-danger bg-white delete-indicator mat-elevation-z2 cursor-pointer"
+     matRipple>
+  <i class="fa fa-times"></i>
 </div>

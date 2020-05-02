@@ -3454,6 +3454,10 @@
   color: rgba(0, 0, 0, 0.8);
 }
 
+.text-contrast {
+  mix-blend-mode: difference;
+}
+
 .text-muted {
   color: #8d9ba2;
 }

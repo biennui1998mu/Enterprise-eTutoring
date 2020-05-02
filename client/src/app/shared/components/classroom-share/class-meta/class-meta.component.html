@@ -1,7 +1,7 @@
-<mat-accordion [displayMode]="'flat'"
-               [hideToggle]="true"
-               [multi]="true"
-               class="event-list">
+<mat-accordion [hideToggle]="true"
+               class="event-list"
+               displayMode="default"
+               multi="false">
 
   <mat-expansion-panel class="custom-meta">
     <mat-expansion-panel-header>
@@ -60,18 +60,33 @@
 
   </mat-expansion-panel>
 
-  <!--  TODO: do event   -->
+  <!--  TODO: do schedule   -->
   <mat-expansion-panel class="custom-meta">
     <mat-expansion-panel-header>
       <mat-panel-title>
-        Events
+        Schedule
       </mat-panel-title>
       <mat-panel-description>
         <mat-icon>date_range</mat-icon>
       </mat-panel-description>
     </mat-expansion-panel-header>
 
-    event list here
+    <app-schedule-viewer></app-schedule-viewer>
+
+  </mat-expansion-panel>
+
+  <!--  TODO: do meetings   -->
+  <mat-expansion-panel class="custom-meta">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Meeting
+      </mat-panel-title>
+      <mat-panel-description>
+        <mat-icon>insert_invitation</mat-icon>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <app-meeting-viewer></app-meeting-viewer>
 
   </mat-expansion-panel>
 

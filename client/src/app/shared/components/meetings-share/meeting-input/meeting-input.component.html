@@ -1,0 +1,78 @@
+<h2 class="tt-capitalize"
+    matDialogTitle>
+  <ng-container *ngIf="data?.mode === 'new'">
+    Setup a meeting
+  </ng-container>
+  <ng-container *ngIf="data?.mode === 'update'">
+    Update the meeting
+  </ng-container>
+</h2>
+
+<form class="content" matDialogContent>
+  <mat-form-field appearance="outline"
+                  class="w100pct">
+    <mat-label>Title</mat-label>
+    <input matInput
+           placeholder="title of the meeting"
+           required
+           type="text">
+    <mat-error>err</mat-error>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline"
+                  class="w100pct">
+    <mat-label>Description</mat-label>
+    <input matInput
+           placeholder="the purpose of the meeting (optional)"
+           type="text">
+    <mat-error>err</mat-error>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline"
+                  class="w100pct">
+    <mat-label>Location</mat-label>
+    <input matInput
+           placeholder="location of the meeting"
+           required
+           type="text">
+    <mat-error>err</mat-error>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline"
+                  class="w100pct">
+    <mat-label>End Date</mat-label>
+    <input [matDatepicker]="picker"
+           matInput
+           required>
+    <mat-datepicker-toggle [for]="picker"
+                           matSuffix></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+  </mat-form-field>
+</form>
+
+<div class="justify-flex-end dialog-action"
+     matDialogActions>
+  <button (click)="cancel()"
+          class="mr05"
+          mat-flat-button>
+    Cancel
+  </button>
+
+  <button (click)="delete()"
+          *ngIf="data?.mode === 'update'"
+          class="ml3 mr05"
+          color="warn"
+          mat-flat-button>
+    Delete
+  </button>
+
+  <button color="primary"
+          mat-flat-button>
+    <ng-container *ngIf="data?.mode === 'new'">
+      Create
+    </ng-container>
+    <ng-container *ngIf="data?.mode === 'update'">
+      Update
+    </ng-container>
+  </button>
+</div>

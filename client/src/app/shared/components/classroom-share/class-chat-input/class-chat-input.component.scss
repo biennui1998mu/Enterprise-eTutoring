@@ -1,14 +1,17 @@
 :host {
   background: white;
   display: grid;
+  grid-template-areas: 'files files files' 'input enter upload';
   position: relative;
   grid-template-columns: auto 2.5rem 2.5rem;
+  grid-template-rows: max-content max-content;
   min-height: 2.5rem;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
   z-index: 2;
   padding: 0.5rem;
 
   .wrapper-input {
+    grid-area: input;
     border-radius: 1.25rem;
     overflow: hidden;
     border: 1px solid #cccccc;
@@ -42,8 +45,25 @@
     }
   }
 
-  .send-btn {
+  .chat-btn {
     align-self: start;
+  }
+
+  .enter-btn {
+    grid-area: enter;
+  }
+
+  .file-upload {
+    grid-area: upload;
+  }
+
+  .file-list {
+    grid-area: files;
+
+    > * {
+      margin-right: 0.5rem;
+      width: 110px;
+    }
   }
 
   mat-icon {
