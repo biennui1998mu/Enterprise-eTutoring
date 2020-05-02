@@ -54,15 +54,15 @@ export class FileIconComponent implements OnInit {
   getIcon() {
     switch (this.fileType) {
       case 'Microsoft Word':
-        return 'fa-file-word';
+        return 'fa-files-word';
       case 'Microsoft Excel':
-        return 'fa-file-excel';
+        return 'fa-files-excel';
       case 'Microsoft Powerpoint':
-        return 'fa-file-powerpoint';
+        return 'fa-files-powerpoint';
       case '7-zip archive':
       case 'ZIP archive':
       case 'RAR Archive':
-        return 'fa-file-zip';
+        return 'fa-files-zip';
       default:
         return 'fa-question';
     }

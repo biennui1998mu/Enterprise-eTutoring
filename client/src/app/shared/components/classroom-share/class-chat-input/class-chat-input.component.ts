@@ -58,8 +58,8 @@ export class ClassChatInputComponent implements OnInit {
     const target = fileEvent.target as HTMLInputElement;
     if (target.files.length > 0) {
       if (target.files.length > 1) {
-        // Limit 1 file upload each time
-        return this.outputFileUploadError('1 file is the maximum upload each time.');
+        // Limit 1 files upload each time
+        return this.outputFileUploadError('1 files is the maximum upload each time.');
       }
       this.fileFormReset();
 
@@ -78,7 +78,7 @@ export class ClassChatInputComponent implements OnInit {
           if (base64) {
             this.outputFileUploadSuccess(fileInfo, base64);
           } else {
-            this.outputFileUploadError('Cannot preview the file.');
+            this.outputFileUploadError('Cannot preview the files.');
           }
         });
       } else {

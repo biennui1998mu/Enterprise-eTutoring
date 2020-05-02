@@ -117,7 +117,7 @@ export const mimeMapper = Object.freeze({
 });
 
 /**
- * get the information of the file
+ * get the information of the files
  * @param file
  * @param option
  */
@@ -172,7 +172,7 @@ export function IsFileSmallerThan(file: File, sizeKb: number) {
 }
 
 /**
- * get the base64 string buffer to preview the (image) file
+ * get the base64 string buffer to preview the (image) files
  * @param file
  */
 export function getPreviewBase64(

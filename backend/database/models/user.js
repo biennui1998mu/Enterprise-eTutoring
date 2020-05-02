@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const AutoIncrement = require('mongoose-sequence')(mongoose);
 
 const Schema = mongoose.Schema;
 
@@ -42,6 +43,28 @@ const userSchema = new Schema({
         type: String,
         default: url + "uploads/sample.png"
     },
+});
+
+/**
+ * https://github.com/ramiel/mongoose-sequence
+ */
+userSchema.plugin(AutoIncrement, {
+    /**
+     * required if use reference_fields
+     */
+    id: 'indicator_seq',
+
+
+    /**
+     * plugin auto create this field in schema
+     */
+    inc_field: 'indicator',
+
+
+    /**
+     * only increment based on level
+     */
+    reference_fields: ['level']
 });
 
 module.exports = mongoose.model('User', userSchema);
