@@ -245,11 +245,15 @@ router.post('/signin', async (req, res) => {
         });
 
     user.activeAt = Date.now()
-    
+
     try{
         await user.save();
     }catch (e) {
-        return e;
+        return res.json({
+            message: 'SKY FALL',
+            data: null,
+            error: e
+        });
     }
 
     return res.json({
