@@ -97,6 +97,7 @@ router.post('/search', async (req, res) => {
  * Create classroom
  */
 router.post('/create', checkAuth, async (req, res) => {
+    const createdBy = req.userData._id;
     const {title, description, student, tutor} = req.body;
 
     if (!title || typeof title !== 'string' || title.length === 0) {
@@ -133,7 +134,8 @@ router.post('/create', checkAuth, async (req, res) => {
         title,
         description,
         student,
-        tutor
+        tutor,
+        createdBy
     });
     classroom.save()
         .then(result => {
@@ -154,11 +156,11 @@ router.post('/create', checkAuth, async (req, res) => {
  * Update classroom
  */
 router.post('/update/:classId', (req, res) => {
-    const classId = req.params.classId;
+    const classroomId = req.params.classroomId;
     const updateOps = {...req.body};
 
     Classroom.update({
-        _id: classId
+        _id: classroomId
     }, {
         $set: {
             updateOps,

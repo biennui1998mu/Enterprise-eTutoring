@@ -8,6 +8,10 @@ const message = new Schema({
         required: true,
         ref: 'Classroom'
     },
+    content: {
+        type: String,
+        required: true,
+    },
     byUser: {
         type: String,
         required: true,
@@ -20,10 +24,6 @@ const message = new Schema({
     quote: {
         type: String,
         ref: 'Message'
-    },
-    file: {
-        type: String,
-        ref: 'File'
     }
 });
 

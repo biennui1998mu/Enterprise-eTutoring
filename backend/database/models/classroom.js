@@ -20,6 +20,11 @@ const classroomSchema = new Schema({
         required: true,
         ref: 'User'
     },
+    createdBy: {
+        type: String,
+        required: true,
+        ref: 'User'
+    },
     createdAt: {
         type: Date,
         default: Date.now
