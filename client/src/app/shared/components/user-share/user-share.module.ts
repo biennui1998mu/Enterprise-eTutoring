@@ -7,12 +7,16 @@ import { FilterUserComponent } from './filter-user/filter-user.component';
 import { MatTableModule } from '@angular/material/table';
 import { TableExtendedCellComponent } from './table-user/table-extended-cell/table-extended-cell.component';
 import { TableHeaderCellComponent } from './table-user/table-header-cell/table-header-cell.component';
+import { MatSortModule } from '@angular/material/sort';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { UserDialogInfoComponent } from './user-dialog-info/user-dialog-info.component';
 
 const components = [
   TableUserComponent,
   FilterUserComponent,
   TableExtendedCellComponent,
   TableHeaderCellComponent,
+  UserDialogInfoComponent,
 ];
 
 @NgModule({
@@ -24,10 +28,12 @@ const components = [
     CoreModule,
     MaterialsModule,
     MatTableModule,
+    MatSortModule,
+    MatPaginatorModule,
   ],
   exports: [
     ...components,
   ],
 })
-export class StaffShareModule {
+export class UserShareModule {
 }

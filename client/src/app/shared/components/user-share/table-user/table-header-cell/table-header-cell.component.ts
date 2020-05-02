@@ -1,12 +1,13 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { User } from '../../../../interface/User';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-table-header-cell',
   templateUrl: './table-header-cell.component.html',
   styleUrls: ['./table-header-cell.component.scss'],
 })
-export class TableHeaderCellComponent implements OnInit {
+export class TableHeaderCellComponent {
 
   @Input()
   user: User;
@@ -14,7 +15,9 @@ export class TableHeaderCellComponent implements OnInit {
   @Input()
   displayField: string;
 
-  constructor() {
+  constructor(
+    private matDialog: MatDialog,
+  ) {
   }
 
   get isAvatarField() {
@@ -45,8 +48,4 @@ export class TableHeaderCellComponent implements OnInit {
         return 'Student';
     }
   }
-
-  ngOnInit(): void {
-  }
-
 }

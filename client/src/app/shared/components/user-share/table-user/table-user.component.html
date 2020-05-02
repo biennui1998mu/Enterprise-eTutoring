@@ -1,0 +1,50 @@
+<div class="mat-elevation-z1">
+  <table [dataSource]="dataSource"
+         mat-table
+         matSort
+         multiTemplateDataRows>
+
+    <ng-container *ngFor="let column of configTableColumns"
+                  matColumnDef="{{column.inDataField}}">
+      <th *matHeaderCellDef
+          mat-header-cell
+          mat-sort-header>
+        {{column.displayAs}}
+      </th>
+      <td *matCellDef="let user"
+          mat-cell>
+        <app-table-header-cell [displayField]="column.inDataField"
+                               [user]="user"></app-table-header-cell>
+      </td>
+    </ng-container>
+
+    <!--
+    Expanded Content Column
+    The detail row is made up of this one column that spans across all columns
+    -->
+    <ng-container matColumnDef="expandedDetail">
+      <td *matCellDef="let user"
+          [attr.colspan]="mapFieldToColumn.length"
+          mat-cell>
+        <app-table-extended-cell [@detailExpand]="user == expandedUserInfo ? 'expanded' : 'collapsed'"
+                                 [user]="user">
+        </app-table-extended-cell>
+      </td>
+    </ng-container>
+
+    <tr *matHeaderRowDef="mapFieldToColumn"
+        mat-header-row></tr>
+    <tr (click)="expandedUserInfo = expandedUserInfo === user ? null : user"
+        *matRowDef="let user; columns: mapFieldToColumn;"
+        [class.example-expanded-row]="expandedUserInfo === user"
+        class="user-info-row"
+        mat-row>
+    </tr>
+    <tr *matRowDef="let row; columns: ['expandedDetail']"
+        class="user-detail-row" mat-row></tr>
+  </table>
+
+  <mat-paginator (page)="switchPage($event)"
+                 [pageSizeOptions]="[1, 5, 10, 50]"></mat-paginator>
+
+</div>

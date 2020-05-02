@@ -9,6 +9,12 @@
   {{userLevel}}
 </ng-container>
 
-<ng-container *ngIf="isRawField || isActiveAtField">
+<ng-container *ngIf="isActiveAtField">
+  <span [class.text-muted]="!user.activeAt">
+    {{user.activeAt ? user.activeAt : 'No data'}}
+  </span>
+</ng-container>
+
+<ng-container *ngIf="isRawField">
   {{user[displayField]}}
 </ng-container>

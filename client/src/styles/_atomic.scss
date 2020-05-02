@@ -22,6 +22,10 @@
   outline: none;
 }
 
+.outline-none-i {
+  outline: none !important;
+}
+
 .obj-fit-cover {
   object-fit: cover;
 }
@@ -3265,9 +3269,12 @@
   background: #333;
 }
 
-
 .bg-darker-i {
   background: #333 !important;
+}
+
+.text-darker-i {
+  color: #333 !important;
 }
 
 .bg-darkest {

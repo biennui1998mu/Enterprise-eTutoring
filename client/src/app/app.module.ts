@@ -5,6 +5,10 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MDBBootstrapModule } from 'angular-bootstrap-md';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { AkitaNgDevtools } from '@datorama/akita-ngdevtools';
+import { AkitaNgRouterStoreModule } from '@datorama/akita-ng-router-store';
+import { environment } from '../environments/environment';
+import { CoreModule } from './shared/modules/core/core.module';
 
 @NgModule({
   declarations: [
@@ -14,8 +18,11 @@ import { DashboardComponent } from './dashboard/dashboard.component';
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
+    CoreModule,
     AppRoutingModule,
     MDBBootstrapModule.forRoot(),
+    environment.production ? [] : AkitaNgDevtools,
+    AkitaNgRouterStoreModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
