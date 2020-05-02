@@ -32,23 +32,9 @@ router.post('/tutor', checkAuth, async (req,res)=> {
         classroom: classroom
     }).exec();
 
-    if(!message){
-        return res.json({
-            message: 'classroom dont have any message',
-            data: []
-        })
-    }
-
     const file = await Classroom.find({
         classroom: classroom
     }).exec();
-
-    if(!file){
-        return res.json({
-            message: 'classroom dont have any file',
-            data: []
-        })
-    }
 
     return res.json({
         message: 'statistic for tutor dashboard',
