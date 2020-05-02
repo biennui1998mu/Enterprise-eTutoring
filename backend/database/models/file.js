@@ -5,6 +5,7 @@ const Schema = mongoose.Schema;
 const file = new Schema({
     _id: mongoose.Schema.Types.ObjectId,
     name: String,
+    url: String,
     type: String,
     createdAt: Date,
     updatedAt: Date

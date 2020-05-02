@@ -6,7 +6,7 @@ const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
-const User = require('./database/models/user');
+const Classroom = require('./database/models/classroom');
 
 mongoose.Promise = global.Promise;
 mongoose.set('useFindAndModify', false);
@@ -22,15 +22,18 @@ mongoose.connect(`mongodb://${username}:${password}@nosama-shard-00-00-dstgw.gcp
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-const userRoutes = require('./routes/userRoute');
 const classRoutes = require('./routes/classRoute');
+const fileRoute = require('./routes/fileRoute');
 const meetingRoutes = require('./routes/meetingRoute');
 const messageRoutes = require('./routes/messageRoute');
+const scheduleRoutes = require('./routes/scheduleRoute');
+const userRoutes = require('./routes/userRoute');
 
 const corsOptions = {
     origin: '*',
     optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
 };
+
 app.use(cors(corsOptions));
 
 //hiện dưới terminal
@@ -41,14 +44,15 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(bodyParser.json());
 
-
 app.use(cookieParser());
 
 //routes handle request
-app.use('/user', userRoutes);
-app.use('/classroom', classRoutes);
+app.use('/class', classRoutes);
+app.use('/file', fileRoute);
 app.use('/meeting', meetingRoutes);
 app.use('/message', messageRoutes);
+app.use('/schedule', scheduleRoutes);
+app.use('/user', userRoutes);
 
 app.use((req, res, next) => {
     const error = new Error('not found');
@@ -74,65 +78,53 @@ app.use((error, req, res) => {
 
 
 // Socket.io cho chat
-// const http = require('http').Server(app);
-// const io = require('socket.io')(http);
-//
-// io.use(async function (socket, next) {
-//     if (socket.handshake.query && socket.handshake.query.token) {
-//         jwt.verify(
-//             socket.handshake.query.token,
-//             process.env.JWT_KEY,
-//             function (err, decoded) {
-//                 if (err) return next(new Error('Authentication error'));
-//                 socket.decoded = decoded;
-//                 // show token connect
-//                 console.log('Đăng nhập mới: ' + username);
-//                 next();
-//             });
-//     } else {
-//         next(new Error('Authentication error'));
-//     }
-// }).on('connection', async (socket) => {
-//     const decoded = socket.decoded;
-//     const username = decoded.username;
-//     const userId = decoded.userId;
-//     // set user online
-//     await User.updateOne({username: username}, {$set: {status: 1}}).exec();
-//
-//     // show token disconnect
-//     socket.on('disconnect', async function () {
-//         console.log('User: ' + username + ' đã out');
-//         await User.updateOne({username: username}, {$set: {status: 2}}).exec();
-//         friendRequestSchema.find({
-//             $or: [
-//                 {requester: userId},
-//                 {recipient: userId},
-//             ],
-//             status: 1
-//         }).exec().then(result => {
-//             socket.broadcast.emit("Offline", result);
-//         })
-//     });
-//
-//     // lắng nghe sự kiện join room
-//     socket.on("user-join-room-chat", function (room) {
-//         Room.findOne({_id: room._id})
-//             .exec()
-//             .then(data => {
-//                 socket.join(data._id);
-//
-//                 // user sẽ tự join vào room mới tạo
-//                 socket.emit("Joined", data);
-//
-//                 // lắng nghe user send message
-//                 socket.on("send-Message-toServer", function (messageData) {
-//                     io.to(data._id).emit("Server-send-message", messageData);
-//                 });
-//             });
-//     });
-// });
+const http = require('http').Server(app);
+const io = require('socket.io')(http);
 
-app.listen(PORT, () => {
+io.use(async function (socket, next) {
+    if (socket.handshake.query && socket.handshake.query.token) {
+        jwt.verify(
+            socket.handshake.query.token,
+            process.env.JWT_KEY,
+            function (err, decoded) {
+                if (err) return next(new Error('Authentication error'));
+                socket.decoded = decoded;
+                // show token connect
+                console.log('Đăng nhập mới: ' + username);
+                next();
+            });
+    } else {
+        next(new Error('Authentication error'));
+    }
+}).on('connection', async (socket) => {
+    const decoded = socket.decoded;
+    const username = decoded.username;
+    const userId = decoded._id;
+
+    // show token disconnect
+    socket.on('disconnect', async function () {
+        console.log('User: ' + username + ' đã out');
+    });
+
+    // lắng nghe sự kiện join room
+    socket.on("user-join-room-chat", function (room) {
+        Classroom.findOne({_id: room._id})
+            .exec()
+            .then(data => {
+                socket.join(data._id);
+
+                // user sẽ tự join vào room mới tạo
+                socket.emit("Joined", data);
+
+                // lắng nghe user send message
+                socket.on("send-Message-toServer", function (messageData) {
+                    io.to(data._id).emit("Server-send-message", messageData);
+                });
+            });
+    });
+});
+
+http.listen(PORT, () => {
     console.log(`Server lives! Port: ${PORT}`);
 });
 
