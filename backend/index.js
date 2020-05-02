@@ -48,7 +48,7 @@ app.use(cookieParser());
 
 //routes handle request
 app.use('/class', classRoutes);
-app.use('/file', fileRoute);
+app.use('/files', fileRoute);
 app.use('/meeting', meetingRoutes);
 app.use('/message', messageRoutes);
 app.use('/schedule', scheduleRoutes);

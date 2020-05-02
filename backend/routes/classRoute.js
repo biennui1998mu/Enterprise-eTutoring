@@ -68,7 +68,7 @@ router.post('/view', (req, res) => {
  * Search classroom by title
  */
 router.post('/search', async (req, res) => {
-    const input = req.body.title;
+    const input = req.body.input;
 
     try {
         const listClass = await Classroom.find({

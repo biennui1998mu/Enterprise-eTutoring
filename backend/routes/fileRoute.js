@@ -1,110 +1,128 @@
 const express = require('express');
 const router = express.Router();
+const checkAuth = require('../middleware/check-auth');
 const File = require('../database/models/file');
+const User = require('../database/models/user');
+const Classroom = require('../database/models/classroom');
 
-// take all file from list user
-router.post('/', (req, res) => {
-    File.find()
-        .exec()
-        .then( allFile => {
-            if (allFile.length >= 1) {
-                const response = {
-                    count: allFile.length,
-                    users: allFile.map(user => {
-                        return {
-                            _id: allFile._id,
-                            name: allFile.name,
-                            type: allFile.type,
-                            createdAt: allFile.createdAt,
-                            updatedAt: allFile.updatedAt
-                        }
-                    })
-                };
-                res.status(200).json(response)
-            } else {
-                res.status(200).json({
-                    message: 'No file found',
-                })
-            }
+/**
+ * https://github.com/expressjs/multer
+ * @type {multer}
+ */
+const multer = require('multer');
 
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        return cb(null, './uploads/files/')
+    },
+    filename: function (req, file, cb) {
+        return cb(null, file.originalname + Date.now)
+    }
+})
+
+const upload = multer({
+    storage: storage,
+    limits: {
+        fileSize: 1024 * 1024 * 3
+    }
+})
+
+/**
+ * take all files from classroom
+ */
+router.post('/', checkAuth, async (req, res) => {
+    const userId = req.userData._id;
+
+    const userExist = await User.findOne({
+        _id: userId
+    }).exec()
+
+    if (!userExist) {
+        return res.json({
+            message: 'User is not exist in database'
         })
-        .catch(err => {
-            console.log(err);
-            res.status(500).json({
-                message: 'No file found',
-                error: err,
-            })
+    }
+
+    const classroomId = req.body.classroom;
+    const allFile = await File.find({
+        classroom: classroomId
+    });
+
+    if (allFile.length === 0 || !allFile) {
+        return res.json({
+            message: 'No files founded',
+            data: []
         })
+    }
+    return res.json({
+        message: 'List files in classroom!',
+        data: allFile
+    })
 });
 
-// take file info
-router.post('/view', (req, res) => {
-    const id = req.body.fileId;
-
-    File.findById(id)
-        .exec()
-        .then( file => {
-            if (file) {
-                return res.status(200).json(file)
-            } else {
-                return res.status(404).json({
-                    message: 'No file found by id'
-                })
-            }
-        })
-        .catch(err => {
-            console.log(err);
-            return res.status(500).json({
-                error: err
-            })
-        })
-});
-
-// Search file
+// Search files
 router.post('/search', async (req, res) => {
-    const input = req.body.name;
+    const input = req.body.input;
 
     try {
         const listFile = await File.find({
             name: input
         }).limit(10).exec();
 
-        if (!listFile || listFile.length === 0) {
-            return res.json([]);
+        if (listFile.length === 0 || !listFile) {
+            return res.json({
+                message: 'No files founded',
+                data: []
+            })
         }
 
-        return res.json(listFile);
+        return res.json({
+            message: 'File founded!',
+            data: listFile
+        });
     } catch (e) {
-        console.log(e);
-        return res.status(500).json([]);
+        return res.status(500).json({
+            message: 'SKY FALL',
+            data: []
+        });
     }
 });
 
-// Create file
-router.post('/create', (req, res) => {
-    const file = new File({
-        name: req.body.name,
-        type: req.body.type,
-        createdAt: Date.now(),
-        updatedAt: req.body.updatedAt
-    });
-    file.save()
-        .then(result => {
-            console.log(result);
-            return res.status(200).json({
-                name: result.name,
-                type: result.type,
-                createdAt: result.createdAt,
-                updatedAt: result.updatedAt
-            });
-        })
-        .catch(err => {
-            console.log(err);
-            res.status(500).json({
-                error: err
-            });
-        });
-});
+// Create files
+router.post('/create', upload.single, checkAuth, async (req, res) => {
+    const byUser = req.userData._id;
+    const classroom = req.body
 
+    const classroomExist = await Classroom.findOne({
+        _id: classroom
+    }).exec()
+
+    if(!classroomExist){
+        return res.json({
+            message: 'Classroom does not exist!'
+        })
+    }
+
+    const newFile = await new File({
+        name: req.file.originalname,
+        url: req.file.path,
+        type: req.file.mimetype,
+        classroom,
+        byUser
+    });
+
+    const saved = await newFile.save();
+
+    if(!saved){
+        return res.json({
+            message: 'saved fail'
+        });
+    }
+    return res.json({
+        message: 'File save successfully!',
+        data: newFile
+    });
+
+});
 
 module.exports = router;
