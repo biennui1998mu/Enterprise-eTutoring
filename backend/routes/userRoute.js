@@ -143,7 +143,13 @@ router.post('/search', checkAuth, async (req, res) => {
 /**
  * sign up
  */
-router.post('/signup', upload.single('avatar'), async (req, res) => {
+router.post('/signup', upload.single('avatar'), checkAuth, async (req, res) => {
+    if(req.userData.level !== 1){
+        return res.json({
+            message: 'You do not have permission to create account!!'
+        })
+    }
+
     const {username, password, name, level} = req.body;
 
     const checkUser = await User.findOne({

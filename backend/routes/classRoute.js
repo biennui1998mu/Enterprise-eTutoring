@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const checkAuth = require('../middleware/check-auth');
+const nodeMailer = require('nodemailer');
+
 const Classroom = require('../database/models/classroom');
 const User = require('../database/models/user')
 
@@ -100,6 +102,20 @@ router.post('/create', checkAuth, async (req, res) => {
     const createdBy = req.userData._id;
     const {title, description, student, tutor} = req.body;
 
+    const checkClass = await Classroom.findOne({
+        $and: [
+            {title: title},
+            {student: student},
+            {tutor: tutor}
+        ]
+    }).exec();
+
+    if(checkClass){
+        return res.json({
+            message: 'Classroom exist!!!'
+        })
+    }
+
     if (!title || typeof title !== 'string' || title.length === 0) {
         return res.json({
             message: 'title invalid!'
@@ -130,6 +146,51 @@ router.post('/create', checkAuth, async (req, res) => {
         })
     }
 
+    const transporter = nodeMailer.createTransport({
+        service: 'gmail',
+        host: 'smtp.gmail.com',
+        Port: 587,
+        secure: false,
+        auth: {
+            user: 'bot.skyfall@gmail.com',
+            pass: 'mu0309198'
+        }
+    })
+
+    const mailForm = {
+        from: 'bot.skyfall@gmail.com',
+        to: [
+            tutorExist.username,
+            studentExist.username
+        ],
+        subject: 'You have been applied to a classroom!',
+        text:
+            `Tutor: ${tutorExist.name} \n 
+            Student: ${studentExist.name} \n 
+            Classroom: ${title} \n 
+            Description: ${description}`
+    }
+
+    const sentMail = await transporter.sendMail(mailForm, (error, email) => {
+        if(error){
+            console.log(error);
+            return res.json({
+                message: 'Some error ???',
+                error: error
+            })
+        }
+        console.log('Email? :' + email.response);
+        return res.json({
+            message: 'Email send!'
+        })
+    })
+
+    if(!sentMail){
+        return res.json({
+            message: 'Some error ???',
+        })
+    }
+
     const classroom = new Classroom({
         title,
         description,
@@ -137,6 +198,7 @@ router.post('/create', checkAuth, async (req, res) => {
         tutor,
         createdBy
     });
+
     classroom.save()
         .then(result => {
             return res.json({
