@@ -103,26 +103,40 @@ io.use(async function (socket, next) {
     const username = decoded.username;
     const userId = decoded._id;
 
-    // show token disconnect
-    socket.on('disconnect', async function () {
+    /**
+     * show socket disconnect
+     * socket handshake with token decoded
+     */
+    socket.on('disconnect', function () {
         console.log('User: ' + username + ' đã out');
     });
 
-    // lắng nghe sự kiện join room
-    socket.on("user-join-room-chat", function (room) {
-        Classroom.findOne({_id: room._id})
-            .exec()
-            .then(data => {
-                socket.join(data._id);
+    /**
+     * socket listen event user join room
+     */
+    socket.on("user-join-room-chat", async function (classroomId) {
+        const checkClass = await Classroom.findOne({_id: classroomId});
 
-                // user sẽ tự join vào room mới tạo
-                socket.emit("user-joined-room-chat", data);
+        if (!checkClass) {
+            return false
+        }
 
-                // lắng nghe user send message
-                socket.on("send-Message-toServer", function (messageData) {
-                    io.to(data._id).emit("Server-send-message", messageData);
-                });
-            });
+        /**
+         * socket join room chat from class id
+         * class id become room name
+         */
+        socket.join(classroomId);
+
+        /**
+         * Server listen event user send message
+         */
+        socket.on("user-send-message", function (messageData) {
+            /**
+             * message from server will send to room
+             * user in room can view message real time
+             */
+            io.to(classroomId).emit("server-send-message", messageData);
+        });
     });
 });
 
