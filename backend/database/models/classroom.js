@@ -25,6 +25,16 @@ const classroomSchema = new Schema({
         required: true,
         ref: 'User'
     },
+    /**
+     * status of classroom
+     * 0: open
+     * 1: close
+     */
+    status: {
+        type: Number,
+        required: true,
+        default: 0
+    },
     createdAt: {
         type: Date,
         default: Date.now
