@@ -1,18 +1,19 @@
 import { Injectable } from '@angular/core';
 import { UserStore } from './user.store';
 import { HttpClient } from '@angular/common/http';
-import { map, tap } from 'rxjs/operators';
+import { catchError, map, tap } from 'rxjs/operators';
 import { TokenService } from '../../token.service';
 import { host } from 'src/app/shared/api';
 import { APIResponse } from '../../../interface/API-Response';
 import { User } from '../../../interface/User';
 import { UserInterfaceService } from '../user-interface';
 import { Router } from '@angular/router';
+import { Observable, of } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class UserService {
 
-  readonly host: string = host;
+  readonly api: string = `${host}/user`;
 
   constructor(
     private userStore: UserStore,
@@ -25,7 +26,7 @@ export class UserService {
 
   login(formData: { username: string, password: string }) {
     return this.http.post<APIResponse<User>>(
-      `${host}/user/signin`,
+      `${this.api}/signin`,
       formData,
     ).pipe(
       tap(response => {
@@ -48,7 +49,42 @@ export class UserService {
     this.router.navigateByUrl('/login');
   }
 
+  me(): Observable<User> {
+    return this.http.post<APIResponse<User>>(
+      `${this.api}/view`,
+      {},
+      { headers: this.tokenService.authorizeHeader },
+    ).pipe(
+      tap(response => {
+        if (response.data) {
+          this.userStore.update(response.data);
+        } else {
+          this.userStore.reset();
+          this.tokenService.token = null;
+          this.uiStateService.setError(response.message, 5);
+        }
+      }),
+      map(response => response.data),
+      catchError(error => {
+        return this.resolvingError<User>(
+          error,
+          'Retrieve user info error',
+        );
+      }),
+    );
+  }
+
   reset() {
     this.userStore.reset();
+  }
+
+  private resolvingError<T = any>(
+    error: any,
+    message: string = 'Unable to query',
+    returnValue: T = null,
+  ): Observable<T> {
+    console.error(error);
+    this.uiStateService.setError(message);
+    return of(returnValue as T);
   }
 }

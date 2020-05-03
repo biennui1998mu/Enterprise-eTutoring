@@ -3,7 +3,7 @@ import { UserQuery } from '../services/state/user';
 import { TokenService } from '../services/token.service';
 
 export const isHavingUserInfo = (userQuery: UserQuery) => {
-  return userQuery.getValue();
+  return userQuery.getValue()._id;
 };
 
 export const isHavingValidToken = (tokenService: TokenService) => {
@@ -15,15 +15,15 @@ export const isFullyAuthorizedLevel = (
   tokenService: TokenService,
   levelAuthorize: USER_TYPE | USER_TYPE[],
 ) => {
-  const user = isHavingUserInfo(userQuery);
+  const userId = isHavingUserInfo(userQuery);
   const decoded = isHavingValidToken(tokenService);
-  const validUserAndDecoded = !(!user || !decoded || user._id !== decoded._id);
+  const validUserAndDecoded = !(!userId || !decoded || userId !== decoded._id);
   if (!Array.isArray(levelAuthorize))
-    return levelAuthorize === user.level && validUserAndDecoded;
+    return levelAuthorize === userQuery.getValue().level && validUserAndDecoded;
 
   let validatedAuthorize = false;
   levelAuthorize.every(level => {
-    if (level === user.level) {
+    if (level === userQuery.getValue().level) {
       validatedAuthorize = true;
     }
     return !validatedAuthorize;

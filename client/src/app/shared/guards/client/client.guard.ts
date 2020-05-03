@@ -11,7 +11,8 @@ import {
 import { USER_TYPE } from '../../interface/User';
 import { TokenService } from '../../services/token.service';
 import { UserQuery, UserService } from '../../services/state/user';
-import { isFullyAuthorizedLevel } from '../guard.helper';
+import { isFullyAuthorizedLevel, isHavingValidToken } from '../guard.helper';
+import { UserInterfaceService } from '../../services/state/user-interface';
 
 @Injectable({
   providedIn: 'root',
@@ -21,11 +22,12 @@ export class ClientGuard implements CanActivateChild, CanLoad {
     private tokenService: TokenService,
     private userQuery: UserQuery,
     private userService: UserService,
+    private uiStateService: UserInterfaceService,
     private router: Router,
   ) {
   }
 
-  canActivateChild(
+  async canActivateChild(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Promise<boolean> {
     if (isFullyAuthorizedLevel(
@@ -33,27 +35,53 @@ export class ClientGuard implements CanActivateChild, CanLoad {
       this.tokenService,
       [USER_TYPE.tutor, USER_TYPE.student],
     )) {
-      return new Promise<boolean>(resolve => resolve(true));
+      return true;
     }
+
+    if (isHavingValidToken(this.tokenService)) {
+      return await this.retrievingUserInfoViaToken();
+    }
+
     // else redirect to home, erase all info
     this.userService.reset();
     this.tokenService.clearToken();
-    return this.router.navigate(['/login']);
+    this.router.navigate(['/login']);
+    return false;
   }
 
-  canLoad(
+  async canLoad(
     route: Route,
-    segments: UrlSegment[]): Promise<boolean> {
+    segments: UrlSegment[],
+  ): Promise<boolean> {
     if (isFullyAuthorizedLevel(
       this.userQuery,
       this.tokenService,
       [USER_TYPE.tutor, USER_TYPE.student],
     )) {
-      return new Promise<boolean>(resolve => resolve(true));
+      return true;
     }
+    if (isHavingValidToken(this.tokenService)) {
+      return await this.retrievingUserInfoViaToken();
+    }
+
     // else redirect to home, erase all info
     this.userService.reset();
     this.tokenService.clearToken();
-    return this.router.navigate(['/login']);
+    this.router.navigate(['/login']);
+    return false;
+  }
+
+  private async retrievingUserInfoViaToken() {
+    try {
+      await this.userService.me().toPromise();
+      if (isFullyAuthorizedLevel(this.userQuery, this.tokenService, [USER_TYPE.tutor, USER_TYPE.student])) {
+        return true;
+      }
+      this.uiStateService.setError('Login session seems to be expired.', 5);
+    } catch (e) {
+      console.error(e);
+    }
+    this.router.navigate(['/login']);
+    return false;
   }
 }
