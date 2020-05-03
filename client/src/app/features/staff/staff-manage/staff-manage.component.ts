@@ -16,7 +16,6 @@ export class StaffManageComponent implements OnInit {
   }
 
   applyFilter($event: Event) {
-    console.log($event);
     this.eventFilter.next($event);
   }
 }
