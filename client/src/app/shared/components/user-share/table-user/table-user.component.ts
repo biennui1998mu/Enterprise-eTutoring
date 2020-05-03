@@ -56,7 +56,6 @@ export class TableUserComponent implements OnInit {
   }
 
   switchPage(pageEvent: PageEvent) {
-    console.log(pageEvent);
     this.expandedUserInfo = null;
   }
 }

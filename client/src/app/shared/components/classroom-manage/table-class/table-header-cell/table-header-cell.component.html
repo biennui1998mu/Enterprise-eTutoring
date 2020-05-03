@@ -1,0 +1,28 @@
+<ng-container *ngIf="isStatusField">
+  <span [class.text-danger]="classroom.status === CLASSROOM_STATUS.closed"
+        [class.text-success]="classroom.status === CLASSROOM_STATUS.open">
+    {{statusVerbal}}
+  </span>
+</ng-container>
+
+<ng-container *ngIf="isStudentAtField">
+  <span [matTooltip]="classroom.student.username">
+    {{classroom.student.name}}
+  </span>
+</ng-container>
+
+<ng-container *ngIf="isTutorField">
+  <span [matTooltip]="classroom.tutor.username">
+    {{classroom.tutor.name}}
+  </span>
+</ng-container>
+
+<ng-container *ngIf="isCreateAtField">
+  <span [matTooltip]="classroom.createdAt | date: 'dd/MM/YY - hh:mm:ss'">
+    {{classroom.createdAt | momentRelativePipe}}
+  </span>
+</ng-container>
+
+<ng-container *ngIf="isRawField">
+  {{classroom[displayField]}}
+</ng-container>

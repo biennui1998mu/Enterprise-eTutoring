@@ -1,0 +1,33 @@
+:host {
+  overflow: auto;
+  display: grid;
+  grid-template-areas: 'left divider right' 'action action action';
+  grid-template-columns: 300px 1px auto;
+  grid-template-rows: max-content max-content;
+  grid-gap: 11px;
+  position: relative;
+}
+
+.divider-bar {
+  grid-area: divider;
+  background: #cecece;
+}
+
+.left-section {
+  padding-top: 16px;
+  grid-area: left;
+}
+
+.right-section {
+  padding-top: 16px;
+  grid-area: right;
+
+  .brief-row {
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 11px;
+  }
+}
+
+.action-section {
+  grid-area: action;
+}

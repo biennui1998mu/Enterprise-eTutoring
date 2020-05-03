@@ -14,7 +14,7 @@ export interface User {
    */
   level: USER_TYPE;
 
-  createdAt: Date;
+  createdAt?: Date;
   updatedAt?: Date;
   activeAt?: Date;
 

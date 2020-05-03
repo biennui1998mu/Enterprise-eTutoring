@@ -2115,6 +2115,10 @@
   padding-bottom: 0;
 }
 
+.pb0-i {
+  padding-bottom: 0 !important;
+}
+
 .pb01 {
   padding-bottom: .1rem;
 }
@@ -2851,6 +2855,10 @@
 
 .fw-bold {
   font-weight: bold;
+}
+
+.fw-bold-i {
+  font-weight: bold !important;
 }
 
 .user-select-all {

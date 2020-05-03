@@ -35,10 +35,9 @@ export class SocketService {
 
   setupSocket() {
     this.messageEventListener();
-    this.classroomEventListener();
   }
 
-  public socketEmit<T>(event: SOCKET_SEND_EVENT, data: T) {
+  public socketEmit<T = Classroom | Message>(event: SOCKET_SEND_EVENT, data: T) {
     this.socket.emit(event, data);
   }
 
@@ -51,16 +50,6 @@ export class SocketService {
         _._messageEvent.next(message);
       });
   }
-
-  private classroomEventListener() {
-    const _ = this;
-    this.socket.on(
-      SOCKET_RECEIVE_EVENT.joined_room_chat,
-      function (classroom: Classroom) {
-        // user entered the classroom
-        _._classroomEvent.next(classroom);
-      });
-  }
 }
 
 /**
@@ -68,8 +57,7 @@ export class SocketService {
  * these are events that server will emit to client
  */
 export enum SOCKET_RECEIVE_EVENT {
-  joined_room_chat = 'user-joined-room-chat',
-  receive_message = 'Server-send-message'
+  receive_message = 'server-send-message'
 }
 
 /**
@@ -78,5 +66,5 @@ export enum SOCKET_RECEIVE_EVENT {
  */
 export enum SOCKET_SEND_EVENT {
   join_room_chat = 'user-join-room-chat',
-  send_message = 'send-Message-toServer',
+  send_message = 'user-send-message',
 }

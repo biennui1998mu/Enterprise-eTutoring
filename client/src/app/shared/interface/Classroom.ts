@@ -1,7 +1,8 @@
 import { User } from './User';
 
 export interface Classroom<student = User, tutor = User, staff = User> {
-  _id?: string,
+  _id?: string;
+  title: string;
   description: string;
   student: student;
   tutor: tutor;

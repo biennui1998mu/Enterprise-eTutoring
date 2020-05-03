@@ -4,7 +4,6 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 @Component({
   selector: 'app-meeting-input',
   templateUrl: './meeting-input.component.html',
-  styleUrls: ['./meeting-input.component.scss'],
 })
 export class MeetingInputComponent implements OnInit {
 
