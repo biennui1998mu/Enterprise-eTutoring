@@ -48,10 +48,10 @@ export class GuestGuard implements CanActivateChild {
 
   private async retrievingUserInfoViaToken() {
     try {
-      await this.userService.me().toPromise();
+      const user = await this.userService.me().toPromise();
       // if user info state exist after API then invalid the route and navigate
       // user to dashboard
-      if (isHavingUserInfo(this.userQuery)) {
+      if (isHavingUserInfo(this.userQuery, user)) {
         this.router.navigate([this.getRoutes(), '/dashboard']);
         return false;
       }

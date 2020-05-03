@@ -24,12 +24,5 @@ export class AccountMenuComponent implements OnInit {
   logout() {
     this.userService.logout();
     this.dialogRef.close();
-    // return this.userService.changeStatusUser(this.tokenService.user._id, 2).subscribe(result => {
-    //   if (result) {
-    //     // event.preventDefault();
-    //     this.authorizeService.logout();
-    //     this.dialogRef.close();
-    //   }
-    // });
   }
 }

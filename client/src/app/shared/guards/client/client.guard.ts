@@ -11,7 +11,7 @@ import {
 import { USER_TYPE } from '../../interface/User';
 import { TokenService } from '../../services/token.service';
 import { UserQuery, UserService } from '../../services/state/user';
-import { isFullyAuthorizedLevel, isHavingValidToken } from '../guard.helper';
+import { isFullyAuthorizedLevel, isHavingValidToken, retrievingUserInfoViaToken } from '../guard.helper';
 import { UserInterfaceService } from '../../services/state/user-interface';
 
 @Injectable({
@@ -38,10 +38,6 @@ export class ClientGuard implements CanActivateChild, CanLoad {
       return true;
     }
 
-    if (isHavingValidToken(this.tokenService)) {
-      return await this.retrievingUserInfoViaToken();
-    }
-
     // else redirect to home, erase all info
     this.userService.reset();
     this.tokenService.clearToken();
@@ -61,26 +57,19 @@ export class ClientGuard implements CanActivateChild, CanLoad {
       return true;
     }
     if (isHavingValidToken(this.tokenService)) {
-      return await this.retrievingUserInfoViaToken();
+      return await retrievingUserInfoViaToken(
+        this.userService,
+        this.userQuery,
+        this.tokenService,
+        this.uiStateService,
+        this.router,
+        [USER_TYPE.student, USER_TYPE.tutor],
+      );
     }
 
     // else redirect to home, erase all info
     this.userService.reset();
     this.tokenService.clearToken();
-    this.router.navigate(['/login']);
-    return false;
-  }
-
-  private async retrievingUserInfoViaToken() {
-    try {
-      await this.userService.me().toPromise();
-      if (isFullyAuthorizedLevel(this.userQuery, this.tokenService, [USER_TYPE.tutor, USER_TYPE.student])) {
-        return true;
-      }
-      this.uiStateService.setError('Login session seems to be expired.', 5);
-    } catch (e) {
-      console.error(e);
-    }
     this.router.navigate(['/login']);
     return false;
   }

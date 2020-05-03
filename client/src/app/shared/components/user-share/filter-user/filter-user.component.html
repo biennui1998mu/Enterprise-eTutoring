@@ -1,1 +1,11 @@
-<p>filter-user works!</p>
+<div class="form-group">
+  <label class="text-muted"
+         for="filter-user">
+    Find user
+  </label>
+  <input (keyup)="inputChanges($event)"
+         class="form-control w100pct form-control-sm"
+         id="filter-user"
+         placeholder="with name or email..."
+         type="text">
+</div>

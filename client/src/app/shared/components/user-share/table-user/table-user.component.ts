@@ -39,19 +39,20 @@ export class TableUserComponent implements OnInit {
     this.dataSource.data = users;
   }
 
-  ngOnInit(): void {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
-  }
-
   @Input('searchEvent')
-  applyFilter(event: Event) {
+  set applyFilter(event: Event) {
+    if (!event) return;
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
 
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
+  }
+
+  ngOnInit(): void {
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
   }
 
   switchPage(pageEvent: PageEvent) {
