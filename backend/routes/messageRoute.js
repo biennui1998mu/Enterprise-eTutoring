@@ -12,6 +12,7 @@ router.post('/', (req, res) => {
     Message.find({
         classroom: req.body.classId
     })
+        .populate('classroom byUser quote')
         .exec()
         .then( messages => {
             return res.json({
