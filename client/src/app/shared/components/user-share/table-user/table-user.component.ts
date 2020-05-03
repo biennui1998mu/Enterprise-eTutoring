@@ -27,7 +27,7 @@ export class TableUserComponent implements OnInit {
   mapFieldToColumn: string[] = this.configTableColumns.map(
     col => col.inDataField,
   );
-  expandedUserInfo: User = mockupUser[0];
+  expandedUserInfo: User = null;
 
   constructor() {
     // TODO debug

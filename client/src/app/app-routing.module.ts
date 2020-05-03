@@ -23,6 +23,10 @@ const routes: Routes = [
     canActivateChild: [StaffGuard],
     loadChildren: () => import('./features/staff/staff.module').then(m => m.StaffModule),
   },
+  {
+    path: 'admin',
+    loadChildren: () => import('./features/admin/admin.module').then(m => m.AdminModule),
+  },
   { path: 'dashboard', component: DashboardComponent },
   { path: '**', redirectTo: '/login' },
 ];

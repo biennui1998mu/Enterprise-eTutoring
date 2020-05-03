@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { AccountMenuComponent } from '../account-menu/account-menu.component';
-import { UserQuery } from '../../../services/state/user';
+import { AccountMenuComponent } from '../staff-layout/account-menu/account-menu.component';
+import { UserQuery } from '../../services/state/user';
 
 @Component({
   selector: 'app-top-navigation',

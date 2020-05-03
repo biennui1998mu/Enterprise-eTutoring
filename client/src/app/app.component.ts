@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { SocketService } from './shared/services/socket.service';
 
 @Component({
   selector: 'app-root',
@@ -8,7 +9,11 @@ import { Component } from '@angular/core';
 export class AppComponent {
   title = 'eTutoring';
 
-  constructor() {
+  constructor(
+    private socketService: SocketService,
+  ) {
+    // setup connection and listener to the socket service:
+    socketService.setupSocket();
   }
 
 }

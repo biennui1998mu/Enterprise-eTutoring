@@ -1,0 +1,86 @@
+<mat-sidenav-container class="h100vh vw-100">
+  <mat-sidenav #sidenav
+               [opened]="true"
+               class="side-nav-general mat-elevation-z5"
+               mode="side">
+    <mat-list class="list-nav">
+      <div mat-subheader>Navigate</div>
+      <a [routerLinkActiveOptions]="{exact: true}"
+         class="cursor-pointer side-link"
+         mat-list-item
+         routerLink="/staff/dashboard"
+         routerLinkActive="active">
+        <mat-icon mat-list-icon>home</mat-icon>
+        <div mat-line>Dashboard</div>
+      </a>
+      <a [routerLinkActiveOptions]="{exact: true}"
+         class="cursor-pointer side-link"
+         mat-list-item
+         routerLink="/staff/settings"
+         routerLinkActive="active">
+        <mat-icon mat-list-icon>settings</mat-icon>
+        <div mat-line>Settings</div>
+      </a>
+
+      <mat-divider class="mv1"></mat-divider>
+
+      <div mat-subheader>
+        Manage
+      </div>
+
+      <a [routerLinkActive]="'active'"
+         [routerLink]="['/admin', 'staff']"
+         class="side-link cursor-pointer"
+         mat-list-item>
+        <mat-icon fontIcon="fa-users"
+                  fontSet="fa"
+                  mat-list-icon></mat-icon>
+        <span mat-line>
+          Staff
+        </span>
+      </a>
+      <a [routerLinkActive]="'active'"
+         [routerLink]="['/admin', 'tutor']"
+         class="side-link cursor-pointer"
+         mat-list-item>
+        <mat-icon fontIcon="fa-chalkboard-teacher"
+                  fontSet="fa"
+                  mat-list-icon></mat-icon>
+        <span mat-line>
+          Tutor
+        </span>
+      </a>
+      <a [routerLinkActive]="'active'"
+         [routerLink]="['/admin', 'student']"
+         class="side-link cursor-pointer"
+         mat-list-item>
+        <mat-icon fontIcon="fa-user-graduate"
+                  fontSet="fa"
+                  mat-list-icon></mat-icon>
+        <span mat-line>
+           Student
+        </span>
+      </a>
+      <a [routerLinkActive]="'active'"
+         [routerLink]="['/admin', 'class']"
+         class="side-link cursor-pointer"
+         mat-list-item>
+        <mat-icon fontIcon="fa-chalkboard"
+                  fontSet="fa"
+                  mat-list-icon></mat-icon>
+        <span mat-line>
+           Class
+        </span>
+      </a>
+    </mat-list>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <div class="h100vh w100pct grid wrapper-routing">
+      <app-top-navigation></app-top-navigation>
+      <div class="ofy-scroll ng-content-wrapper">
+        <ng-content></ng-content>
+      </div>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

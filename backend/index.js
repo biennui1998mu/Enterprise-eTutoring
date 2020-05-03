@@ -116,7 +116,7 @@ io.use(async function (socket, next) {
                 socket.join(data._id);
 
                 // user sẽ tự join vào room mới tạo
-                socket.emit("Joined", data);
+                socket.emit("user-joined-room-chat", data);
 
                 // lắng nghe user send message
                 socket.on("send-Message-toServer", function (messageData) {
