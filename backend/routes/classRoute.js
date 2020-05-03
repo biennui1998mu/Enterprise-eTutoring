@@ -147,18 +147,18 @@ router.post('/create', checkAuth, async (req, res) => {
     }
 
     const transporter = nodeMailer.createTransport({
-        service: 'gmail',
-        host: 'smtp.gmail.com',
-        Port: 587,
-        secure: false,
+        service: process.env.MAIL_SERVICE,
+        host: process.env.MAIL_HOST,
+        Port: process.env.MAIL_PORT,
+        secure: process.env.MAIL_SECURE,
         auth: {
-            user: 'bot.skyfall@gmail.com',
-            pass: 'mu0309198'
+            user: process.env.MAIL_USERNAME,
+            pass: process.env.MAIL_PASSWORD
         }
     })
 
     const mailForm = {
-        from: 'bot.skyfall@gmail.com',
+        from: process.env.MAIL_USERNAME,
         to: [
             tutorExist.username,
             studentExist.username
@@ -171,7 +171,7 @@ router.post('/create', checkAuth, async (req, res) => {
             Description: ${description}`
     }
 
-    const sentMail = await transporter.sendMail(mailForm, (error, email) => {
+    transporter.sendMail(mailForm, (error, email) => {
         if(error){
             console.log(error);
             return res.json({
@@ -184,12 +184,6 @@ router.post('/create', checkAuth, async (req, res) => {
             message: 'Email send!'
         })
     })
-
-    if(!sentMail){
-        return res.json({
-            message: 'Some error ???',
-        })
-    }
 
     const classroom = new Classroom({
         title,
