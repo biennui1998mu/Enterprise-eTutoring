@@ -53,7 +53,7 @@ router.post('/tutor-list', checkAuth, async (req, res) => {
         })
     }
 
-    if (checkUser.level !== 1 || checkUser.level !== 0) {
+    if (checkUser.level !== 1 && checkUser.level !== 0) {
         return res.json({
             message: 'User is not one of staff/admin'
         })
@@ -97,7 +97,7 @@ router.post('/student-list', checkAuth, async (req, res) => {
         })
     }
 
-    if (checkUser.level !== 1 || checkUser.level !== 0) {
+    if (checkUser.level !== 1 && checkUser.level !== 0) {
         return res.json({
             message: 'User is not one of staff or admin'
         })
