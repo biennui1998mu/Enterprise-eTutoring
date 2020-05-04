@@ -46,6 +46,7 @@ export class TableExtendedCellComponent {
     ).afterClosed().subscribe(
       data => {
         if (
+          data &&
           (data.action === DialogAction.update || data.action === DialogAction.delete) &&
           data.user._id
         ) {
@@ -54,6 +55,9 @@ export class TableExtendedCellComponent {
             user: data.user,
             action: data.action,
           });
+        } else if (!data || data.action === DialogAction.cancel) {
+          const userUnActive = data?.user ? data.user : this.user;
+          this.tutorService.unselectActive(userUnActive);
         }
       },
     );

@@ -44,31 +44,27 @@ export class UserManageComponent implements OnInit {
   newUserDialog(
     level: USER_TYPE = USER_TYPE.tutor,
   ) {
-    const activeState = this.query.getActive();
-    let user: User;
-    if (Array.isArray(activeState)) {
-      user = activeState[0];
-    } else {
-      user = activeState;
-    }
+    // const activeState = this.query.getActive();
+    // let user: User;
+    // if (Array.isArray(activeState)) {
+    //   user = activeState[0];
+    // } else {
+    //   user = activeState;
+    // }
     this.matDialog.open<UserDialogInfoComponent, PopupUserInfo, PopupUserInfo>(
       UserDialogInfoComponent, {
         height: 'max-content',
         maxHeight: '600px',
         width: '100%',
         maxWidth: '700px',
-        data: { user: user, action: DialogAction.new, subject: level },
+        data: { user: null, action: DialogAction.new, subject: level },
       },
     ).afterClosed().subscribe(
       data => {
-        if (data.action === DialogAction.cancel) {
+        if (!data || data.action === DialogAction.cancel) {
           return;
         }
-        if (
-          data.action === DialogAction.new &&
-          data.subject === USER_TYPE.tutor &&
-          data.user
-        ) {
+        if (data.action === DialogAction.new && data.user) {
           this.service.createUser(data.user);
         }
       },

@@ -26,7 +26,7 @@ export class UserDialogInfoComponent implements OnInit {
   );
 
   levelField = new FormControl(
-    { value: null, disabled: true }, [
+    { value: this.data?.subject, disabled: true }, [
       Validators.required, Validators.min(USER_TYPE.staff), Validators.max(USER_TYPE.student),
     ],
   );
@@ -78,7 +78,9 @@ export class UserDialogInfoComponent implements OnInit {
   }
 
   update() {
-    const user: User = this.mapBasicFields();
+    const user: User = this.mapBasicFields(
+      deepMutableObject(this.data.user),
+    );
     if (this.passwordField.value?.length > 0) {
       if (!this.passwordField.valid) {
         return;
@@ -151,16 +153,26 @@ export class UserDialogInfoComponent implements OnInit {
     this.avatarField.setValue(this.cachedAvatar);
   }
 
-  private mapBasicFields() {
-    const user: User = deepMutableObject(this.data.user);
-    user.name = this.nameField.value;
-    user.username = this.usernameField.value;
-    user.level = this.levelField.value;
-    if (user.avatar !== this.avatarField.value && this.cacheFileUpload) {
-      user.avatarNew = this.cacheFileUpload;
+  private mapBasicFields(initValue?: User) {
+    let user: User = initValue;
+    if (!initValue) {
+      user = {
+        name: this.nameField.value,
+        username: this.usernameField.value,
+        level: this.levelField.value,
+        avatar: this.avatarField.value,
+      };
     } else {
-      user.avatar = this.avatarField.value;
+      user.name = this.nameField.value;
+      user.username = this.usernameField.value;
+      user.level = this.levelField.value;
+      if (user.avatar !== this.avatarField.value && this.cacheFileUpload) {
+        user.avatarNew = this.cacheFileUpload;
+      } else {
+        user.avatar = this.avatarField.value;
+      }
     }
+
     return user;
   }
 
@@ -168,7 +180,6 @@ export class UserDialogInfoComponent implements OnInit {
     const user = this.data.user;
     this.nameField.setValue(user?.name);
     this.usernameField.setValue(user?.username);
-    this.levelField.setValue(user?.level | this.data.subject);
     this.avatarField.setValue(user?.avatar);
     this.cachedAvatar = user?.avatar;
   }

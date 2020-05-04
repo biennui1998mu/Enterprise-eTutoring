@@ -29,7 +29,7 @@ export class UsersSystemService {
   get(): Observable<User[]> {
     this.store.setLoading(true);
     return this.http.post<APIResponse<User[]>>(
-      `${this.api}/tutor-list`,
+      `${this.api}/user-list`,
       {},
       { headers: this.tokenService.authorizeHeader },
     ).pipe(
@@ -48,7 +48,7 @@ export class UsersSystemService {
         console.error(err);
         this.store.setLoading(false);
         this.store.set([]);
-        this.uiStateService.setError('Failed to get list tutor', 5);
+        this.uiStateService.setError('Failed to get list user', 5);
         return of([] as User[]);
       }),
     );
@@ -66,22 +66,28 @@ export class UsersSystemService {
     if (!student) {
       return;
     }
-    this.store.removeActive(student._id);
+    if (this.query.hasActive(student._id)) {
+      this.store.removeActive(student._id);
+    }
   }
 
   createUser(user: User) {
     const formData = new FormData();
     Object.keys(user).forEach(field => {
+      // create formData based on user available field
       if (field === 'avatar' || field === 'avatarNew') {
         // TODO resolve later
       } else if (!!user[field]) {
+        // only passing the data that is not null/empty to the form
         let data = user[field];
+        // must stringify the data first
         if (typeof data !== 'string') {
           data = JSON.stringify(data);
         }
         formData.append(field, data);
       }
     });
+    // set the store state (loading screen etc...)
     this.store.setLoading(true);
     this.http.post<APIResponse<User>>(
       `${this.api}/signup`,
@@ -89,16 +95,20 @@ export class UsersSystemService {
       { headers: this.tokenService.authorizeHeader },
     ).pipe(
       tap(() => {
+        // finish loading once tap trigger / finish API request
         this.store.setLoading(false);
       }),
+      // only care about the data, f*ck response message
       map(res => res.data),
       catchError(error => {
         console.error(error);
+        /// display error 5 second if the request error
         this.uiStateService.setError('Failed to create the user', 5);
         return of(null as User);
       }),
     ).subscribe(newUser => {
       if (newUser) {
+        // add the new user to the array
         this.store.add(newUser);
       }
     });

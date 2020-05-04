@@ -3,7 +3,7 @@ export interface User {
   /**
    * auto increment
    */
-  indicator: number;
+  indicator?: number;
   username: string;
   password?: string;
   name: string;
