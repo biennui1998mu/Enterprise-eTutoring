@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 import { APIResponse } from '../../../interface/API-Response';
 import { User } from '../../../interface/User';
 import { Observable, of } from 'rxjs';
+import { ClientTutorQuery } from './client-tutor.query';
 
 @Injectable({ providedIn: 'root' })
 export class ClientTutorService {
@@ -17,6 +18,7 @@ export class ClientTutorService {
 
   constructor(
     private store: ClientTutorStore,
+    private query: ClientTutorQuery,
     private http: HttpClient,
     private tokenService: TokenService,
     private uiStateService: UserInterfaceService,
@@ -25,6 +27,7 @@ export class ClientTutorService {
   }
 
   get(): Observable<User[]> {
+    this.store.setLoading(true);
     return this.http.post<APIResponse<User[]>>(
       `${this.api}/tutor-list`,
       {},
@@ -38,10 +41,12 @@ export class ClientTutorService {
           this.store.reset();
           this.uiStateService.setError(response.message, 5);
         }
+        this.store.setLoading(false);
       }),
       map(response => response.data),
       catchError(err => {
         console.error(err);
+        this.store.setLoading(false);
         this.store.set([]);
         this.uiStateService.setError('Failed to get list tutor', 5);
         return of([] as User[]);
@@ -50,6 +55,14 @@ export class ClientTutorService {
   }
 
   selectActive(student: User) {
+    if (!student) {
+      this.store.setActive(null);
+      return;
+    }
     this.store.setActive(student._id);
+  }
+
+  createTutor(tutor: User) {
+
   }
 }

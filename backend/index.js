@@ -20,7 +20,7 @@ mongoose.connect(`mongodb://${username}:${password}@nosama-shard-00-00-dstgw.gcp
 });
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 3000;
 
 const classRoutes = require('./routes/classRoute');
 const fileRoute = require('./routes/fileRoute');

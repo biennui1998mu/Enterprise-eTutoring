@@ -2,8 +2,9 @@
   Update information
 </span>
 
-<div class="content"
-     matDialogContent>
+<form [formGroup]="userInfo"
+      class="content"
+      matDialogContent>
   <div class="flex flex-d-col align-items-center avatar-section">
     <img *ngIf="avatarField.valid"
          [src]="avatarField.value"
@@ -25,7 +26,7 @@
       Upload
     </label>
     <button (click)="resetAvatar()"
-            *ngIf="cachedAvatar"
+            *ngIf="cachedAvatar && avatarField.value !== cachedAvatar"
             [disabled]="avatarField.pending"
             class="mt05 btn btn-sm btn-danger">
       Reset
@@ -50,8 +51,8 @@
     <mat-form-field appearance="outline">
       <mat-label>Password</mat-label>
       <input [formControl]="passwordField"
+             [required]="data.action === DialogAction.new"
              matInput
-             required
              type="text">
     </mat-form-field>
     <mat-form-field appearance="outline">
@@ -70,7 +71,7 @@
       </mat-select>
     </mat-form-field>
   </div>
-</div>
+</form>
 
 <div class="action"
      matDialogActions>
@@ -80,27 +81,24 @@
           mat-button>
     Cancel
   </button>
-  <button (click)="debug()"
-          class="ml1"
-          color="warn"
-          mat-button>
-    debug
-  </button>
   <button (click)="delete()"
+          *ngIf="data.action === DialogAction.update"
           class="ml1"
           color="warn"
           mat-raised-button>
     Delete
   </button>
   <button (click)="update()"
-          [disabled]="userInfo.valid"
+          *ngIf="data.action === DialogAction.update"
+          [disabled]="userInfo.invalid"
           class="ml1"
           color="accent"
           mat-raised-button>
     Update
   </button>
   <button (click)="create()"
-          [disabled]="userInfo.valid"
+          *ngIf="data.action === DialogAction.new"
+          [disabled]="userInfo.invalid"
           class="ml1"
           color="primary"
           mat-raised-button>

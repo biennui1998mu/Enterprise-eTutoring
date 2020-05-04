@@ -187,7 +187,7 @@ router.post('/search', checkAuth, async (req, res) => {
  * sign up
  */
 router.post('/signup', upload.single('avatar'), checkAuth, async (req, res) => {
-    if(req.userData.level !== 1){
+    if (req.userData.level !== 1) {
         return res.json({
             message: 'You do not have permission to create account!!'
         })
@@ -205,19 +205,19 @@ router.post('/signup', upload.single('avatar'), checkAuth, async (req, res) => {
         })
     }
 
-    if(!username || typeof username !== 'string' || username.length === 0){
+    if (!username || typeof username !== 'string' || username.length === 0) {
         return res.json({
             message: 'username invalid'
         })
     }
 
-    if(!name || typeof name !== 'string' || name.length === 0){
+    if (!name || typeof name !== 'string' || name.length === 0) {
         return res.json({
             message: 'name invalid'
         })
     }
 
-    if(!level){
+    if (!level) {
         return res.json({
             message: 'level invalid'
         })
@@ -295,9 +295,9 @@ router.post('/signin', async (req, res) => {
 
     user.activeAt = Date.now()
 
-    try{
+    try {
         await user.save();
-    }catch (e) {
+    } catch (e) {
         return res.json({
             message: 'SKY FALL',
             data: null,
@@ -321,7 +321,8 @@ router.post('/update/:userId', (req, res) => {
 
     User.update({
         _id: userId
-    }, {$set: {
+    }, {
+        $set: {
             updateOps,
             updatedAt: Date.now
         }

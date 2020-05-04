@@ -11,28 +11,26 @@ import { deepMutableObject, extractInfo, getPreviewBase64 } from '../../../tools
   styleUrls: ['./user-dialog-info.component.scss'],
 })
 export class UserDialogInfoComponent implements OnInit {
-
   userInfo: FormGroup;
+
   nameField = new FormControl(
     '', [
       Validators.required, Validators.minLength(1),
     ],
   );
+
   usernameField = new FormControl(
     '', [
       Validators.required, Validators.minLength(1), Validators.email,
     ],
   );
-  passwordField = new FormControl(
-    null, [
-      Validators.minLength(1),
-    ],
-  );
+
   levelField = new FormControl(
-    USER_TYPE.student, [
+    null, [
       Validators.required, Validators.min(USER_TYPE.staff), Validators.max(USER_TYPE.student),
     ],
   );
+
   avatarField = new FormControl(
     USER_TYPE.student, [
       Validators.required,
@@ -41,8 +39,18 @@ export class UserDialogInfoComponent implements OnInit {
     ],
   );
 
+  readonly DialogAction = DialogAction;
   readonly USER_TYPE = USER_TYPE;
   cachedAvatar: string = '';
+
+  private passwordValidations = [
+    Validators.minLength(1),
+    this.data.action === DialogAction.new ? Validators.required : null,
+  ];
+  passwordField = new FormControl(
+    null, this.passwordValidations.filter(validation => !!validation),
+  );
+
   private cacheFileUpload: File = null;
 
   constructor(
@@ -68,13 +76,9 @@ export class UserDialogInfoComponent implements OnInit {
     }
   }
 
-  debug() {
-    console.log(this.userInfo);
-  }
-
   update() {
     const user: User = this.mapBasicFields();
-    if (this.passwordField.value.length > 0) {
+    if (this.passwordField.value?.length > 0) {
       if (!this.passwordField.valid) {
         return;
       }
@@ -82,34 +86,38 @@ export class UserDialogInfoComponent implements OnInit {
     }
 
     this.dialogRef.close({
-      action: 'update',
+      action: DialogAction.update,
       user: user,
+      subject: this.data.subject,
     } as PopupUserInfo);
   }
 
   create() {
     const user: User = this.mapBasicFields();
-    if (!this.passwordField.valid) {
+    if (!this.passwordField?.valid) {
       return;
     }
     user.password = this.passwordField.value;
     this.dialogRef.close({
-      action: 'new',
+      action: DialogAction.new,
       user: user,
+      subject: this.data.subject,
     } as PopupUserInfo);
   }
 
   close() {
     this.dialogRef.close({
-      action: 'cancel',
+      action: DialogAction.cancel,
       user: null,
+      subject: this.data.subject,
     } as PopupUserInfo);
   }
 
   delete() {
     this.dialogRef.close({
-      action: 'delete',
+      action: DialogAction.delete,
       user: this.data.user,
+      subject: this.data.subject,
     } as PopupUserInfo);
   }
 
@@ -167,5 +175,13 @@ export class UserDialogInfoComponent implements OnInit {
 
 export interface PopupUserInfo {
   user: User;
-  action: 'new' | 'update' | 'delete' | 'cancel'
+  action: DialogAction,
+  subject: USER_TYPE
+}
+
+export enum DialogAction {
+  new,
+  update,
+  delete,
+  cancel
 }

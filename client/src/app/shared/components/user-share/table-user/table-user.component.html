@@ -26,7 +26,8 @@
       <td *matCellDef="let user"
           [attr.colspan]="mapFieldToColumn.length"
           mat-cell>
-        <app-table-extended-cell [@detailExpand]="user == expandedUserInfo ? 'expanded' : 'collapsed'"
+        <app-table-extended-cell (userUpdate)="userUpdateEvent($event)"
+                                 [@detailExpand]="user == expandedUserInfo ? 'expanded' : 'collapsed'"
                                  [user]="user">
         </app-table-extended-cell>
       </td>
@@ -34,7 +35,7 @@
 
     <tr *matHeaderRowDef="mapFieldToColumn"
         mat-header-row></tr>
-    <tr (click)="expandedUserInfo = expandedUserInfo === user ? null : user"
+    <tr (click)="viewUser(user)"
         *matRowDef="let user; columns: mapFieldToColumn;"
         [class.example-expanded-row]="expandedUserInfo === user"
         class="user-info-row"

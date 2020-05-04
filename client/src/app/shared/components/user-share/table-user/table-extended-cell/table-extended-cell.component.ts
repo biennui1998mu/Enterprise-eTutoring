@@ -1,6 +1,10 @@
-import { AfterViewInit, Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { User } from '../../../../interface/User';
-import { PopupUserInfo, UserDialogInfoComponent } from '../../user-dialog-info/user-dialog-info.component';
+import {
+  DialogAction,
+  PopupUserInfo,
+  UserDialogInfoComponent,
+} from '../../user-dialog-info/user-dialog-info.component';
 import { MatDialog } from '@angular/material/dialog';
 
 @Component({
@@ -8,16 +12,19 @@ import { MatDialog } from '@angular/material/dialog';
   templateUrl: './table-extended-cell.component.html',
   styleUrls: ['./table-extended-cell.component.scss'],
 })
-export class TableExtendedCellComponent implements AfterViewInit {
+export class TableExtendedCellComponent {
   @Input()
   user: User;
+
+  @Output()
+  userUpdate: EventEmitter<{
+    action: DialogAction,
+    user: User
+  }> = new EventEmitter();
 
   constructor(
     private matDialog: MatDialog,
   ) {
-  }
-
-  ngAfterViewInit(): void {
   }
 
   editUser() {
@@ -29,12 +36,24 @@ export class TableExtendedCellComponent implements AfterViewInit {
         width: '100%',
         maxWidth: '700px',
         data: {
-          user: null,
-          action: 'update',
+          user: this.user,
+          action: DialogAction.update,
+          subject: this.user.level,
         },
       },
     ).afterClosed().subscribe(
-      data => console.log(data),
+      data => {
+        if (
+          (data.action === DialogAction.update || data.action === DialogAction.delete) &&
+          data.user._id
+        ) {
+          this.userUpdate.emit({
+            user: data.user,
+            action: data.action,
+          });
+        }
+        console.log(data);
+      },
     );
   }
 
@@ -42,3 +61,4 @@ export class TableExtendedCellComponent implements AfterViewInit {
 
   }
 }
+

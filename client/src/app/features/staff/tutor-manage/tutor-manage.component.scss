@@ -11,4 +11,9 @@
 .functionalities {
   flex-wrap: nowrap;
   overflow-x: auto;
+  align-items: center;
+
+  > * {
+    margin-right: 1rem;
+  }
 }

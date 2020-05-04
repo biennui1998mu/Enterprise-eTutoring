@@ -1,9 +1,10 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { User } from '../../../interface/User';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { DialogAction } from '../user-dialog-info/user-dialog-info.component';
 
 @Component({
   selector: 'app-table-user',
@@ -18,25 +19,22 @@ import { MatTableDataSource } from '@angular/material/table';
   ],
 })
 export class TableUserComponent implements OnInit {
-
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
 
+  @Output()
+  viewUserDetail: EventEmitter<User> = new EventEmitter();
+
+  @Output()
+  updateUserDetail: EventEmitter<{ action: DialogAction; user: User }> = new EventEmitter();
+
   dataSource: MatTableDataSource<User> = new MatTableDataSource<User>([]);
   configTableColumns: ColumnMatMapper[] = columnMapper;
-  mapFieldToColumn: string[] = this.configTableColumns.map(
-    col => col.inDataField,
-  );
+  mapFieldToColumn: string[] = this.configTableColumns.map(col => col.inDataField);
   expandedUserInfo: User = null;
-
-  constructor() {
-    // TODO debug
-    // this.dataSource = new MatTableDataSource<User>(mockupUser);
-  }
 
   @Input()
   set users(users: User[]) {
-    console.log(users);
     this.dataSource.data = users;
   }
 
@@ -58,6 +56,20 @@ export class TableUserComponent implements OnInit {
 
   switchPage(pageEvent: PageEvent) {
     this.expandedUserInfo = null;
+    this.viewUserDetail.emit(this.expandedUserInfo);
+  }
+
+  viewUser(user: User) {
+    if (this.expandedUserInfo && this.expandedUserInfo._id === user._id) {
+      this.expandedUserInfo = null;
+    } else {
+      this.expandedUserInfo = user;
+    }
+    this.viewUserDetail.emit(this.expandedUserInfo);
+  }
+
+  userUpdateEvent(updateEvent: { action: DialogAction; user: User }) {
+    this.updateUserDetail.emit(updateEvent);
   }
 }
 
@@ -90,30 +102,5 @@ const columnMapper: ColumnMatMapper[] = [
   {
     inDataField: 'activeAt',
     displayAs: 'Last Active',
-  },
-];
-
-const mockupUser: User[] = [
-  {
-    indicator: 1,
-    name: 'Hydrogen',
-    username: 'hydro@gmail.com',
-    avatar: 'https://material.angular.io/assets/img/examples/shiba1.jpg',
-    level: 1,
-    createdAt: null,
-  }, {
-    indicator: 2,
-    name: 'Asaka',
-    username: 'Asaka_Yumi@gmail.com',
-    avatar: 'https://material.angular.io/assets/img/examples/shiba1.jpg',
-    level: 2,
-    createdAt: null,
-  }, {
-    indicator: 3,
-    name: 'Son Nguyen',
-    username: 'songokun@gmail.com',
-    avatar: 'https://material.angular.io/assets/img/examples/shiba1.jpg',
-    level: 3,
-    createdAt: null,
   },
 ];
