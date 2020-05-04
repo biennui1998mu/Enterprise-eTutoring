@@ -1,0 +1,45 @@
+@mixin mat-table-columns($columns) {
+  .mat-column- {
+    @each $colName, $props in $columns {
+
+      $width: map-get($props, 'width');
+
+      &#{$colName} {
+        flex: $width;
+        width: $width;
+
+        @if map-has-key($props, 'color') {
+          color: map-get($props, 'color');
+        }
+      }
+    }
+  }
+}
+
+table {
+  width: 100%;
+}
+
+tr.user-detail-row {
+  height: 0;
+}
+
+tr.user-info-row:not(.table-expanded-row):hover {
+  background: whitesmoke;
+}
+
+tr.user-info-row:not(.table-expanded-row):active {
+  background: #efefef;
+}
+
+.user-info-row td {
+  border-bottom-width: 0;
+}
+
+@include mat-table-columns((
+        title: (width: 250px),
+        tutor: (width: 130px),
+        student: (width: 130px),
+        createdAt: (width: 110px),
+        status: (width: 80px)
+));

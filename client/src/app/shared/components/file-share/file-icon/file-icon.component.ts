@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { KBToMB } from '../../../tools/upload.helper';
+import { KBToMB } from '../../../tools';
 
 @Component({
   selector: 'app-file-icon',
@@ -54,15 +54,15 @@ export class FileIconComponent implements OnInit {
   getIcon() {
     switch (this.fileType) {
       case 'Microsoft Word':
-        return 'fa-files-word';
+        return 'fa-file-word';
       case 'Microsoft Excel':
-        return 'fa-files-excel';
+        return 'fa-file-excel';
       case 'Microsoft Powerpoint':
-        return 'fa-files-powerpoint';
+        return 'fa-file-powerpoint';
       case '7-zip archive':
       case 'ZIP archive':
       case 'RAR Archive':
-        return 'fa-files-zip';
+        return 'fa-file-zip';
       default:
         return 'fa-question';
     }

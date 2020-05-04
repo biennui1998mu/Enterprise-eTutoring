@@ -8,8 +8,9 @@ import { StaffLayoutModule } from '../../shared/layouts/staff-layout.module';
 import { StaffManageComponent } from './staff-manage/staff-manage.component';
 import { StudentManageComponent } from './student-manage/student-manage.component';
 import { ClassManageComponent } from './class-manage/class-manage.component';
-import { StaffShareModule } from '../../shared/components/staff-share/staff-share.module';
+import { UserShareModule } from '../../shared/components/user-share/user-share.module';
 import { MaterialsModule } from '../../shared/modules/materials/materials.module';
+import { ClassroomManageModule } from '../../shared/components/classroom-manage/classroom-manage.module';
 
 
 @NgModule({
@@ -18,8 +19,9 @@ import { MaterialsModule } from '../../shared/modules/materials/materials.module
     CommonModule,
     StaffRoutingModule,
     StaffLayoutModule,
-    StaffShareModule,
+    UserShareModule,
     MaterialsModule,
+    ClassroomManageModule,
   ],
 })
 export class StaffModule {

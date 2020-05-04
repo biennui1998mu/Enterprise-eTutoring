@@ -123,6 +123,7 @@ export const mimeMapper = Object.freeze({
  */
 export function extractInfo(file: File, option?: {
   sizeUnit?: StorageUnit
+  specifiedType?: 'image' | 'application'
 }): FileUploadInfo {
   const filename = file.name;
   const fileSizeRaw = file.size;
@@ -151,6 +152,11 @@ export function extractInfo(file: File, option?: {
   }
 
   let { type, extension, pseudoExtension } = mimeInfo;
+  if (option?.specifiedType) {
+    if (type !== option.specifiedType) {
+      return null;
+    }
+  }
 
   if (pseudoExtension) {
     const fileSplit = filename.split('.');
@@ -166,7 +172,13 @@ export function extractInfo(file: File, option?: {
   };
 }
 
-export function IsFileSmallerThan(file: File, sizeKb: number) {
+/**
+ * If the file is smaller than the specified size
+ * @param file
+ * @param sizeKb
+ * @constructor
+ */
+export function IsFileSmallerThan(file: File, sizeKb: number = 3000) {
   const fileSize = ByteToKB(file.size);
   return fileSize < sizeKb;
 }
@@ -188,5 +200,20 @@ export function getPreviewBase64(
       resolve(null);
     };
     fileReader.readAsDataURL(file);
+  });
+}
+
+export function isValidImage(base64: string): Promise<boolean> {
+  const image = new Image();
+  return new Promise(resolve => {
+    image.onload = function (loadEvent) {
+      const target = loadEvent.target as HTMLImageElement;
+      resolve(!(target.height === 0 && target.width === 0));
+    };
+    image.onerror = function (loadEvent) {
+      console.error(loadEvent);
+      resolve(false);
+    };
+    image.src = base64;
   });
 }

@@ -1,0 +1,20 @@
+<ng-container *ngIf="isAvatarField">
+  <img [alt]="user.username"
+       [src]="user.avatar"
+       class="br50 obj-fit-cover obj-pos-center"
+       style="width: 1.5rem; height: 1.5rem">
+</ng-container>
+
+<ng-container *ngIf="isLevelField">
+  {{userLevel}}
+</ng-container>
+
+<ng-container *ngIf="isActiveAtField">
+  <span [class.text-muted]="!user.activeAt">
+    {{user.activeAt ? user.activeAt : 'No data'}}
+  </span>
+</ng-container>
+
+<ng-container *ngIf="isRawField">
+  {{user[displayField]}}
+</ng-container>

@@ -6,10 +6,14 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./class-manage.component.scss']
 })
 export class ClassManageComponent implements OnInit {
+  eventFilter: any;
 
   constructor() { }
 
   ngOnInit(): void {
   }
 
+  applyFilter($event: Event) {
+
+  }
 }

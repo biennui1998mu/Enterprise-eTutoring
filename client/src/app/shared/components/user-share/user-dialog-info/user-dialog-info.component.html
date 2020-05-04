@@ -1,0 +1,109 @@
+<span matDialogTitle>
+  Update information
+</span>
+
+<div class="content"
+     matDialogContent>
+  <div class="flex flex-d-col align-items-center avatar-section">
+    <img *ngIf="avatarField.valid"
+         [src]="avatarField.value"
+         alt=""
+         class="br50 of-hidden obj-pos-center obj-fit-cover">
+    <div *ngIf="!avatarField.valid && !avatarField.pending"
+         class="br50 bg-white-dirty grid place-item-center img-placeholder">
+      <i class="fas fa-exclamation"></i>
+    </div>
+    <div *ngIf="avatarField.pending"
+         class="br50 bg-white-dirty grid place-item-center img-placeholder">
+      <i class="fa fa-spinner"></i>
+    </div>
+    <label class="mt1 btn btn-sm btn-secondary">
+      <input (change)="fileUpload($event)"
+             [disabled]="avatarField.pending"
+             hidden
+             type="file">
+      Upload
+    </label>
+    <button (click)="resetAvatar()"
+            *ngIf="cachedAvatar"
+            [disabled]="avatarField.pending"
+            class="mt05 btn btn-sm btn-danger">
+      Reset
+    </button>
+  </div>
+
+  <div class="flex flex-d-col form-section">
+    <mat-form-field appearance="outline">
+      <mat-label>Name</mat-label>
+      <input [formControl]="nameField"
+             matInput
+             required
+             type="text">
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Username</mat-label>
+      <input [formControl]="usernameField"
+             matInput
+             required
+             type="text">
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Password</mat-label>
+      <input [formControl]="passwordField"
+             matInput
+             required
+             type="text">
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Level</mat-label>
+      <mat-select [formControl]="levelField"
+                  required>
+        <mat-option [value]="USER_TYPE.staff">
+          Staff
+        </mat-option>
+        <mat-option [value]="USER_TYPE.tutor">
+          Tutor
+        </mat-option>
+        <mat-option [value]="USER_TYPE.student">
+          Student
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+</div>
+
+<div class="action"
+     matDialogActions>
+  <button (click)="close()"
+          class="ml1"
+          color="warn"
+          mat-button>
+    Cancel
+  </button>
+  <button (click)="debug()"
+          class="ml1"
+          color="warn"
+          mat-button>
+    debug
+  </button>
+  <button (click)="delete()"
+          class="ml1"
+          color="warn"
+          mat-raised-button>
+    Delete
+  </button>
+  <button (click)="update()"
+          [disabled]="userInfo.valid"
+          class="ml1"
+          color="accent"
+          mat-raised-button>
+    Update
+  </button>
+  <button (click)="create()"
+          [disabled]="userInfo.valid"
+          class="ml1"
+          color="primary"
+          mat-raised-button>
+    Create
+  </button>
+</div>

@@ -3,12 +3,12 @@ import { CommonModule } from '@angular/common';
 import { StaffLayoutComponent } from './staff-layout/staff-layout.component';
 import { RouterModule } from '@angular/router';
 import { MaterialsModule } from '../modules/materials/materials.module';
-import { TopNavigationComponent } from './staff-layout/top-navigation/top-navigation.component';
 import { AccountMenuComponent } from './staff-layout/account-menu/account-menu.component';
+import { LayoutModule } from './layout.module';
 
 
 @NgModule({
-  declarations: [StaffLayoutComponent, TopNavigationComponent, AccountMenuComponent],
+  declarations: [StaffLayoutComponent, AccountMenuComponent],
   exports: [
     StaffLayoutComponent,
   ],
@@ -16,6 +16,7 @@ import { AccountMenuComponent } from './staff-layout/account-menu/account-menu.c
     CommonModule,
     RouterModule,
     MaterialsModule,
+    LayoutModule,
   ],
 })
 export class StaffLayoutModule {

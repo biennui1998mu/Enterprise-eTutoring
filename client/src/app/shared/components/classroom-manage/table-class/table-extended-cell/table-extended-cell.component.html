@@ -1,0 +1,76 @@
+<div class="divider-bar"></div>
+
+<div class="flex flex-d-col left-section">
+  <mat-list class="list-nav">
+    <div class="pb0-i"
+         mat-subheader>
+      Tutor
+    </div>
+    <mat-list-item class="cursor-pointer side-link"
+                   mat-list-item>
+      <img [alt]="classroom.tutor.name"
+           [src]="classroom.tutor.avatar"
+           class="obj-pos-center obj-fit-cover"
+           mat-list-icon>
+      <div mat-line>
+        {{classroom.tutor.name}}
+      </div>
+      <small class="text-muted"
+             mat-line>
+        {{classroom.tutor.username}}
+      </small>
+      <small class="text-muted"
+             mat-line>
+        last active {{classroom.tutor.activeAt | momentRelativePipe}}
+      </small>
+    </mat-list-item>
+
+    <div class="pb0-i"
+         mat-subheader>
+      Student
+    </div>
+    <mat-list-item class="cursor-pointer side-link"
+                   mat-list-item>
+      <img [alt]="classroom.student.name"
+           [src]="classroom.student.avatar"
+           class="obj-pos-center obj-fit-cover"
+           mat-list-icon>
+      <div mat-line>
+        {{classroom.student.name}}
+      </div>
+      <small class="text-muted"
+             mat-line>
+        {{classroom.student.username}}
+      </small>
+      <small class="text-muted"
+             mat-line>
+        last active {{classroom.student.activeAt | momentRelativePipe}}
+      </small>
+    </mat-list-item>
+  </mat-list>
+</div>
+
+<div class="flex flex-d-col right-section">
+  <div class="grid brief-row">
+    <div class="flex flex-d-col">
+      <h2>Schedule</h2>
+      <button color="primary"
+              mat-flat-button>
+        View this class schedule
+      </button>
+      <small class="text-muted">
+        You will be navigated to schedule manager
+      </small>
+    </div>
+
+    <div class="flex flex-d-col">
+      <h2>Resources</h2>
+      <button (click)="popupResource()"
+              color="primary"
+              mat-flat-button>
+        View this class uploaded files
+      </button>
+    </div>
+  </div>
+
+</div>

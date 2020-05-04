@@ -1,0 +1,38 @@
+@import "../../../../styles/specific/admin";
+
+.header {
+  padding: 0.25rem 0.5rem;
+  grid-template-areas: 'left logo . right';
+  grid-template-columns: max-content max-content auto max-content;
+  grid-template-rows: 1fr;
+  grid-gap: 1rem;
+}
+
+.icon-left {
+  grid-area: left;
+
+  &:hover {
+    background: #e0e0e0 !important;
+  }
+}
+
+.logo {
+  grid-area: logo;
+  height: 40px;
+}
+
+.user-section {
+  grid-area: right;
+  border-radius: 20px;
+  transition: background-color 0.2s;
+
+  .user-avatar {
+    width: 40px;
+    height: 40px;
+    padding: 4px;
+  }
+
+  &:hover, &.active {
+    background: rgba(204, 204, 204, 0.3);
+  }
+}

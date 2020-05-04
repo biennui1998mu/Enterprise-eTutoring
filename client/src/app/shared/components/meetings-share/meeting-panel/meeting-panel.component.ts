@@ -5,7 +5,6 @@ import { MatDialog } from '@angular/material/dialog';
 @Component({
   selector: 'app-meeting-panel',
   templateUrl: './meeting-panel.component.html',
-  styleUrls: ['./meeting-panel.component.scss'],
 })
 export class MeetingPanelComponent implements OnInit {
 

@@ -1,0 +1,26 @@
+<header class="relative grid header">
+  <button class="icon-left bg-transparent-i text-darker-i outline-none-i shadow-none"
+          mat-mini-fab>
+    <mat-icon fontIcon="fa-bars"
+              fontSet="fas"></mat-icon>
+  </button>
+
+  <div class="logo">
+    <img alt="School Logo"
+         class="h100pct w-auto"
+         src="/client/src/assets/school-logo.png">
+  </div>
+
+  <div (click)="openUserMenu()"
+       [class.active]="isUserMenuOpen"
+       [matTooltip]="(user | async)?.name"
+       class="flex align-items-center pr1 user-section">
+    <div class="br50 mr05 of-hidden user-avatar">
+      <img [alt]="(user | async)?.name"
+           [src]="(user | async)?.avatar"
+           class="w100pct h100pct br50 obj-pos-center obj-fit-cover"
+           mat-list-icon>
+    </div>
+    <i class="fa text-muted fa-caret-down"></i>
+  </div>
+</header>

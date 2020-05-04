@@ -101,7 +101,7 @@ io.use(async function (socket, next) {
 }).on('connection', async (socket) => {
     const decoded = socket.decoded;
     const username = decoded.username;
-    // const userId = decoded._id;
+    const userId = decoded._id;
 
     /**
      * show socket disconnect

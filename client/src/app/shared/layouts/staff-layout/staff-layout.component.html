@@ -36,7 +36,7 @@
                   fontSet="fa"
                   mat-list-icon></mat-icon>
         <span mat-line>
-          Staff
+          Tutor
         </span>
       </a>
       <a [routerLinkActive]="'active'"
@@ -59,6 +59,17 @@
                   mat-list-icon></mat-icon>
         <span mat-line>
            Class
+        </span>
+      </a>
+      <a [routerLinkActive]="'active'"
+         [routerLink]="['/staff', 'schedule']"
+         class="side-link cursor-pointer"
+         mat-list-item>
+        <mat-icon fontIcon="fa-calendar"
+                  fontSet="fa"
+                  mat-list-icon></mat-icon>
+        <span mat-line>
+           Schedule
         </span>
       </a>
     </mat-list>

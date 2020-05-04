@@ -22,6 +22,10 @@
   outline: none;
 }
 
+.outline-none-i {
+  outline: none !important;
+}
+
 .obj-fit-cover {
   object-fit: cover;
 }
@@ -2111,6 +2115,10 @@
   padding-bottom: 0;
 }
 
+.pb0-i {
+  padding-bottom: 0 !important;
+}
+
 .pb01 {
   padding-bottom: .1rem;
 }
@@ -2849,6 +2857,10 @@
   font-weight: bold;
 }
 
+.fw-bold-i {
+  font-weight: bold !important;
+}
+
 .user-select-all {
   user-select: all;
 }
@@ -3265,9 +3277,12 @@
   background: #333;
 }
 
-
 .bg-darker-i {
   background: #333 !important;
+}
+
+.text-darker-i {
+  color: #333 !important;
 }
 
 .bg-darkest {
