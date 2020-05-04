@@ -6,6 +6,7 @@ import {
   UserDialogInfoComponent,
 } from '../../user-dialog-info/user-dialog-info.component';
 import { MatDialog } from '@angular/material/dialog';
+import { UsersSystemService } from '../../../../services/state/client-tutor';
 
 @Component({
   selector: 'app-table-extended-cell',
@@ -24,6 +25,7 @@ export class TableExtendedCellComponent {
 
   constructor(
     private matDialog: MatDialog,
+    private tutorService: UsersSystemService,
   ) {
   }
 
@@ -47,12 +49,12 @@ export class TableExtendedCellComponent {
           (data.action === DialogAction.update || data.action === DialogAction.delete) &&
           data.user._id
         ) {
+          this.tutorService.unselectActive(data.user);
           this.userUpdate.emit({
             user: data.user,
             action: data.action,
           });
         }
-        console.log(data);
       },
     );
   }

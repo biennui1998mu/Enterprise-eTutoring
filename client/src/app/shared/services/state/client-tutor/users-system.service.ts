@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ClientTutorStore } from './client-tutor.store';
+import { UsersSystemStore } from './users-system.store';
 import { HttpClient } from '@angular/common/http';
 import { catchError, map, tap } from 'rxjs/operators';
 import { host } from '../../../api';
@@ -9,16 +9,16 @@ import { Router } from '@angular/router';
 import { APIResponse } from '../../../interface/API-Response';
 import { User } from '../../../interface/User';
 import { Observable, of } from 'rxjs';
-import { ClientTutorQuery } from './client-tutor.query';
+import { UsersSystemQuery } from './users-system.query';
 
 @Injectable({ providedIn: 'root' })
-export class ClientTutorService {
+export class UsersSystemService {
 
   readonly api: string = `${host}/user`;
 
   constructor(
-    private store: ClientTutorStore,
-    private query: ClientTutorQuery,
+    private store: UsersSystemStore,
+    private query: UsersSystemQuery,
     private http: HttpClient,
     private tokenService: TokenService,
     private uiStateService: UserInterfaceService,
@@ -62,7 +62,53 @@ export class ClientTutorService {
     this.store.setActive(student._id);
   }
 
-  createTutor(tutor: User) {
+  unselectActive(student: User) {
+    if (!student) {
+      return;
+    }
+    this.store.removeActive(student._id);
+  }
 
+  createUser(user: User) {
+    const formData = new FormData();
+    Object.keys(user).forEach(field => {
+      if (field === 'avatar' || field === 'avatarNew') {
+        // TODO resolve later
+      } else if (!!user[field]) {
+        let data = user[field];
+        if (typeof data !== 'string') {
+          data = JSON.stringify(data);
+        }
+        formData.append(field, data);
+      }
+    });
+    this.store.setLoading(true);
+    this.http.post<APIResponse<User>>(
+      `${this.api}/signup`,
+      formData,
+      { headers: this.tokenService.authorizeHeader },
+    ).pipe(
+      tap(() => {
+        this.store.setLoading(false);
+      }),
+      map(res => res.data),
+      catchError(error => {
+        console.error(error);
+        this.uiStateService.setError('Failed to create the user', 5);
+        return of(null as User);
+      }),
+    ).subscribe(newUser => {
+      if (newUser) {
+        this.store.add(newUser);
+      }
+    });
+  }
+
+  updateUser(tutor: User) {
+    // todo update the state
+  }
+
+  deleteUser(tutor: User) {
+    // todo delete the user and update the state
   }
 }

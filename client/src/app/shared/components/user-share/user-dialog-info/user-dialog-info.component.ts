@@ -26,7 +26,7 @@ export class UserDialogInfoComponent implements OnInit {
   );
 
   levelField = new FormControl(
-    null, [
+    { value: null, disabled: true }, [
       Validators.required, Validators.min(USER_TYPE.staff), Validators.max(USER_TYPE.student),
     ],
   );
@@ -41,7 +41,9 @@ export class UserDialogInfoComponent implements OnInit {
 
   readonly DialogAction = DialogAction;
   readonly USER_TYPE = USER_TYPE;
+
   cachedAvatar: string = '';
+  hidePassword: boolean = true;
 
   private passwordValidations = [
     Validators.minLength(1),
@@ -50,7 +52,6 @@ export class UserDialogInfoComponent implements OnInit {
   passwordField = new FormControl(
     null, this.passwordValidations.filter(validation => !!validation),
   );
-
   private cacheFileUpload: File = null;
 
   constructor(
@@ -167,7 +168,7 @@ export class UserDialogInfoComponent implements OnInit {
     const user = this.data.user;
     this.nameField.setValue(user?.name);
     this.usernameField.setValue(user?.username);
-    this.levelField.setValue(user?.level);
+    this.levelField.setValue(user?.level | this.data.subject);
     this.avatarField.setValue(user?.avatar);
     this.cachedAvatar = user?.avatar;
   }

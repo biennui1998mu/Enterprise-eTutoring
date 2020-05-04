@@ -224,33 +224,37 @@ router.post('/signup', upload.single('avatar'), checkAuth, async (req, res) => {
         })
     }
 
-    bcrypt.hash(password, 10, (err, hash) => {
-        if (err) {
+    let hashedPassword = undefined;
+    if (password) {
+        // if client send password then update, else skip
+        try {
+            hashedPassword = await bcrypt.hash(password, 10);
+        } catch (e) {
             return res.status(500).json({
-                error: err
+                error: e
             })
-        } else {
-            const newUser = new User({
-                username,
-                password: hash,
-                name,
-                level
-            });
-            newUser.save()
-                .then(result => {
-                    return res.json({
-                        message: 'user created!',
-                        data: result
-                    })
-                        .catch(err => {
-                            res.status(500).json({
-                                message: 'SKY FALL',
-                                error: err
-                            })
-                        })
-                })
         }
+    }
+
+    const newUser = new User({
+        username,
+        password: hashedPassword,
+        name,
+        level
     });
+
+    newUser.save()
+        .then(result => {
+            return res.json({
+                message: 'user created!',
+                data: result
+            }).catch(err => {
+                res.status(500).json({
+                    message: 'SKY FALL',
+                    error: err
+                })
+            })
+        })
 });
 
 /**
@@ -353,22 +357,24 @@ router.post('/delete/:userId', async (req, res) => {
         _id: userId
     }).exec()
 
-    if(checkUser.level === 3 || checkUser.level === 2){
+    if (checkUser.level === 3 || checkUser.level === 2) {
         const checkClassroom = await Classroom.findOne({
             $or: [
                 {student: checkUser._id},
                 {tutor: checkUser._id}
             ]
         }).exec()
-        if(checkClassroom){
+        if (checkClassroom) {
             User.updateOne({
                 _id: checkUser._id
-            }, {$set: {
-                deletedAt: Date.now()
-            }})
+            }, {
+                $set: {
+                    deletedAt: Date.now()
+                }
+            })
         }
         const deleteUser = await User.remove({_id: checkUser._id}).exec();
-        if(!deleteUser){
+        if (!deleteUser) {
             return res.json({
                 message: 'Delete fail'
             })
@@ -378,19 +384,21 @@ router.post('/delete/:userId', async (req, res) => {
         })
     }
 
-    if(checkUser.level === 1){
+    if (checkUser.level === 1) {
         const checkClassroom = await Classroom.findOne({
             createdBy: checkUser._id
         }).exec()
-        if(checkClassroom){
+        if (checkClassroom) {
             User.updateOne({
                 _id: checkUser._id
-            }, {$set: {
+            }, {
+                $set: {
                     deletedAt: Date.now()
-                }})
+                }
+            })
         }
         const deleteUser = await User.remove({_id: checkUser._id}).exec();
-        if(!deleteUser){
+        if (!deleteUser) {
             return res.json({
                 message: 'Delete fail'
             })

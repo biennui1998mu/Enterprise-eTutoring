@@ -5,8 +5,7 @@ import { StaffRoutingModule } from './staff-routing.module';
 import { StaffComponent } from './staff.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { StaffLayoutModule } from '../../shared/layouts/staff-layout.module';
-import { TutorManageComponent } from './tutor-manage/tutor-manage.component';
-import { StudentManageComponent } from './student-manage/student-manage.component';
+import { UserManageComponent } from './user-manage/user-manage.component';
 import { ClassManageComponent } from './class-manage/class-manage.component';
 import { UserShareModule } from '../../shared/components/user-share/user-share.module';
 import { MaterialsModule } from '../../shared/modules/materials/materials.module';
@@ -14,7 +13,7 @@ import { ClassroomManageModule } from '../../shared/components/classroom-manage/
 
 
 @NgModule({
-  declarations: [StaffComponent, DashboardComponent, TutorManageComponent, StudentManageComponent, ClassManageComponent],
+  declarations: [StaffComponent, DashboardComponent, UserManageComponent, ClassManageComponent],
   imports: [
     CommonModule,
     StaffRoutingModule,

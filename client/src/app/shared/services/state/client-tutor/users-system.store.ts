@@ -2,12 +2,12 @@ import { Injectable } from '@angular/core';
 import { EntityState, EntityStore, StoreConfig } from '@datorama/akita';
 import { User } from '../../../interface/User';
 
-export interface ClientTutorState extends EntityState<User> {
+export interface UsersSystemState extends EntityState<User> {
 }
 
 @Injectable({ providedIn: 'root' })
-@StoreConfig({ name: 'client-tutor', resettable: true, idKey: '_id' })
-export class ClientTutorStore extends EntityStore<ClientTutorState> {
+@StoreConfig({ name: 'users-system', resettable: true, idKey: '_id' })
+export class UsersSystemStore extends EntityStore<UsersSystemState> {
 
   constructor() {
     super();

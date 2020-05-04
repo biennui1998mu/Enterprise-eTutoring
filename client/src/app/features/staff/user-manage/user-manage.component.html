@@ -1,0 +1,32 @@
+<app-filter-user (eventSearchInput)="applyFilter($event)"></app-filter-user>
+<div class="flex functionalities">
+  <button (click)="newUserDialog(USER_TYPE.tutor)"
+          class="tt-capitalize"
+          color="primary"
+          mat-flat-button>
+    <mat-icon>add</mat-icon>
+    New Tutor
+  </button>
+  <button (click)="newUserDialog(USER_TYPE.student)"
+          class="tt-capitalize"
+          color="primary"
+          mat-flat-button>
+    <mat-icon>add</mat-icon>
+    New Student
+  </button>
+  <button (click)="newUserDialog(USER_TYPE.staff)"
+          class="tt-capitalize"
+          color="primary"
+          mat-flat-button>
+    <mat-icon>add</mat-icon>
+    New Staff
+  </button>
+  <small *ngIf="isUsersLoading | async"
+         class="text-muted">
+    loading...
+  </small>
+</div>
+<app-table-user (updateUserDetail)="updateUserInfo($event)"
+                (viewUserDetail)="selectedUser($event)"
+                [searchEvent]="eventFilter | async"
+                [users]="users | async"></app-table-user>
