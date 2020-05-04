@@ -16,7 +16,7 @@ export class UserService {
   readonly api: string = `${host}/user`;
 
   constructor(
-    private userStore: UserStore,
+    private store: UserStore,
     private http: HttpClient,
     private tokenService: TokenService,
     private uiStateService: UserInterfaceService,
@@ -31,10 +31,10 @@ export class UserService {
     ).pipe(
       tap(response => {
         if (response.data) {
-          this.userStore.update(response.data);
+          this.store.update(response.data);
           this.tokenService.token = response.token;
         } else {
-          this.userStore.reset();
+          this.store.reset();
           this.tokenService.token = null;
           this.uiStateService.setError(response.message, 5);
         }
@@ -57,9 +57,9 @@ export class UserService {
     ).pipe(
       tap(response => {
         if (response.data) {
-          this.userStore.update(response.data);
+          this.store.update(response.data);
         } else {
-          this.userStore.reset();
+          this.store.reset();
           this.tokenService.token = null;
           this.uiStateService.setError(response.message, 5);
         }
@@ -75,7 +75,7 @@ export class UserService {
   }
 
   reset() {
-    this.userStore.reset();
+    this.store.reset();
   }
 
   private resolvingError<T = any>(

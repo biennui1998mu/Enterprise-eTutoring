@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
+import { User } from '../../../shared/interface/User';
 
 @Component({
   selector: 'app-staff-manage',
@@ -8,6 +9,8 @@ import { Subject } from 'rxjs';
 })
 export class StaffManageComponent implements OnInit {
   eventFilter: Subject<Event> = new Subject<Event>();
+
+  staffs: User[] = [];
 
   constructor() {
   }
