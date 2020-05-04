@@ -60,7 +60,9 @@ router.post('/', checkAuth, async (req, res) => {
     })
 });
 
-// Search files
+/**
+ * Search files
+ */
 router.post('/search', async (req, res) => {
     const input = req.body.input;
 
@@ -88,7 +90,9 @@ router.post('/search', async (req, res) => {
     }
 });
 
-// Create files
+/**
+ * Create files
+ */
 router.post('/create', upload.single, checkAuth, async (req, res) => {
     const byUser = req.userData._id;
     const classroom = req.body
@@ -125,5 +129,59 @@ router.post('/create', upload.single, checkAuth, async (req, res) => {
     });
 
 });
+
+/**
+ * download file
+ */
+router.post('/download', checkAuth, async (req,res) => {
+    const userId = req.userData._id;
+    const fileId = req.body.fileId;
+    const classroomId = req.body.classroomId;
+
+    const checkUser = await User.findOne({
+        _id: userId
+    })
+
+    if(!checkUser){
+        return res.json({
+            message: 'User dont exist!'
+        })
+    }
+
+    const checkClassroom = await Classroom.findOne({
+        _id: classroomId
+    })
+
+    if(!checkClassroom){
+        return res.json({
+            message: 'File dont exist!'
+        })
+    }
+
+    const checkFile = await File.findOne({
+        _id: fileId
+    })
+
+    if(!checkFile){
+        return res.json({
+            message: 'File dont exist!'
+        })
+    }
+
+    if(checkFile.classroom !== classroomId){
+        return res.json({
+            message: 'File is not in classroom!'
+        })
+    }
+
+    if(checkUser._id !== checkClassroom.student && checkUser._id !== checkClassroom.tutor){
+        return res.json({
+            message: 'User is not in classroom!'
+        })
+    }
+
+    const url = `${process.env.PROTOCOL}://${process.env.HOST_NAME}:${process.env.PORT}/`
+    return res.download(url + checkFile.url);
+})
 
 module.exports = router;
