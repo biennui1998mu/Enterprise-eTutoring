@@ -42,6 +42,9 @@ const userSchema = new Schema({
         type: String,
         default: url + "uploads/sample.png"
     },
+    deletedAt: {
+        type: Date
+    }
 });
 
 /**
