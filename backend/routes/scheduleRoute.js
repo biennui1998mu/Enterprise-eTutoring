@@ -110,7 +110,24 @@ router.post('/create', checkAuth, async (req, res) => {
 /**
  * Update meeting
  */
-router.post('/update/:scheduleId', (req, res) => {
+router.post('/update/:scheduleId', checkAuth, async (req, res) => {
+    const staffId = req.userData._id
+    const checkStaff = await User.findOne({
+        _id: staffId
+    })
+
+    if(!checkStaff){
+        return res.json({
+            message: 'Staff dont exist!'
+        });
+    }
+
+    if(checkStaff.level !== 1){
+        return res.json({
+            message: 'You are not Staff!'
+        });
+    }
+
     const scheduleId = req.params.scheduleId;
     const updateOps = {...req.body};
 
@@ -140,7 +157,24 @@ router.post('/update/:scheduleId', (req, res) => {
 /**
  * Delete meeting
  */
-router.post('/delete/:scheduleId', (req, res) => {
+router.post('/delete/:scheduleId', checkAuth, async (req, res) => {
+    const staffId = req.userData._id
+    const checkStaff = await User.findOne({
+        _id: staffId
+    })
+
+    if(!checkStaff){
+        return res.json({
+            message: 'Staff dont exist!'
+        });
+    }
+
+    if(checkStaff.level !== 1){
+        return res.json({
+            message: 'You are not Staff!'
+        });
+    }
+
     const scheduleId = req.params.scheduleId;
 
     Schedule.remove({_id: scheduleId})

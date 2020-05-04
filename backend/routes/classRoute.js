@@ -211,7 +211,24 @@ router.post('/create', checkAuth, async (req, res) => {
 /**
  * Update classroom
  */
-router.post('/update/:classId', (req, res) => {
+router.post('/update/:classId', checkAuth, async (req, res) => {
+    const staffId = req.userData._id
+    const checkStaff = await User.findOne({
+        _id: staffId
+    })
+
+    if(!checkStaff){
+        return res.json({
+            message: 'Staff dont exist!'
+        });
+    }
+
+    if(checkStaff.level !== 1){
+        return res.json({
+            message: 'You are not Staff!'
+        });
+    }
+
     const classroomId = req.params.classroomId;
     const updateOps = {...req.body};
 
@@ -241,7 +258,24 @@ router.post('/update/:classId', (req, res) => {
 /**
  * Delete classroom
  */
-router.post('/delete/:classId', (req, res) => {
+router.post('/delete/:classId', checkAuth, async (req, res) => {
+    const staffId = req.userData._id
+    const checkStaff = await User.findOne({
+        _id: staffId
+    })
+
+    if(!checkStaff){
+        return res.json({
+            message: 'Staff dont exist!'
+        });
+    }
+
+    if(checkStaff.level !== 1){
+        return res.json({
+            message: 'You are not Staff!'
+        });
+    }
+
     const classroomId = req.params.classroomId;
     Classroom.remove({_id: classroomId})
         .exec()

@@ -41,7 +41,7 @@ const upload = multer({
  * take all tutor from database
  * staff/admin can view
  */
-router.post('/tutor-list', checkAuth, async (req, res) => {
+router.post('/user-list', checkAuth, async (req, res) => {
     const idUserLogin = req.userData._id;
 
     const checkUser = await User.findOne({
@@ -60,49 +60,17 @@ router.post('/tutor-list', checkAuth, async (req, res) => {
         })
     }
 
+    const listStaff = await User.find({
+        $and: [
+            {level: 1}
+        ]
+    }).exec()
+
     const listTutor = await User.find({
-        /**
-         * tutor: 2
-         */
         $and: [
             {level: 2},
         ]
     }).exec()
-
-    if (!listTutor) {
-        return res.json({
-            message: 'No tutor found',
-        });
-    }
-
-    return res.json({
-        message: 'List tutor',
-        data: listTutor
-    })
-});
-
-/**
- * take all student from database
- * staff/admin can view
- */
-router.post('/student-list', checkAuth, async (req, res) => {
-    const idUserLogin = req.userData._id;
-
-    const checkUser = await User.findOne({
-        _id: idUserLogin
-    }).exec()
-
-    if (!checkUser) {
-        return res.json({
-            message: 'User is a thief'
-        })
-    }
-
-    if (checkUser.level !== 1 && checkUser.level !== 0) {
-        return res.json({
-            message: 'User is not one of staff or admin'
-        })
-    }
 
     const listStudent = await User.find({
         $and: [
@@ -110,15 +78,29 @@ router.post('/student-list', checkAuth, async (req, res) => {
         ]
     }).exec()
 
-    if (!listStudent) {
+    if (listStaff) {
         return res.json({
-            message: 'No student found',
-        });
+            message: 'List staff',
+            data: listStaff
+        })
+    }
+
+    if (listTutor) {
+        return res.json({
+            message: 'List tutor',
+            data: listTutor
+        })
+    }
+
+    if (listStudent) {
+        return res.json({
+            message: 'List student',
+            data: listStudent
+        })
     }
 
     return res.json({
-        message: 'List student',
-        data: listStudent
+        message: 'Empty!!!'
     })
 });
 
@@ -326,7 +308,24 @@ router.post('/signin', async (req, res) => {
 /**
  * Update user
  */
-router.post('/update/:userId', (req, res) => {
+router.post('/update/:userId', checkAuth, async (req, res) => {
+    const staffId = req.userData._id
+    const checkStaff = await User.findOne({
+        _id: staffId
+    })
+
+    if(!checkStaff){
+        return res.json({
+            message: 'Staff dont exist!'
+        });
+    }
+
+    if(checkStaff.level !== 1){
+        return res.json({
+            message: 'You are not Staff!'
+        });
+    }
+
     const userId = req.params.userId;
     const updateOps = {...req.body};
     // const avatar = req.file.
@@ -357,7 +356,24 @@ router.post('/update/:userId', (req, res) => {
 /**
  * account recover
  */
-router.post('/recover/:userId', (req, res) => {
+router.post('/recover/:userId', checkAuth, async (req, res) => {
+    const staffId = req.userData._id
+    const checkStaff = await User.findOne({
+        _id: staffId
+    })
+
+    if(!checkStaff){
+        return res.json({
+            message: 'Staff dont exist!'
+        });
+    }
+
+    if(checkStaff.level !== 1){
+        return res.json({
+            message: 'You are not Staff!'
+        });
+    }
+
     const userId = req.params.userId;
 
     User.updateOne({_id: userId}, {$set: {updatedAt: null}})
@@ -379,7 +395,24 @@ router.post('/recover/:userId', (req, res) => {
 /**
  * Delete user
  */
-router.post('/delete/:userId', async (req, res) => {
+router.post('/delete/:userId', checkAuth, async (req, res) => {
+    const staffId = req.userData._id
+    const checkStaff = await User.findOne({
+        _id: staffId
+    })
+
+    if(!checkStaff){
+        return res.json({
+            message: 'Staff dont exist!'
+        });
+    }
+
+    if(checkStaff.level !== 1){
+        return res.json({
+            message: 'You are not Staff!'
+        });
+    }
+
     const userId = req.params.userId;
     const checkUser = await User.findOne({
         _id: userId
