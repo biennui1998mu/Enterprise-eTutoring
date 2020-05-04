@@ -4,6 +4,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const checkAuth = require('../middleware/check-auth');
 const User = require('../database/models/user');
+const Classroom = require('../database/models/classroom');
 
 /**
  * https://github.com/expressjs/multer
@@ -288,7 +289,7 @@ router.post('/signin', async (req, res) => {
             username: user.username,
             name: user.name
         },
-        process.env.JWT_KEY,
+        process.env.JWT_SECRET,
         {
             expiresIn: 604800
         });
@@ -318,6 +319,7 @@ router.post('/signin', async (req, res) => {
 router.post('/update/:userId', (req, res) => {
     const userId = req.params.userId;
     const updateOps = {...req.body};
+    // const avatar = req.file.
 
     User.update({
         _id: userId
@@ -344,21 +346,58 @@ router.post('/update/:userId', (req, res) => {
 /**
  * Delete user
  */
-router.post('/delete/:userId', (req, res) => {
+router.post('/delete/:userId', async (req, res) => {
     const userId = req.params.userId;
-    User.remove({_id: userId})
-        .exec()
-        .then(result => {
+    const checkUser = await User.findOne({
+        _id: userId
+    }).exec()
+
+    if(checkUser.level === 3 || checkUser.level === 2){
+        const checkClassroom = await Classroom.findOne({
+            $or: [
+                {student: checkUser._id},
+                {tutor: checkUser._id}
+            ]
+        }).exec()
+        if(checkClassroom){
+            User.updateOne({
+                _id: checkUser._id
+            }, {$set: {
+                deletedAt: Date.now()
+            }})
+        }
+        const deleteUser = await User.remove({_id: checkUser._id}).exec();
+        if(!deleteUser){
             return res.json({
-                message: 'User was deleted',
-            });
-        })
-        .catch(err => {
-            return res.json({
-                message: 'SKY FALL',
-                error: err,
+                message: 'Delete fail'
             })
-        });
+        }
+        return res.json({
+            message: 'Delete success!'
+        })
+    }
+
+    if(checkUser.level === 1){
+        const checkClassroom = await Classroom.findOne({
+            createdBy: checkUser._id
+        }).exec()
+        if(checkClassroom){
+            User.updateOne({
+                _id: checkUser._id
+            }, {$set: {
+                    deletedAt: Date.now()
+                }})
+        }
+        const deleteUser = await User.remove({_id: checkUser._id}).exec();
+        if(!deleteUser){
+            return res.json({
+                message: 'Delete fail'
+            })
+        }
+        return res.json({
+            message: 'Delete success!'
+        })
+    }
 });
 
 module.exports = router;

@@ -9,7 +9,7 @@ module.exports = async (req, res, next) => {
     }
     try {
         const currentToken = req.headers.authorization.split(" ")[1];
-        const userToken = jwt.verify(currentToken, process.env.JWT_KEY);
+        const userToken = jwt.verify(currentToken, process.env.JWT_SECRET);
         // find in DB for sure
         const user = await User.findById(userToken._id)
             .exec();
