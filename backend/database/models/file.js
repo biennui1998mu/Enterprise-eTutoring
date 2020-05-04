@@ -36,6 +36,13 @@ const file = new Schema({
     type: {
         type: String
     },
+    /**
+     * file weight
+     */
+    size: {
+        type: Number,
+        required: true
+    },
     createdAt: {
         type: Date,
         default: Date.now

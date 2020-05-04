@@ -32,7 +32,7 @@ router.post('/', (req, res) => {
  * Create message
  */
 router.post('/create', checkAuth, async (req, res) => {
-    const {classroom, byUser, content, quote, file} = req.body;
+    const {classroom, byUser, content, quote} = req.body;
 
     let classroomExist = await Classroom.findOne({
         _id: classroom
@@ -61,8 +61,7 @@ router.post('/create', checkAuth, async (req, res) => {
     const message = new Message({
         classroom,
         byUser,
-        quote,
-        file
+        quote
     });
 
     message.save()
