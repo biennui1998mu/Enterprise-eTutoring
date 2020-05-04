@@ -107,6 +107,7 @@ router.post('/create', upload.single, checkAuth, async (req, res) => {
         name: req.file.originalname,
         url: req.file.path,
         type: req.file.mimetype,
+        size: req.file.size,
         classroom,
         byUser
     });
