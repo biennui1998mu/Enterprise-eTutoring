@@ -276,6 +276,12 @@ router.post('/signin', async (req, res) => {
         });
     }
 
+    if(user.deletedAt){
+        return res.json({
+            message: 'contact staff!'
+        });
+    }
+
     const validatePassword = await bcrypt.compare(password, user.password);
 
     if (!validatePassword) {
@@ -337,6 +343,28 @@ router.post('/update/:userId', (req, res) => {
         .then(result => {
             return res.json({
                 message: 'User updated',
+                data: result
+            });
+        })
+        .catch(err => {
+            return res.json({
+                message: 'SKY FALL',
+                error: err
+            });
+        });
+});
+
+/**
+ * account recover
+ */
+router.post('/recover/:userId', (req, res) => {
+    const userId = req.params.userId;
+
+    User.updateOne({_id: userId}, {$set: {updatedAt: null}})
+        .exec()
+        .then(result => {
+            return res.json({
+                message: 'User recover',
                 data: result
             });
         })
