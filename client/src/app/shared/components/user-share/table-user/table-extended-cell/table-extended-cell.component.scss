@@ -1,10 +1,9 @@
 :host {
   overflow: auto;
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  grid-gap: 24px;
+  display: flex;
 
   button {
     transition: all 0s;
+    margin-right: 1rem;
   }
 }

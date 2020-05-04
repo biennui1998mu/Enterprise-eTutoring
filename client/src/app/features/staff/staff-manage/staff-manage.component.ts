@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
+import { ClientTutorQuery, ClientTutorService } from '../../../shared/services/state/client-tutor';
 import { User } from '../../../shared/interface/User';
 
 @Component({
@@ -12,10 +13,19 @@ export class StaffManageComponent implements OnInit {
 
   staffs: User[] = [];
 
-  constructor() {
+  constructor(
+    private clientTutorService: ClientTutorService,
+    private clientTutorQuery: ClientTutorQuery,
+  ) {
+    this.clientTutorQuery.selectAll().subscribe(
+      staffs => this.staffs = staffs,
+    );
   }
 
   ngOnInit(): void {
+    this.clientTutorService.get().subscribe(data => {
+      console.log(data);
+    });
   }
 
   applyFilter($event: Event) {

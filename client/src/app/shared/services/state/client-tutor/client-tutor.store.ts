@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { EntityState, EntityStore, StoreConfig } from '@datorama/akita';
 import { User } from '../../../interface/User';
 
-export interface ClientTutorState extends EntityState<User[]> {
+export interface ClientTutorState extends EntityState<User> {
 }
 
 @Injectable({ providedIn: 'root' })

@@ -15,7 +15,7 @@ import { User } from '../../../interface/User';
  */
 export class ClientStudentService {
 
-  readonly api: string = `${host}/student`;
+  readonly api: string = `${host}/user`;
 
   constructor(
     private store: ClientStudentStore,
@@ -28,7 +28,7 @@ export class ClientStudentService {
 
   get() {
     return this.http.post<APIResponse<User[]>>(
-      `${this.api}/signin`,
+      `${this.api}/student-list`,
       {},
       { headers: this.tokenService.authorizeHeader },
     ).pipe(
@@ -45,6 +45,6 @@ export class ClientStudentService {
   }
 
   selectActive(student: User) {
-
+    this.store.setActive(student._id);
   }
 }

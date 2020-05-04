@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { ActiveState, EntityState, EntityStore, StoreConfig } from '@datorama/akita';
 import { User } from '../../../interface/User';
 
-export interface ClientStudentState extends EntityState<User[]>, ActiveState {
+export interface ClientStudentState extends EntityState<User>, ActiveState {
 }
 
 const initialState = {

@@ -31,11 +31,12 @@ export class TableUserComponent implements OnInit {
 
   constructor() {
     // TODO debug
-    this.dataSource = new MatTableDataSource<User>(mockupUser);
+    // this.dataSource = new MatTableDataSource<User>(mockupUser);
   }
 
   @Input()
   set users(users: User[]) {
+    console.log(users);
     this.dataSource.data = users;
   }
 
