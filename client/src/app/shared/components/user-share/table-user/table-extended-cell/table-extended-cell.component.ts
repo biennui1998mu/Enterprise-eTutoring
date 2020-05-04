@@ -45,20 +45,16 @@ export class TableExtendedCellComponent {
       },
     ).afterClosed().subscribe(
       data => {
-        if (
-          data &&
-          (data.action === DialogAction.update || data.action === DialogAction.delete) &&
-          data.user._id
-        ) {
-          this.tutorService.unselectActive(data.user);
-          this.userUpdate.emit({
-            user: data.user,
-            action: data.action,
-          });
-        } else if (!data || data.action === DialogAction.cancel) {
-          const userUnActive = data?.user ? data.user : this.user;
-          this.tutorService.unselectActive(userUnActive);
+        if (!data || data.action === DialogAction.cancel) {
+          this.tutorService.unselectActive(data?.user);
+          return;
         }
+
+        this.tutorService.unselectActive(data.user);
+        this.userUpdate.emit({
+          user: data.user,
+          action: data.action,
+        });
       },
     );
   }

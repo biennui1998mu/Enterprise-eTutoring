@@ -44,13 +44,7 @@ export class UserManageComponent implements OnInit {
   newUserDialog(
     level: USER_TYPE = USER_TYPE.tutor,
   ) {
-    // const activeState = this.query.getActive();
-    // let user: User;
-    // if (Array.isArray(activeState)) {
-    //   user = activeState[0];
-    // } else {
     //   user = activeState;
-    // }
     this.matDialog.open<UserDialogInfoComponent, PopupUserInfo, PopupUserInfo>(
       UserDialogInfoComponent, {
         height: 'max-content',
