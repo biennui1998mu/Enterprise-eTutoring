@@ -44,7 +44,6 @@ export class UserManageComponent implements OnInit {
   newUserDialog(
     level: USER_TYPE = USER_TYPE.tutor,
   ) {
-    //   user = activeState;
     this.matDialog.open<UserDialogInfoComponent, PopupUserInfo, PopupUserInfo>(
       UserDialogInfoComponent, {
         height: 'max-content',
