@@ -19,6 +19,9 @@ export const isFullyAuthorizedLevel = (
   customUser?: User,
 ) => {
   const user = userQuery.getValue()._id ? userQuery.getValue() : customUser ? customUser : null;
+  if (!user) {
+    return false;
+  }
   const userId = isHavingUserInfo(userQuery, customUser);
   const decoded = isHavingValidToken(tokenService);
   const validUserAndDecoded = !(!userId || !decoded || userId !== decoded._id);
@@ -32,6 +35,7 @@ export const isFullyAuthorizedLevel = (
     }
     return !validatedAuthorize;
   });
+  return validatedAuthorize;
 };
 
 /**

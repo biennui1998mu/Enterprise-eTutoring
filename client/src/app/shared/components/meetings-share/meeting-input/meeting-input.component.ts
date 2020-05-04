@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, Optional } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
@@ -8,7 +8,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 export class MeetingInputComponent implements OnInit {
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data: MeetingPopupInitData,
+    @Optional() @Inject(MAT_DIALOG_DATA) public data: MeetingPopupInitData,
     public dialogRef: MatDialogRef<MeetingInputComponent>,
   ) {
   }

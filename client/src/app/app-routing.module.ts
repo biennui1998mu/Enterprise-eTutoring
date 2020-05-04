@@ -13,13 +13,11 @@ const routes: Routes = [
   },
   {
     path: 'client',
-    canLoad: [ClientGuard],
     canActivateChild: [ClientGuard],
     loadChildren: () => import('./features/client/client.module').then(m => m.ClientModule),
   },
   {
     path: 'staff',
-    canLoad: [StaffGuard],
     canActivateChild: [StaffGuard],
     loadChildren: () => import('./features/staff/staff.module').then(m => m.StaffModule),
   },

@@ -1,13 +1,5 @@
 import { Injectable } from '@angular/core';
-import {
-  ActivatedRouteSnapshot,
-  CanActivateChild,
-  CanLoad,
-  Route,
-  Router,
-  RouterStateSnapshot,
-  UrlSegment,
-} from '@angular/router';
+import { ActivatedRouteSnapshot, CanActivateChild, Router, RouterStateSnapshot } from '@angular/router';
 import { USER_TYPE } from '../../interface/User';
 import { TokenService } from '../../services/token.service';
 import { UserQuery, UserService } from '../../services/state/user';
@@ -17,7 +9,7 @@ import { UserInterfaceService } from '../../services/state/user-interface';
 @Injectable({
   providedIn: 'root',
 })
-export class ClientGuard implements CanActivateChild, CanLoad {
+export class ClientGuard implements CanActivateChild {
   constructor(
     private tokenService: TokenService,
     private userQuery: UserQuery,
@@ -38,24 +30,6 @@ export class ClientGuard implements CanActivateChild, CanLoad {
       return true;
     }
 
-    // else redirect to home, erase all info
-    this.userService.reset();
-    this.tokenService.clearToken();
-    this.router.navigate(['/login']);
-    return false;
-  }
-
-  async canLoad(
-    route: Route,
-    segments: UrlSegment[],
-  ): Promise<boolean> {
-    if (isFullyAuthorizedLevel(
-      this.userQuery,
-      this.tokenService,
-      [USER_TYPE.tutor, USER_TYPE.student],
-    )) {
-      return true;
-    }
     if (isHavingValidToken(this.tokenService)) {
       return await retrievingUserInfoViaToken(
         this.userService,

@@ -1,6 +1,6 @@
-import { Component, Inject, Input, OnInit } from '@angular/core';
+import { Component, Inject, Input, OnInit, Optional } from '@angular/core';
 import { ClassroomFile } from '../../../interface/Classroom-File';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { USER_TYPE } from '../../../interface/User';
 
 @Component({
@@ -13,8 +13,7 @@ export class ResourceMetaComponent implements OnInit {
   displayFiles: ClassroomFile[] = [];
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data: PopupFileInfo,
-    public dialogRef: MatDialogRef<ResourceMetaComponent>,
+    @Optional() @Inject(MAT_DIALOG_DATA) public data: PopupFileInfo,
   ) {
     if (data?.files && this.authorized) {
       this.files = data.files;

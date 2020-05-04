@@ -1,13 +1,5 @@
 import { Injectable } from '@angular/core';
-import {
-  ActivatedRouteSnapshot,
-  CanActivateChild,
-  CanLoad,
-  Route,
-  Router,
-  RouterStateSnapshot,
-  UrlSegment,
-} from '@angular/router';
+import { ActivatedRouteSnapshot, CanActivateChild, Router, RouterStateSnapshot } from '@angular/router';
 import { TokenService } from '../../services/token.service';
 import { UserQuery, UserService } from '../../services/state/user';
 import { USER_TYPE } from '../../interface/User';
@@ -17,7 +9,7 @@ import { UserInterfaceService } from '../../services/state/user-interface';
 @Injectable({
   providedIn: 'root',
 })
-export class StaffGuard implements CanActivateChild, CanLoad {
+export class StaffGuard implements CanActivateChild {
   constructor(
     private tokenService: TokenService,
     private userQuery: UserQuery,
@@ -30,21 +22,6 @@ export class StaffGuard implements CanActivateChild, CanLoad {
   async canActivateChild(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot,
-  ): Promise<boolean> {
-    if (isFullyAuthorizedLevel(this.userQuery, this.tokenService, USER_TYPE.staff)) {
-      return true;
-    }
-
-    // else redirect to home, erase all info
-    this.userService.reset();
-    this.tokenService.clearToken();
-    this.router.navigate(['/login']);
-    return false;
-  }
-
-  async canLoad(
-    route: Route,
-    segments: UrlSegment[],
   ): Promise<boolean> {
     if (isFullyAuthorizedLevel(this.userQuery, this.tokenService, USER_TYPE.staff)) {
       return true;
