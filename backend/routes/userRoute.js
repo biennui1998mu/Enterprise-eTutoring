@@ -37,10 +37,10 @@ const upload = multer({
 });
 
 /**
- * take all tutor and student from database
- * only staff can view
+ * take all tutor from database
+ * staff/admin can view
  */
-router.post('/', checkAuth, async (req, res) => {
+router.post('/tutor-list', checkAuth, async (req, res) => {
     const idUserLogin = req.userData._id;
 
     const checkUser = await User.findOne({
@@ -53,28 +53,71 @@ router.post('/', checkAuth, async (req, res) => {
         })
     }
 
-    if (checkUser.level !== 1) {
+    if (checkUser.level !== 1 || checkUser.level !== 0) {
         return res.json({
-            message: 'User is not one of staff'
+            message: 'User is not one of staff/admin'
         })
     }
 
-    const listUser = await User.find({
+    const listTutor = await User.find({
+        /**
+         * tutor: 2
+         */
         $and: [
-            {level: 3},
-            {level: 4}
+            {level: 2},
         ]
     }).exec()
 
-    if (!listUser) {
+    if (!listTutor) {
         return res.json({
-            message: 'No user found',
+            message: 'No tutor found',
         });
     }
 
     return res.json({
-        message: 'List tutor and student',
-        data: listUser
+        message: 'List tutor',
+        data: listTutor
+    })
+});
+
+/**
+ * take all student from database
+ * staff/admin can view
+ */
+router.post('/student-list', checkAuth, async (req, res) => {
+    const idUserLogin = req.userData._id;
+
+    const checkUser = await User.findOne({
+        _id: idUserLogin
+    }).exec()
+
+    if (!checkUser) {
+        return res.json({
+            message: 'User is a thief'
+        })
+    }
+
+    if (checkUser.level !== 1 || checkUser.level !== 0) {
+        return res.json({
+            message: 'User is not one of staff or admin'
+        })
+    }
+
+    const listStudent = await User.find({
+        $and: [
+            {level: 3}
+        ]
+    }).exec()
+
+    if (!listStudent) {
+        return res.json({
+            message: 'No student found',
+        });
+    }
+
+    return res.json({
+        message: 'List student',
+        data: listStudent
     })
 });
 
