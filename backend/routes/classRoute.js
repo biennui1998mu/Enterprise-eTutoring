@@ -14,7 +14,7 @@ router.post('/', checkAuth, async (req, res) => {
 
     const checkUser = await User.findOne({
         _id: idUserLogin
-    }).exec()
+    }).exec();
 
     if (!checkUser || checkUser.level !== 1) {
         return res.json({

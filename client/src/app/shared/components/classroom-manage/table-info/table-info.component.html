@@ -1,0 +1,65 @@
+<span matDialogTitle>
+  Update information
+</span>
+
+<form [formGroup]="classInfo"
+      matDialogContent>
+  <div class="flex flex-d-col">
+    <mat-form-field appearance="outline">
+      <mat-label>Class title</mat-label>
+      <input [formControl]="classTitle"
+             matInput
+             required
+             type="text">
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Class description</mat-label>
+      <input [formControl]="classDescription"
+             matInput
+             required
+             type="text">
+    </mat-form-field>
+
+    <!--  SELECT TUTOR  -->
+    <app-user-search [formUserPassing]="classTutor"
+                     [userType]="USER_TYPE.tutor"></app-user-search>
+
+    <!--  SELECT STUDENT  -->
+    <app-user-search [formUserPassing]="classStudent"
+                     [userType]="USER_TYPE.student"></app-user-search>
+  </div>
+</form>
+
+<div class="flex-d-col-reverse cl-btns" matDialogActions>
+  <button (click)="emitAction(DIALOG_ACTION.cancel)"
+          class=""
+          mat-flat-button>
+    Discard changes
+  </button>
+  <button (click)="emitAction(DIALOG_ACTION.disable)"
+          *ngIf="data.action === DIALOG_ACTION.update && data.class.status === CLASSROOM_STATUS.open"
+          color="warn"
+          mat-flat-button>
+    Close class
+  </button>
+  <button (click)="emitAction(DIALOG_ACTION.open)"
+          *ngIf="data.action === DIALOG_ACTION.update && data.class.status === CLASSROOM_STATUS.closed"
+          color="warn"
+          mat-flat-button>
+    Open class
+  </button>
+  <button (click)="emitAction(DIALOG_ACTION.update)"
+          *ngIf="data.action === DIALOG_ACTION.update && data.class.status === CLASSROOM_STATUS.open"
+          [disabled]="classInfo.invalid"
+          color="primary"
+          mat-raised-button>
+    Update
+  </button>
+  <button (click)="emitAction(DIALOG_ACTION.new)"
+          *ngIf="data.action === DIALOG_ACTION.new"
+          [disabled]="classInfo.invalid"
+          color="primary"
+          mat-raised-button>
+    Create
+  </button>
+</div>

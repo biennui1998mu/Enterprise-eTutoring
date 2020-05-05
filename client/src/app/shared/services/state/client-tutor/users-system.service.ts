@@ -6,7 +6,7 @@ import { host } from '../../../api';
 import { TokenService } from '../../token.service';
 import { UserInterfaceService } from '../user-interface';
 import { APIResponse } from '../../../interface/API-Response';
-import { User } from '../../../interface/User';
+import { User, USER_TYPE } from '../../../interface/User';
 import { Observable, of } from 'rxjs';
 import { UsersSystemQuery } from './users-system.query';
 import { extractInfo } from '../../../tools';
@@ -47,6 +47,24 @@ export class UsersSystemService {
         console.error(err);
         this.store.setLoading(false);
         this.store.set([]);
+        this.uiStateService.setError('Failed to get list user', 5);
+        return of([] as User[]);
+      }),
+    );
+  }
+
+  find(searchText: string, level?: USER_TYPE) {
+    return this.http.post<APIResponse<User[]>>(
+      `${this.api}/search`,
+      {
+        input: searchText,
+        level,
+      },
+      { headers: this.tokenService.authorizeHeader },
+    ).pipe(
+      map(response => response.data),
+      catchError(err => {
+        console.error(err);
         this.uiStateService.setError('Failed to get list user', 5);
         return of([] as User[]);
       }),

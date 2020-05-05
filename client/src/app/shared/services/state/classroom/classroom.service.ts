@@ -50,4 +50,39 @@ export class ClassroomService {
     );
   }
 
+  updateClass(classroom: Classroom<string, string, string>) {
+    console.log(classroom);
+    return;
+    this.http.post<APIResponse<Classroom>>(
+      `${this.api}/update/${classroom._id}`,
+      classroom,
+      { headers: this.tokenService.authorizeHeader },
+    ).pipe(
+      // todo
+    );
+  }
+
+  closeClass(classroom: Classroom<string, string, string>) {
+    console.log(classroom);
+    return;
+    this.http.post<APIResponse<Classroom>>(
+      `${this.api}/close/${classroom._id}`,
+      classroom,
+      { headers: this.tokenService.authorizeHeader },
+    ).pipe(
+      // todo
+    );
+  }
+
+  createClass(classroom: Classroom<string, string, string>) {
+    console.log(classroom);
+    return;
+    this.http.post<APIResponse<Classroom>>(
+      `${this.api}/create`,
+      classroom,
+      { headers: this.tokenService.authorizeHeader },
+    ).pipe(
+
+    );
+  }
 }

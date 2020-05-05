@@ -30,7 +30,6 @@ export class TableExtendedCellComponent {
   }
 
   editUser() {
-    // TODO: mapping to API
     this.matDialog.open<UserDialogInfoComponent, PopupUserInfo, PopupUserInfo>(
       UserDialogInfoComponent, {
         height: 'max-content',

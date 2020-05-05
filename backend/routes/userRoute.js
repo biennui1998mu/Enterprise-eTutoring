@@ -117,13 +117,21 @@ router.post('/view', checkAuth, (req, res) => {
  */
 router.post('/search', checkAuth, async (req, res) => {
     const input = req.body.input;
+    const searchOrCondition = {
+        $or: [
+            {username: new RegExp(input, 'i')},
+            {name: new RegExp(input, 'i')},
+        ],
+    };
+    const searchAndCondition = {}
+    if (req.body.level) {
+        searchAndCondition.level = req.body.level;
+    }
 
     try {
         const users = await User.find({
-            $or: [
-                {username: new RegExp(input)},
-                {name: new RegExp(input)}
-            ]
+            ...searchOrCondition,
+            ...searchAndCondition,
         }).limit(10).exec();
 
         if (!users || users.length === 0) {

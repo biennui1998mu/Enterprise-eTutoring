@@ -11,7 +11,7 @@ export interface Classroom<student = User, tutor = User, staff = User> {
    * 1 = close
    */
   status: CLASSROOM_STATUS;
-  createdBy: staff;
+  createdBy?: staff;
   createdAt?: Date;
   updatedAt?: Date;
 }

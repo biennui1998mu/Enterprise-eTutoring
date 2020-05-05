@@ -12,11 +12,20 @@ import { SharedPipeModule } from '../../pipe/shared-pipe.module';
 import { MatListModule } from '@angular/material/list';
 import { SchedulesShareModule } from '../schedules-share/schedules-share.module';
 import { MatButtonModule } from '@angular/material/button';
-
+import { TableInfoComponent } from './table-info/table-info.component';
+import { MaterialsModule } from '../../modules/materials/materials.module';
+import { CoreModule } from '../../modules/core/core.module';
+import { UserGeneralModule } from '../user-general/user-general.module';
 
 
 @NgModule({
-  declarations: [TableClassComponent, FilterClassComponent, TableExtendedCellComponent, TableHeaderCellComponent],
+  declarations: [
+    TableClassComponent,
+    FilterClassComponent,
+    TableExtendedCellComponent,
+    TableHeaderCellComponent,
+    TableInfoComponent,
+  ],
   imports: [
     CommonModule,
     MatTableModule,
@@ -27,10 +36,14 @@ import { MatButtonModule } from '@angular/material/button';
     MatListModule,
     SchedulesShareModule,
     MatButtonModule,
+    MaterialsModule,
+    CoreModule,
+    UserGeneralModule,
   ],
   exports: [
     TableClassComponent,
     FilterClassComponent,
   ],
 })
-export class ClassroomManageModule { }
+export class ClassroomManageModule {
+}
