@@ -1,17 +1,17 @@
-import { Injectable } from '@angular/core';
-import { UsersSystemStore } from './users-system.store';
-import { HttpClient } from '@angular/common/http';
-import { catchError, map, switchMap, tap } from 'rxjs/operators';
-import { host } from '../../../api';
-import { TokenService } from '../../token.service';
-import { UserInterfaceService } from '../user-interface';
-import { APIResponse } from '../../../interface/API-Response';
-import { User } from '../../../interface/User';
-import { Observable, of } from 'rxjs';
-import { UsersSystemQuery } from './users-system.query';
-import { extractInfo } from '../../../tools';
+import {Injectable} from '@angular/core';
+import {UsersSystemStore} from './users-system.store';
+import {HttpClient} from '@angular/common/http';
+import {catchError, map, switchMap, tap} from 'rxjs/operators';
+import {host} from '../../../api';
+import {TokenService} from '../../token.service';
+import {UserInterfaceService} from '../user-interface';
+import {APIResponse} from '../../../interface/API-Response';
+import {User} from '../../../interface/User';
+import {Observable, of} from 'rxjs';
+import {UsersSystemQuery} from './users-system.query';
+import {extractInfo} from '../../../tools';
 
-@Injectable({ providedIn: 'root' })
+@Injectable({providedIn: 'root'})
 export class UsersSystemService {
 
   private readonly api: string = `${host}/user`;
@@ -30,7 +30,7 @@ export class UsersSystemService {
     return this.http.post<APIResponse<User[]>>(
       `${this.api}/list`,
       {},
-      { headers: this.tokenService.authorizeHeader },
+      {headers: this.tokenService.authorizeHeader},
     ).pipe(
       tap(response => {
         if (response.data) {
@@ -77,7 +77,7 @@ export class UsersSystemService {
     this.http.post<APIResponse<User>>(
       `${this.api}/signup`,
       formData,
-      { headers: this.tokenService.authorizeHeader },
+      {headers: this.tokenService.authorizeHeader},
     ).pipe(
       tap(() => {
         // finish loading once tap trigger / finish API request
@@ -138,7 +138,7 @@ export class UsersSystemService {
     this.http.post<APIResponse<User>>(
       `${this.api}/delete/${user._id}`,
       {},
-      { headers: this.tokenService.authorizeHeader },
+      {headers: this.tokenService.authorizeHeader},
     ).pipe(
       tap(() => {
         // finish loading once tap trigger / finish API request

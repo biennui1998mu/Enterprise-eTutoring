@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
-import { HttpHeaders } from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {HttpHeaders} from '@angular/common/http';
 import * as jwtDecoder from 'jwt-decode';
 
 @Injectable({

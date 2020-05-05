@@ -1,15 +1,15 @@
-import { Injectable } from '@angular/core';
-import { MessageStore } from './message.store';
-import { HttpClient } from '@angular/common/http';
-import { host } from '../../../api';
-import { TokenService } from '../../token.service';
-import { APIResponse } from '../../../interface/API-Response';
-import { Message } from '../../../interface/Message';
-import { catchError, map, tap } from 'rxjs/operators';
-import { of } from 'rxjs';
-import { SOCKET_SEND_EVENT, SocketService } from '../../socket.service';
+import {Injectable} from '@angular/core';
+import {MessageStore} from './message.store';
+import {HttpClient} from '@angular/common/http';
+import {host} from '../../../api';
+import {TokenService} from '../../token.service';
+import {APIResponse} from '../../../interface/API-Response';
+import {Message} from '../../../interface/Message';
+import {catchError, map, tap} from 'rxjs/operators';
+import {of} from 'rxjs';
+import {SOCKET_SEND_EVENT, SocketService} from '../../socket.service';
 
-@Injectable({ providedIn: 'root' })
+@Injectable({providedIn: 'root'})
 export class MessageService {
 
   private readonly hostAPI = `${host}/message`;
@@ -31,8 +31,8 @@ export class MessageService {
   getAllMessage(classId: string) {
     this.httpClient.post<APIResponse<Message[]>>(
       this.hostAPI,
-      { classId },
-      { headers: this.tokenService.authorizeHeader },
+      {classId},
+      {headers: this.tokenService.authorizeHeader},
     ).pipe(
       map(response => response.data || [] as Message[]),
       catchError(error => {
@@ -52,7 +52,7 @@ export class MessageService {
     return this.httpClient.post<APIResponse<Message>>(
       this.hostAPI + '/create',
       message,
-      { headers: this.tokenService.authorizeHeader },
+      {headers: this.tokenService.authorizeHeader},
     ).pipe(
       map(response => response.data),
       tap(message => {

@@ -163,6 +163,69 @@ router.post('/staff', checkAuth, async (req,res)=> {
     })
 })
 
+/**{
+ * test dashboard
+ * level: 1000
+ */
+router.post('/all', checkAuth, async (req,res)=> {
+    if(req.userData.level === 1){
+        const classroom = await Classroom.find({
+            createdBy: req.userData._id
+        }).populate('student tutor').exec();
+
+        const message = await Message.find({
+            classroom: classroom._id
+        }).populate('classroom byUser quote').exec();
+
+        const file = await File.find({
+            classroom: classroom._id
+        }).populate('classroom byUser').exec();
+
+        return res.json({
+            message: 'statistic for staff dashboard retrieve successfully',
+            data: {classroom, message, file}
+        })
+    }
+
+    if(req.userData.level === 3){
+        const classroom = await Classroom.find({
+            student: req.userData._id
+        }).populate('tutor').exec();
+
+        const message = await Message.find({
+            classroom: classroom._id
+        }).populate('classroom byUser quote').exec();
+
+        const file = await File.find({
+            classroom: classroom._id
+        }).populate('classroom byUser').exec();
+
+        return res.json({
+            message: 'statistic for student dashboard retrieve successfully',
+            data: {classroom, message, file}
+        })
+    }
+
+    if(req.userData.level === 2){
+        const classroom = await Classroom.find({
+            tutor: req.userData._id
+        }).populate('student').exec();
+
+        const message = await Message.find({
+            classroom: classroom._id
+        }).populate('classroom byUser quote').exec();
+
+        const file = await File.find({
+            classroom: classroom._id
+        }).populate('classroom byUser').exec();
+
+        return res.json({
+            message: 'statistic for tutor dashboard retrieve successfully',
+            data: {classroom, message, file}
+        })
+    }
+})
+
 module.exports = router;
 
 

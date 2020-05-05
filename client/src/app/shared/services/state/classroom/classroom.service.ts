@@ -1,15 +1,15 @@
-import { Injectable } from '@angular/core';
-import { ClassroomStore } from './classroom.store';
-import { host } from '../../../api';
-import { HttpClient } from '@angular/common/http';
-import { TokenService } from '../../token.service';
-import { UserInterfaceService } from '../user-interface';
-import { Observable, of } from 'rxjs';
-import { APIResponse } from '../../../interface/API-Response';
-import { catchError, map, tap } from 'rxjs/operators';
-import { Classroom } from '../../../interface/Classroom';
+import {Injectable} from '@angular/core';
+import {ClassroomStore} from './classroom.store';
+import {host} from '../../../api';
+import {HttpClient} from '@angular/common/http';
+import {TokenService} from '../../token.service';
+import {UserInterfaceService} from '../user-interface';
+import {Observable, of} from 'rxjs';
+import {APIResponse} from '../../../interface/API-Response';
+import {catchError, map, tap} from 'rxjs/operators';
+import {Classroom} from '../../../interface/Classroom';
 
-@Injectable({ providedIn: 'root' })
+@Injectable({providedIn: 'root'})
 export class ClassroomService {
 
   private readonly api: string = `${host}/classroom`;
@@ -27,7 +27,7 @@ export class ClassroomService {
     return this.http.post<APIResponse<Classroom[]>>(
       `${this.api}/`,
       {},
-      { headers: this.tokenService.authorizeHeader },
+      {headers: this.tokenService.authorizeHeader},
     ).pipe(
       tap(response => {
         if (response.data) {

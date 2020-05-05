@@ -10,6 +10,7 @@ import { ClassManageComponent } from './class-manage/class-manage.component';
 import { UserShareModule } from '../../shared/components/user-share/user-share.module';
 import { MaterialsModule } from '../../shared/modules/materials/materials.module';
 import { ClassroomManageModule } from '../../shared/components/classroom-manage/classroom-manage.module';
+import {StatisticsModule} from "../../shared/components/statistics/statistics.module";
 
 
 @NgModule({
@@ -21,6 +22,7 @@ import { ClassroomManageModule } from '../../shared/components/classroom-manage/
     UserShareModule,
     MaterialsModule,
     ClassroomManageModule,
+    StatisticsModule,
   ],
 })
 export class StaffModule {

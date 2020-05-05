@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
-import { Store, StoreConfig } from '@datorama/akita';
-import { User } from '../../../interface/User';
+import {Injectable} from '@angular/core';
+import {Store, StoreConfig} from '@datorama/akita';
+import {User} from '../../../interface/User';
 
 export function createInitialState(): User {
   return {
@@ -16,8 +16,8 @@ export function createInitialState(): User {
   };
 }
 
-@Injectable({ providedIn: 'root' })
-@StoreConfig({ name: 'user', resettable: true })
+@Injectable({providedIn: 'root'})
+@StoreConfig({name: 'user', resettable: true})
 export class UserStore extends Store<User> {
 
   constructor() {

@@ -108,7 +108,7 @@ router.post('/create', checkAuth, async (req, res) => {
 });
 
 /**
- * Update meeting
+ * Delete schedule
  */
 router.post('/update/:scheduleId', checkAuth, async (req, res) => {
     const staffId = req.userData._id
@@ -155,7 +155,7 @@ router.post('/update/:scheduleId', checkAuth, async (req, res) => {
 });
 
 /**
- * Delete meeting
+ * Delete schedule
  */
 router.post('/delete/:scheduleId', checkAuth, async (req, res) => {
     const staffId = req.userData._id

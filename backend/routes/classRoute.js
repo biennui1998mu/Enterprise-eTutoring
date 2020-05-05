@@ -173,20 +173,6 @@ router.post('/create', checkAuth, async (req, res) => {
             Description: ${description}`
     }
 
-    transporter.sendMail(mailForm, (error, email) => {
-        if (error) {
-            console.log(error);
-            return res.json({
-                message: 'Some error ???',
-                error: error
-            })
-        }
-        console.log('Email? :' + email.response);
-        return res.json({
-            message: 'Email send!'
-        })
-    })
-
     const classroom = new Classroom({
         title,
         description,
@@ -197,6 +183,17 @@ router.post('/create', checkAuth, async (req, res) => {
 
     classroom.save()
         .then(result => {
+            transporter.sendMail(mailForm, (error, email) => {
+                if (error) {
+                    console.log(error);
+                    return res.json({
+                        message: 'Some error ???',
+                        error: error
+                    })
+                }
+                console.log('Email? :' + email.response);
+            })
+
             return res.json({
                 message: 'a classroom has been create!',
                 data: result
