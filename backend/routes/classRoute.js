@@ -23,7 +23,9 @@ router.post('/', checkAuth, async (req, res) => {
         })
     }
 
-    const listClass = await Classroom.find().exec()
+    const listClass = await Classroom.find()
+        .populate('student tutor')
+        .exec()
 
     if (!listClass) {
         return res.json({
@@ -47,7 +49,7 @@ router.post('/view', (req, res) => {
         _id: classroomId
     })
         .exec()
-        .then( classroom => {
+        .then(classroom => {
             if (!classroom) {
                 return res.json({
                     message: 'No classroom found by id'
@@ -110,7 +112,7 @@ router.post('/create', checkAuth, async (req, res) => {
         ]
     }).exec();
 
-    if(checkClass){
+    if (checkClass) {
         return res.json({
             message: 'Classroom exist!!!'
         })
@@ -172,7 +174,7 @@ router.post('/create', checkAuth, async (req, res) => {
     }
 
     transporter.sendMail(mailForm, (error, email) => {
-        if(error){
+        if (error) {
             console.log(error);
             return res.json({
                 message: 'Some error ???',
@@ -217,13 +219,13 @@ router.post('/update/:classId', checkAuth, async (req, res) => {
         _id: staffId
     })
 
-    if(!checkStaff){
+    if (!checkStaff) {
         return res.json({
             message: 'Staff dont exist!'
         });
     }
 
-    if(checkStaff.level !== 1){
+    if (checkStaff.level !== 1) {
         return res.json({
             message: 'You are not Staff!'
         });
@@ -264,13 +266,13 @@ router.post('/delete/:classId', checkAuth, async (req, res) => {
         _id: staffId
     })
 
-    if(!checkStaff){
+    if (!checkStaff) {
         return res.json({
             message: 'Staff dont exist!'
         });
     }
 
-    if(checkStaff.level !== 1){
+    if (checkStaff.level !== 1) {
         return res.json({
             message: 'You are not Staff!'
         });

@@ -34,8 +34,7 @@ export class TableClassComponent implements OnInit {
   expandedClassInfo: Classroom = mockupClassroom[0];
 
   constructor() {
-    // TODO debug
-    this.dataSource = new MatTableDataSource<Classroom>(mockupClassroom);
+    // this.dataSource = new MatTableDataSource<Classroom>(mockupClassroom);
   }
 
   @Input()
@@ -59,7 +58,7 @@ export class TableClassComponent implements OnInit {
     this.dataSource.sort = this.sort;
   }
 
-  switchPage(pageEvent: PageEvent) {
+  switchPage() {
     this.expandedClassInfo = null;
   }
 }

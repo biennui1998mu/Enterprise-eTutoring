@@ -5,16 +5,16 @@ import { catchError, map, switchMap, tap } from 'rxjs/operators';
 import { host } from '../../../api';
 import { TokenService } from '../../token.service';
 import { UserInterfaceService } from '../user-interface';
-import { Router } from '@angular/router';
 import { APIResponse } from '../../../interface/API-Response';
 import { User } from '../../../interface/User';
 import { Observable, of } from 'rxjs';
 import { UsersSystemQuery } from './users-system.query';
+import { extractInfo } from '../../../tools';
 
 @Injectable({ providedIn: 'root' })
 export class UsersSystemService {
 
-  readonly api: string = `${host}/user`;
+  private readonly api: string = `${host}/user`;
 
   constructor(
     private store: UsersSystemStore,
@@ -22,7 +22,6 @@ export class UsersSystemService {
     private http: HttpClient,
     private tokenService: TokenService,
     private uiStateService: UserInterfaceService,
-    private router: Router,
   ) {
   }
 
@@ -164,10 +163,12 @@ export class UsersSystemService {
         // create formData based on user available field
         if (field === 'avatar' || field === 'avatarNew') {
           // TODO resolve later
-          // if (field === 'avatarNew') {
-          //   const fileInfo = extractInfo(userUpdate.avatarNew)
-          // }
-          // formData.append('avatar', )
+          if (field === 'avatarNew') {
+            const fileInfo = extractInfo(userUpdate.avatarNew);
+            if (fileInfo) {
+              formData.append('avatar', fileInfo.selfInstance, fileInfo.filename);
+            }
+          }
         } else if (!!userUpdate[field]) {
           // only passing the data that is not null/empty to the form
           let data = userUpdate[field];
