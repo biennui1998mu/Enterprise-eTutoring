@@ -1,10 +1,9 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { Classroom, CLASSROOM_STATUS } from '../../../interface/Classroom';
-import { USER_TYPE } from '../../../interface/User';
+import { Classroom } from '../../../interface/Classroom';
 
 @Component({
   selector: 'app-table-class',
@@ -22,7 +21,6 @@ import { USER_TYPE } from '../../../interface/User';
   ],
 })
 export class TableClassComponent implements OnInit {
-
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
 
@@ -31,10 +29,9 @@ export class TableClassComponent implements OnInit {
   mapFieldToColumn: string[] = this.configTableColumns.map(
     col => col.inDataField,
   );
-  expandedClassInfo: Classroom = mockupClassroom[0];
+  expandedClassInfo: Classroom = null;
 
   constructor() {
-    // this.dataSource = new MatTableDataSource<Classroom>(mockupClassroom);
   }
 
   @Input()
@@ -92,43 +89,5 @@ const columnMapper: ColumnMatMapper[] = [
   {
     inDataField: 'createdAt',
     displayAs: 'Created at',
-  },
-];
-
-const mockupClassroom: Classroom[] = [
-  {
-    title: 'Software Development',
-    description: 'Softwhare hare',
-    student: {
-      _id: '',
-      name: 'Hai Son',
-      username: 'haison@gmail',
-      activeAt: null,
-      avatar: 'https://material.angular.io/assets/img/examples/shiba1.jpg',
-      level: USER_TYPE.student,
-      createdAt: null,
-      indicator: 1,
-    },
-    tutor: {
-      _id: '',
-      name: 'Hoang Nam',
-      username: 'hoangnam@gmail',
-      activeAt: null,
-      avatar: 'https://material.angular.io/assets/img/examples/shiba1.jpg',
-      level: USER_TYPE.tutor,
-      createdAt: null,
-      indicator: 1,
-    },
-    status: CLASSROOM_STATUS.open,
-    createdBy: {
-      _id: '',
-      name: 'Hoang Nam staff',
-      username: 'hoangnam@gmail',
-      activeAt: null,
-      avatar: 'https://material.angular.io/assets/img/examples/shiba1.jpg',
-      level: USER_TYPE.tutor,
-      createdAt: null,
-      indicator: 1,
-    },
   },
 ];

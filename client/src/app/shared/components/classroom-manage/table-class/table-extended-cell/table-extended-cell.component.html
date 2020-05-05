@@ -53,7 +53,11 @@
 <div class="flex flex-d-col right-section">
   <div class="grid brief-row">
     <div class="flex flex-d-col">
-      <h2>Schedule</h2>
+      <p>Start on</p>
+      <span>{{classroom.createdAt | date: 'dd/MM/yyyy - hh:mm:ss'}}</span>
+    </div>
+
+    <div class="flex flex-d-col">
       <button color="primary"
               mat-flat-button>
         View this class schedule
@@ -61,14 +65,15 @@
       <small class="text-muted">
         You will be navigated to schedule manager
       </small>
-    </div>
-
-    <div class="flex flex-d-col">
-      <h2>Resources</h2>
       <button (click)="popupResource()"
               color="primary"
               mat-flat-button>
         View this class uploaded files
+      </button>
+      <br>
+      <button color="primary"
+              mat-flat-button>
+        View this class Statistics
       </button>
     </div>
   </div>
