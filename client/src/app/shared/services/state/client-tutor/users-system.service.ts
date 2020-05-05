@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { UsersSystemStore } from './users-system.store';
 import { HttpClient } from '@angular/common/http';
-import { catchError, map, tap } from 'rxjs/operators';
+import { catchError, map, switchMap, tap } from 'rxjs/operators';
 import { host } from '../../../api';
 import { TokenService } from '../../token.service';
 import { UserInterfaceService } from '../user-interface';
@@ -72,21 +72,7 @@ export class UsersSystemService {
   }
 
   createUser(user: User) {
-    const formData = new FormData();
-    Object.keys(user).forEach(field => {
-      // create formData based on user available field
-      if (field === 'avatar' || field === 'avatarNew') {
-        // TODO resolve later
-      } else if (!!user[field]) {
-        // only passing the data that is not null/empty to the form
-        let data = user[field];
-        // must stringify the data first
-        if (typeof data !== 'string') {
-          data = JSON.stringify(data);
-        }
-        formData.append(field, data);
-      }
-    });
+    const formData = this.generateFormData(user);
     // set the store state (loading screen etc...)
     this.store.setLoading(true);
     this.http.post<APIResponse<User>>(
@@ -114,11 +100,72 @@ export class UsersSystemService {
     });
   }
 
-  updateUser(tutor: User) {
-    // todo update the state
+  updateUser(user: User) {
+    const formData = this.generateFormData(user);
+    // set the store state (loading screen etc...)
+    this.store.setLoading(true);
+    this.http.post<APIResponse<User>>(
+      `${this.api}/update/${user._id}`,
+      formData,
+      { headers: this.tokenService.authorizeHeader },
+    ).pipe(
+      tap(() => {
+        // finish loading once tap trigger / finish API request
+        this.store.setLoading(false);
+      }),
+      // only care about the data, f*ck response message
+      map(res => res.data),
+      switchMap(() => this.get()),
+      catchError(error => {
+        console.error(error);
+        /// display error 5 second if the request error
+        this.uiStateService.setError('Failed to update the user', 5);
+        return of([] as User[]);
+      }),
+    ).subscribe();
   }
 
-  deleteUser(tutor: User) {
-    // todo delete the user and update the state
+  deleteUser(user: User) {
+    this.store.setLoading(true);
+    this.http.post<APIResponse<User>>(
+      `${this.api}/delete/${user._id}`,
+      {},
+      { headers: this.tokenService.authorizeHeader },
+    ).pipe(
+      tap(() => {
+        // finish loading once tap trigger / finish API request
+        this.store.setLoading(false);
+      }),
+      // only care about the data, f*ck response message
+      map(res => res.data),
+      switchMap(() => this.get()),
+      catchError(error => {
+        console.error(error);
+        /// display error 5 second if the request error
+        this.uiStateService.setError('Failed to delete the user', 5);
+        return of([] as User[]);
+      }),
+    ).subscribe();
+  }
+
+  private generateFormData(userUpdate: User) {
+    const formData = new FormData();
+    Object.keys(userUpdate).forEach(field => {
+      if (field !== 'indicator' && field !== '_id') {
+        // create formData based on user available field
+        if (field === 'avatar' || field === 'avatarNew') {
+          // TODO resolve later
+        } else if (!!userUpdate[field]) {
+          // only passing the data that is not null/empty to the form
+          let data = userUpdate[field];
+          // must stringify the data first
+          if (typeof data !== 'string') {
+            data = JSON.stringify(data);
+          }
+          formData.append(field, data);
+        }
+      }
+    });
+    return formData;
   }
 }
