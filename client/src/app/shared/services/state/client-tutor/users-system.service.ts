@@ -167,7 +167,7 @@ export class UsersSystemService {
           // if (field === 'avatarNew') {
           //   const fileInfo = extractInfo(userUpdate.avatarNew)
           // }
-          formData.append('avatar', )
+          // formData.append('avatar', )
         } else if (!!userUpdate[field]) {
           // only passing the data that is not null/empty to the form
           let data = userUpdate[field];
