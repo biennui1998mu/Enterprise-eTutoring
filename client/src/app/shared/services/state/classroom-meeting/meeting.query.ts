@@ -1,8 +1,8 @@
-import { Injectable } from '@angular/core';
-import { QueryEntity } from '@datorama/akita';
-import { MeetingStore, MeetingState } from './meeting.store';
+import {Injectable} from '@angular/core';
+import {QueryEntity} from '@datorama/akita';
+import {MeetingState, MeetingStore} from './meeting.store';
 
-@Injectable({ providedIn: 'root' })
+@Injectable({providedIn: 'root'})
 export class MeetingQuery extends QueryEntity<MeetingState> {
 
   constructor(protected store: MeetingStore) {

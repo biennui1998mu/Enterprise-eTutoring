@@ -1,10 +1,10 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import * as io from 'socket.io-client';
-import { TokenService } from './token.service';
-import { host } from '../api';
-import { BehaviorSubject, Subject } from 'rxjs';
-import { Message } from '../interface/Message';
-import { Classroom } from '../interface/Classroom';
+import {TokenService} from './token.service';
+import {host} from '../api';
+import {BehaviorSubject, Subject} from 'rxjs';
+import {Message} from '../interface/Message';
+import {Classroom} from '../interface/Classroom';
 
 @Injectable({
   providedIn: 'root',

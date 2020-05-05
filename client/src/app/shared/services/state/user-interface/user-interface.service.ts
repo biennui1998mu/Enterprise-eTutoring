@@ -1,10 +1,10 @@
-import { Injectable } from '@angular/core';
-import { UserInterfaceStore } from './user-interface.store';
-import { SnackBarModel } from '../../../interface/SnackBarModel';
-import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
-import { UserInterfaceQuery } from './user-interface.query';
+import {Injectable} from '@angular/core';
+import {UserInterfaceStore} from './user-interface.store';
+import {SnackBarModel} from '../../../interface/SnackBarModel';
+import {MatSnackBar, MatSnackBarConfig} from '@angular/material/snack-bar';
+import {UserInterfaceQuery} from './user-interface.query';
 
-@Injectable({ providedIn: 'root' })
+@Injectable({providedIn: 'root'})
 export class UserInterfaceService {
 
   constructor(
@@ -28,7 +28,7 @@ export class UserInterfaceService {
    * @param timeout second
    */
   setError(message: string, timeout?: number) {
-    const errorInstance: SnackBarModel = { message, timeout };
+    const errorInstance: SnackBarModel = {message, timeout};
     this.store.update({
       errorAnnouncement: errorInstance,
     });

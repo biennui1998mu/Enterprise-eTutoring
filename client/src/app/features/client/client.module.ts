@@ -8,16 +8,18 @@ import { ClassRoomComponent } from './class-room/class-room.component';
 import { ChatRoomComponent } from './class-room/chat-room/chat-room.component';
 import { ClassroomShareModule } from '../../shared/components/classroom-share/classroom-share.module';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import {StatisticsModule} from "../../shared/components/statistics/statistics.module";
 
 
 @NgModule({
   declarations: [ClientComponent, ClassRoomComponent, ChatRoomComponent, DashboardComponent],
-  imports: [
-    CommonModule,
-    ClientRoutingModule,
-    GeneralLayoutModule,
-    ClassroomShareModule,
-  ],
+    imports: [
+        CommonModule,
+        ClientRoutingModule,
+        GeneralLayoutModule,
+        ClassroomShareModule,
+        StatisticsModule,
+    ],
 })
 export class ClientModule {
 }

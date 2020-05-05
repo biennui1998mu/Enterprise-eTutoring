@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import * as domPurify from 'dompurify';
 import * as marked from 'marked';
 
