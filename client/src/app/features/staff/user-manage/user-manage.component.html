@@ -28,5 +28,6 @@
 </div>
 <app-table-user (updateUserDetail)="updateUserInfo($event)"
                 (viewUserDetail)="selectedUser($event)"
+                [ngStyle]="{opacity: (isUsersLoading | async) ? 0.8 : 1}"
                 [searchEvent]="eventFilter | async"
                 [users]="users | async"></app-table-user>

@@ -29,7 +29,7 @@ export class UsersSystemService {
   get(): Observable<User[]> {
     this.store.setLoading(true);
     return this.http.post<APIResponse<User[]>>(
-      `${this.api}/user-list`,
+      `${this.api}/list`,
       {},
       { headers: this.tokenService.authorizeHeader },
     ).pipe(
@@ -102,14 +102,23 @@ export class UsersSystemService {
 
   updateUser(user: User) {
     const formData = this.generateFormData(user);
+    const authorizeHeader = this.tokenService.authorizeHeader;
     // set the store state (loading screen etc...)
     this.store.setLoading(true);
     this.http.post<APIResponse<User>>(
-      `${this.api}/update/${user._id}`,
+      `${this.api}/update`,
       formData,
-      { headers: this.tokenService.authorizeHeader },
+      {
+        headers: authorizeHeader,
+      },
     ).pipe(
-      tap(() => {
+      tap((res) => {
+        if (res.error) {
+          this.uiStateService.setError(
+            res.error.message ? res.error.message : 'Failed to update the user',
+            5,
+          );
+        }
         // finish loading once tap trigger / finish API request
         this.store.setLoading(false);
       }),
@@ -151,10 +160,14 @@ export class UsersSystemService {
   private generateFormData(userUpdate: User) {
     const formData = new FormData();
     Object.keys(userUpdate).forEach(field => {
-      if (field !== 'indicator' && field !== '_id') {
+      if (field !== 'indicator') {
         // create formData based on user available field
         if (field === 'avatar' || field === 'avatarNew') {
           // TODO resolve later
+          // if (field === 'avatarNew') {
+          //   const fileInfo = extractInfo(userUpdate.avatarNew)
+          // }
+          formData.append('avatar', )
         } else if (!!userUpdate[field]) {
           // only passing the data that is not null/empty to the form
           let data = userUpdate[field];

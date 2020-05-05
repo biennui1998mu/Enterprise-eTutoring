@@ -9,10 +9,24 @@
   {{userLevel}}
 </ng-container>
 
-<ng-container *ngIf="isActiveAtField">
-  <span [class.text-muted]="!user.activeAt">
-    {{user.activeAt ? user.activeAt : 'No data'}}
+<ng-container *ngIf="isDeletedAtField">
+  <span [class.text-muted]="user.deletedAt"
+        [class.text-success]="!user.deletedAt">
+    {{user.deletedAt ? 'Disabled' : 'Active'}}
   </span>
+</ng-container>
+
+<ng-container *ngIf="isActiveAtField">
+  <span *ngIf="!user.activeAt"
+        class="text-muted tt-capitalize fs-italic">
+    No data
+  </span>
+  <ng-container *ngIf="user.activeAt">
+    <span [matTooltip]="user.activeAt | date: 'hh:mm:ss - dd/MM/yyyy'"
+          class="text-muted fs-italic">
+      {{user.activeAt | momentRelativePipe}}
+    </span>
+  </ng-container>
 </ng-container>
 
 <ng-container *ngIf="isRawField">

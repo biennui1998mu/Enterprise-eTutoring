@@ -80,8 +80,8 @@ interface ColumnMatMapper {
 
 const columnMapper: ColumnMatMapper[] = [
   {
-    inDataField: 'indicator',
-    displayAs: 'ID',
+    inDataField: 'level',
+    displayAs: 'Account Type',
   },
   {
     inDataField: 'avatar',
@@ -96,11 +96,11 @@ const columnMapper: ColumnMatMapper[] = [
     displayAs: 'Email',
   },
   {
-    inDataField: 'level',
-    displayAs: 'Account Type',
-  },
-  {
     inDataField: 'activeAt',
     displayAs: 'Last Active',
+  },
+  {
+    inDataField: 'deletedAt',
+    displayAs: 'Status',
   },
 ];

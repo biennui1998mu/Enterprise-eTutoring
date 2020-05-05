@@ -1,6 +1,5 @@
 import { Component, Input } from '@angular/core';
 import { User } from '../../../../interface/User';
-import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-table-header-cell',
@@ -15,9 +14,7 @@ export class TableHeaderCellComponent {
   @Input()
   displayField: string;
 
-  constructor(
-    private matDialog: MatDialog,
-  ) {
+  constructor() {
   }
 
   get isAvatarField() {
@@ -32,8 +29,12 @@ export class TableHeaderCellComponent {
     return this.displayField === 'activeAt';
   }
 
+  get isDeletedAtField() {
+    return this.displayField === 'deletedAt';
+  }
+
   get isRawField() {
-    return !(this.isAvatarField || this.isLevelField || this.isActiveAtField);
+    return !(this.isAvatarField || this.isLevelField || this.isActiveAtField || this.isDeletedAtField);
   }
 
   get userLevel() {

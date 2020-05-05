@@ -37,9 +37,9 @@ tr.user-info-row:not(.table-expanded-row):active {
 }
 
 @include mat-table-columns((
-        indicator: (width: 80px),
         avatar: (width: 60px),
         name: (width: 150px),
-        level: (width: 100px),
-        activeAt: (width: 110px)
+        level: (width: 120px),
+        activeAt: (width: 120px),
+        deletedAt: (width: 75px),
 ));

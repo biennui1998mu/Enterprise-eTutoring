@@ -5,6 +5,7 @@ const jwt = require('jsonwebtoken');
 const checkAuth = require('../middleware/check-auth');
 const User = require('../database/models/user');
 const Classroom = require('../database/models/classroom');
+const moment = require('moment');
 
 /**
  * https://github.com/expressjs/multer
@@ -183,16 +184,20 @@ router.post('/signup', upload.single('avatar'), checkAuth, async (req, res) => {
         })
     }
 
+    if (!password && typeof password === 'string' && password.length > 1) {
+        return res.json({
+            message: 'Password invalid'
+        });
+    }
     let hashedPassword = undefined;
-    if (password) {
-        // if client send password then update, else skip
-        try {
-            hashedPassword = await bcrypt.hash(password, 10);
-        } catch (e) {
-            return res.status(500).json({
-                error: e
-            })
-        }
+
+    // if client send password then update, else skip
+    try {
+        hashedPassword = await bcrypt.hash(password, 10);
+    } catch (e) {
+        return res.status(500).json({
+            error: e
+        })
     }
 
     const newUser = new User({
@@ -235,7 +240,7 @@ router.post('/signin', async (req, res) => {
         });
     }
 
-    if(user.deletedAt){
+    if (user.deletedAt) {
         return res.json({
             message: 'contact staff!'
         });
@@ -285,49 +290,81 @@ router.post('/signin', async (req, res) => {
 /**
  * Update user
  */
-router.post('/update/:userId', checkAuth, async (req, res) => {
+router.post('/update', upload.single('avatar'), checkAuth, async (req, res) => {
+    console.log(req);
     const staffId = req.userData._id
     const checkStaff = await User.findOne({
         _id: staffId
     })
 
-    if(!checkStaff){
+    if (!checkStaff) {
         return res.json({
             message: 'Staff dont exist!'
         });
     }
 
-    if(checkStaff.level !== 1){
+    if (checkStaff.level !== 1) {
         return res.json({
             message: 'You are not Staff!'
         });
     }
 
-    const userId = req.params.userId;
-    const updateOps = {...req.body};
+    const userId = req.body._id;
+    const {username, name, password, activeAt} = req.body;
     // const avatar = req.file.
 
-    User.update({
-        _id: userId
-    }, {
-        $set: {
-            updateOps,
-            updatedAt: Date.now
-        }
-    })
-        .exec()
-        .then(result => {
-            return res.json({
-                message: 'User updated',
-                data: result
-            });
-        })
-        .catch(err => {
-            return res.json({
-                message: 'SKY FALL',
-                error: err
-            });
+    const findUser = await User.findById(userId).exec();
+
+    if (!findUser) {
+        return res.status(404).json({
+            message: 'User not found',
         });
+    }
+
+    if (username) {
+        findUser.username = username;
+    }
+
+    if (name) {
+        findUser.name = name;
+    }
+
+    if (
+        activeAt &&
+        moment(activeAt).isValid() &&
+        moment(activeAt).isAfter(findUser.createdAt)
+    ) {
+        // activeAt must be date and after the create time
+        findUser.activeAt = activeAt;
+    }
+
+    let hashedPassword = undefined;
+    if (password) {
+        // if client send password then update, else skip
+        try {
+            hashedPassword = await bcrypt.hash(password, 10);
+            findUser.password = hashedPassword;
+        } catch (e) {
+            return res.status(500).json({
+                error: e
+            })
+        }
+    }
+
+    try {
+        findUser.updatedAt = Date.now(); // set the update time
+        await findUser.save(); // save new information
+    } catch (e) {
+        return res.json({
+            message: 'SKY FALL',
+            error: e
+        });
+    }
+
+    return res.json({
+        message: 'User updated',
+        data: findUser
+    });
 });
 
 /**
@@ -339,13 +376,13 @@ router.post('/recover/:userId', checkAuth, async (req, res) => {
         _id: staffId
     })
 
-    if(!checkStaff){
+    if (!checkStaff) {
         return res.json({
             message: 'Staff dont exist!'
         });
     }
 
-    if(checkStaff.level !== 1){
+    if (checkStaff.level !== 1) {
         return res.json({
             message: 'You are not Staff!'
         });
@@ -378,13 +415,13 @@ router.post('/delete/:userId', checkAuth, async (req, res) => {
         _id: staffId
     })
 
-    if(!checkStaff){
+    if (!checkStaff) {
         return res.json({
             message: 'Staff dont exist!'
         });
     }
 
-    if(checkStaff.level !== 1){
+    if (checkStaff.level !== 1) {
         return res.json({
             message: 'You are not Staff!'
         });

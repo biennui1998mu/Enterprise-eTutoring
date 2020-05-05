@@ -10,6 +10,7 @@ import { TableHeaderCellComponent } from './table-user/table-header-cell/table-h
 import { MatSortModule } from '@angular/material/sort';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { UserDialogInfoComponent } from './user-dialog-info/user-dialog-info.component';
+import { SharedPipeModule } from '../../pipe/shared-pipe.module';
 
 const components = [
   TableUserComponent,
@@ -30,6 +31,7 @@ const components = [
     MatTableModule,
     MatSortModule,
     MatPaginatorModule,
+    SharedPipeModule,
   ],
   exports: [
     ...components,
