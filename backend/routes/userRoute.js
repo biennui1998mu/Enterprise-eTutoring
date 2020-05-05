@@ -41,7 +41,7 @@ const upload = multer({
  * take all tutor from database
  * staff/admin can view
  */
-router.post('/user-list', checkAuth, async (req, res) => {
+router.post('/list', checkAuth, async (req, res) => {
     const idUserLogin = req.userData._id;
 
     const checkUser = await User.findOne({
@@ -60,47 +60,24 @@ router.post('/user-list', checkAuth, async (req, res) => {
         })
     }
 
-    const listStaff = await User.find({
-        $and: [
-            {level: 1}
-        ]
-    }).exec()
-
-    const listTutor = await User.find({
-        $and: [
+    const listUser = await User.find({
+        $or: [
+            {level: 1},
             {level: 2},
-        ]
-    }).exec()
-
-    const listStudent = await User.find({
-        $and: [
             {level: 3}
-        ]
+        ],
+        _id: {$ne: checkUser._id}
     }).exec()
 
-    if (listStaff) {
+    if (!listUser) {
         return res.json({
-            message: 'List staff',
-            data: listStaff
-        })
-    }
-
-    if (listTutor) {
-        return res.json({
-            message: 'List tutor',
-            data: listTutor
-        })
-    }
-
-    if (listStudent) {
-        return res.json({
-            message: 'List student',
-            data: listStudent
+            message: 'Empty!!!'
         })
     }
 
     return res.json({
-        message: 'Empty!!!'
+        message: 'List user',
+        data: listUser
     })
 });
 
