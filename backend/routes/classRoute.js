@@ -257,8 +257,10 @@ router.post('/update/:classId', checkAuth, async (req, res) => {
 /**
  * Delete classroom
  */
-router.post('/delete/:classId', checkAuth, async (req, res) => {
-    const staffId = req.userData._id
+router.post('/status/:classId', checkAuth, async (req, res) => {
+    const staffId = req.userData._id;
+    const status = req.body.status;
+
     const checkStaff = await User.findOne({
         _id: staffId
     })
@@ -276,7 +278,7 @@ router.post('/delete/:classId', checkAuth, async (req, res) => {
     }
 
     const classroomId = req.params.classroomId;
-    Classroom.remove({_id: classroomId})
+    Classroom.update({_id: classroomId}, {$set: {status: status}})
         .exec()
         .then(result => {
             return res.json({
