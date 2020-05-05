@@ -18,7 +18,7 @@
 </ng-container>
 
 <ng-container *ngIf="isCreateAtField">
-  <span [matTooltip]="classroom.createdAt | date: 'dd/MM/YY - hh:mm:ss'">
+  <span [matTooltip]="classroom.createdAt | date: 'dd/MM/yyyy - hh:mm:ss'">
     {{classroom.createdAt | momentRelativePipe}}
   </span>
 </ng-container>

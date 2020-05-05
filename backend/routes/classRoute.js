@@ -228,30 +228,29 @@ router.post('/update/:classId', checkAuth, async (req, res) => {
         });
     }
 
-    const classroomId = req.params.classroomId;
-    const updateOps = {...req.body};
-
-    Classroom.update({
-        _id: classroomId
-    }, {
-        $set: {
-            updateOps,
-            updatedAt: Date.now
+    const classroomId = req.params.classId;
+    const {title, description} = req.body;
+    try {
+        const findClass = await Classroom.findById(classroomId)
+            .exec();
+        if (!findClass) {
+            return res.status(404).json({
+                message: 'Class not found',
+            })
         }
-    })
-        .exec()
-        .then(result => {
-            return res.json({
-                message: 'Class updated',
-                data: result
-            });
-        })
-        .catch(err => {
-            return res.status(500).json({
-                message: 'SKY FALL',
-                error: err
-            });
+        findClass.title = title;
+        findClass.description = description;
+        await findClass.save();
+        return res.json({
+            message: 'Class information was updated',
+            data: findClass,
         });
+    } catch (e) {
+        return res.status(500).json({
+            message: 'SKY FALL',
+            error: e,
+        })
+    }
 });
 
 /**
@@ -260,6 +259,7 @@ router.post('/update/:classId', checkAuth, async (req, res) => {
 router.post('/status/:classId', checkAuth, async (req, res) => {
     const staffId = req.userData._id;
     const status = req.body.status;
+    console.log(status);
 
     const checkStaff = await User.findOne({
         _id: staffId
@@ -277,20 +277,26 @@ router.post('/status/:classId', checkAuth, async (req, res) => {
         });
     }
 
-    const classroomId = req.params.classroomId;
-    Classroom.update({_id: classroomId}, {$set: {status: status}})
-        .exec()
-        .then(result => {
-            return res.json({
-                message: 'Class was deleted',
-            });
-        })
-        .catch(err => {
-            return res.status(500).json({
-                message: 'SKY FALL',
-                error: err,
+    const classroomId = req.params.classId;
+    try {
+        const findClass = await Classroom.findById(classroomId).exec();
+        if (!findClass) {
+            return res.status(404).json({
+                message: 'Class not found',
             })
+        }
+        findClass.status = status;
+        await findClass.save();
+        return res.json({
+            message: 'Class status was updated',
+            data: findClass,
         });
+    } catch (e) {
+        return res.status(500).json({
+            message: 'SKY FALL',
+            error: e,
+        })
+    }
 });
 
 module.exports = router;

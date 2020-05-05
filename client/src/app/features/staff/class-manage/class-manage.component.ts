@@ -38,8 +38,8 @@ export class ClassManageComponent implements OnInit {
   updateClassInfo($event: {
     action: DialogAction; class: Classroom<string, string, string>
   }) {
-    if ($event.action === DialogAction.disable) {
-      this.classroomService.closeClass($event.class);
+    if ($event.action === DialogAction.disable || $event.action === DialogAction.open) {
+      this.classroomService.changeStatusClass($event.class);
     } else if ($event.action === DialogAction.update) {
       this.classroomService.updateClass($event.class);
     }

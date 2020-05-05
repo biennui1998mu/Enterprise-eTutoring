@@ -1,10 +1,10 @@
-import {Injectable} from '@angular/core';
-import {UserInterfaceStore} from './user-interface.store';
-import {SnackBarModel} from '../../../interface/SnackBarModel';
-import {MatSnackBar, MatSnackBarConfig} from '@angular/material/snack-bar';
-import {UserInterfaceQuery} from './user-interface.query';
+import { Injectable } from '@angular/core';
+import { UserInterfaceStore } from './user-interface.store';
+import { SnackBarModel } from '../../../interface/SnackBarModel';
+import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
+import { UserInterfaceQuery } from './user-interface.query';
 
-@Injectable({providedIn: 'root'})
+@Injectable({ providedIn: 'root' })
 export class UserInterfaceService {
 
   constructor(
@@ -17,7 +17,7 @@ export class UserInterfaceService {
         this.openErrorSnackBar();
       } else if (state.infoAnnouncement) {
         // TODO openInfoSnackBar
-        this.openInfoSnackBar();
+        this.openNotifySnackBar();
       }
     });
   }
@@ -28,9 +28,21 @@ export class UserInterfaceService {
    * @param timeout second
    */
   setError(message: string, timeout?: number) {
-    const errorInstance: SnackBarModel = {message, timeout};
+    const errorInstance: SnackBarModel = { message, timeout };
     this.store.update({
       errorAnnouncement: errorInstance,
+    });
+  }
+
+  /**
+   * display info dialog
+   * @param message
+   * @param timeout second
+   */
+  setNotify(message: string, timeout?: number) {
+    const notify: SnackBarModel = { message, timeout };
+    this.store.update({
+      infoAnnouncement: notify,
     });
   }
 
@@ -40,6 +52,15 @@ export class UserInterfaceService {
   clearError() {
     this.store.update({
       errorAnnouncement: null,
+    });
+  }
+
+  /**
+   * reset the state of the error alone
+   */
+  clearNotify() {
+    this.store.update({
+      infoAnnouncement: null,
     });
   }
 
@@ -58,7 +79,17 @@ export class UserInterfaceService {
     });
   }
 
-  private openInfoSnackBar() {
-
+  private openNotifySnackBar() {
+    const timeout = this.store.getValue().infoAnnouncement.timeout;
+    const config: MatSnackBarConfig = {
+      duration: timeout ? timeout * 1000 : 3000,
+    };
+    this.matSnackBar.open(
+      this.store.getValue().infoAnnouncement.message,
+      'close',
+      config,
+    ).afterDismissed().subscribe(() => {
+      this.clearNotify();
+    });
   }
 }

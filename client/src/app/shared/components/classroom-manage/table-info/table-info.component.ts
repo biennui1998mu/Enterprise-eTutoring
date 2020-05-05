@@ -97,6 +97,10 @@ export class TableInfoComponent implements OnInit {
         this.classDescription.disable();
         this.classStudent.disable();
         this.classTutor.disable();
+      } else if (this.data.action === DialogAction.update) {
+        // prevent update student/tutor, only allow to close the class and change info
+        this.classStudent.disable();
+        this.classTutor.disable();
       }
     }
   }
