@@ -166,19 +166,23 @@ router.post('/update/:id', checkAuth, async (req, res) => {
             });
         }
 
-        if (title && title.length > 0) {
+        if (title && typeof title === 'string' && title.length > 0) {
             meetingFind.title = title;
         }
 
-        if (description && description.length > 0) {
+        if (description && typeof description === 'string' && description.length > 0) {
             meetingFind.description = description;
         }
 
-        if (address && address.length > 0) {
+        if (address && typeof address === 'string' && address.length > 0) {
             meetingFind.address = address;
         }
 
-        if (time && moment(time).isValid() && moment(time).isBefore(meetingFind.createdAt)) {
+        if (
+            time &&
+            moment(time).isValid() &&
+            moment(time).isBefore(meetingFind.createdAt)
+        ) {
             meetingFind.time = time;
         }
 

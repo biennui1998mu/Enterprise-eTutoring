@@ -45,7 +45,7 @@ router.post('/', async (req, res) => {
  */
 router.post('/create', checkAuth, async (req, res) => {
     const createdBy = req.userData._id;
-    const {title, description, classroom, listDate, startAt, endAt} = req.body;
+    const {title, description, classroom, listDate} = req.body;
 
     let classroomExist = await Classroom.findOne({
         _id: classroom.toString()
@@ -71,25 +71,12 @@ router.post('/create', checkAuth, async (req, res) => {
         })
     }
 
-    const startAtParser = moment(String(startAt), 'x');
-    const endAtParser = moment(String(endAt), 'x');
-
-    if (startAtParser.isValid() && endAtParser.isValid()) {
-        if (endAtParser.isBefore(startAtParser)) {
-            return res.json({
-                message: 'endAt must after startAt!'
-            })
-        }
-    }
-
     const schedule = new Schedule({
         title,
         description,
         createdBy,
         classroom,
-        listDate,
-        startAt,
-        endAt
+        listDate
     });
 
     schedule.save()
@@ -108,9 +95,11 @@ router.post('/create', checkAuth, async (req, res) => {
 });
 
 /**
- * Delete schedule
+ * update schedule
  */
 router.post('/update/:scheduleId', checkAuth, async (req, res) => {
+    const scheduleId = req.params.scheduleId;
+
     const staffId = req.userData._id
     const checkStaff = await User.findOne({
         _id: staffId
@@ -128,31 +117,34 @@ router.post('/update/:scheduleId', checkAuth, async (req, res) => {
         });
     }
 
-    const scheduleId = req.params.scheduleId;
-    const updateOps = {...req.body};
+    const {title, description, listDate} = req.body;
 
-    Schedule.update({
+    if (!title || typeof title !== 'string' || title.length === 0) {
+        return res.json({
+            message: 'title invalid'
+        })
+    }
+
+    const updated = await Schedule.update({
         _id: scheduleId
     }, {
         $set: {
-            updateOps,
-            updatedAt: Date.now
+            title: title,
+            description: description,
+            listDate: listDate,
+            updatedAt: Date.now()
         }
-    })
-        .exec()
-        .then(result => {
-            return res.json({
-                message: 'schedule updated',
-                data: result
-            });
-        })
-        .catch(err => {
-            console.log(err);
-            return res.status(500).json({
-                message: 'SKY FALL',
-                error: err
-            });
+    }).exec()
+
+    if (!updated) {
+        return res.json({
+            message: 'Update fail'
         });
+    }
+    return res.json({
+        message: 'schedule updated',
+        data: updated
+    });
 });
 
 /**
