@@ -1,6 +1,10 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { extractInfo, FileUploadInfo, getPreviewBase64, IsFileSmallerThan } from '../../../tools';
+import { Classroom } from '../../../interface/Classroom';
+import { MessageService } from '../../../services/state/classroom-message';
+import { UserQuery } from '../../../services/state/user';
+import { Message } from '../../../interface/Message';
 
 @Component({
   selector: 'app-class-chat-input',
@@ -8,13 +12,15 @@ import { extractInfo, FileUploadInfo, getPreviewBase64, IsFileSmallerThan } from
   styleUrls: ['./class-chat-input.component.scss'],
 })
 export class ClassChatInputComponent implements OnInit {
+  @Input()
+  classroom: Classroom;
 
   @ViewChild('inputFile')
   inputFile: ElementRef<HTMLInputElement>;
 
   chatForm: FormGroup;
 
-  messageInput: FormControl = new FormControl(
+  contentInput: FormControl = new FormControl(
     '',
     [Validators.required, Validators.minLength(1)],
   );
@@ -32,26 +38,34 @@ export class ClassChatInputComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
+    private messageService: MessageService,
+    private userQuery: UserQuery,
   ) {
   }
 
   ngOnInit(): void {
     this.chatForm = this.formBuilder.group({
-      messageInput: this.messageInput,
-      fileInput: this.fileInput,
+      classroom: [this.classroom._id, [Validators.required]],
+      byUser: [this.userQuery.getValue()._id, [Validators.required]],
+      content: this.contentInput,
     });
   }
 
   sendChatMessage() {
     if (this.chatForm.valid) {
-      console.log('send ms');
+      const message: Message<any, any> = this.chatForm.value;
+      this.messageService.sendMessage(message).subscribe(
+        value => {
+          console.log(value);
+        },
+      );
     }
     return;
   }
 
   getValue($event: KeyboardEvent) {
     const domInput = $event.target as HTMLDivElement;
-    this.messageInput.setValue(domInput.innerText);
+    this.contentInput.setValue(domInput.innerText);
   }
 
   fileUpload(fileEvent: Event) {

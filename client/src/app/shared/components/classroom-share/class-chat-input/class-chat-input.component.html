@@ -14,7 +14,7 @@
        [contentEditable]="true"
        class="br0 p05 bg-transparent chat-input"></div>
   <span (click)="chatInput.focus()"
-        *ngIf="messageInput.value?.length === 0"
+        *ngIf="contentInput.value?.length === 0"
         class="chat-input-placeholder text-muted">
     start the conversation...
   </span>
