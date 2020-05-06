@@ -1,5 +1,6 @@
 import { Component, Inject, OnInit, Optional } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-meeting-input',
@@ -7,13 +8,36 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 })
 export class MeetingInputComponent implements OnInit {
 
+  titleInput = new FormControl('', [
+    Validators.required, Validators.minLength(1),
+  ]);
+  descriptionInput = new FormControl('', [
+    Validators.required, Validators.minLength(1),
+  ]);
+  addressInput = new FormControl('', [
+    Validators.required, Validators.minLength(1),
+  ]);
+  timeInput = new FormControl(
+    { value: '', disabled: true }, [
+      Validators.required, Validators.minLength(1),
+    ]);
+
+  formMeeting: FormGroup;
+
   constructor(
     @Optional() @Inject(MAT_DIALOG_DATA) public data: MeetingPopupInitData,
     public dialogRef: MatDialogRef<MeetingInputComponent>,
+    private formBuilder: FormBuilder,
   ) {
   }
 
   ngOnInit(): void {
+    this.formMeeting = this.formBuilder.group({
+      title: this.titleInput,
+      description: this.descriptionInput,
+      address: this.addressInput,
+      time: this.timeInput,
+    });
   }
 
   cancel() {
@@ -28,6 +52,14 @@ export class MeetingInputComponent implements OnInit {
       meeting: null,
       action: 'update',
     } as MeetingPopupCloseData);
+  }
+
+  create() {
+
+  }
+
+  update() {
+
   }
 }
 

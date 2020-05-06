@@ -1,12 +1,19 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { MeetingInputComponent, MeetingPopupInitData } from '../meeting-input/meeting-input.component';
 import { MatDialog } from '@angular/material/dialog';
+import { Meeting } from '../../../interface/Meeting';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-meeting-panel',
   templateUrl: './meeting-panel.component.html',
 })
 export class MeetingPanelComponent implements OnInit {
+
+  @Input()
+  meeting: Meeting;
+  moment = moment;
+  Date = Date;
 
   constructor(
     private matDialog: MatDialog,
@@ -25,7 +32,7 @@ export class MeetingPanelComponent implements OnInit {
         width: '350px',
         data: {
           mode: 'update',
-          meeting: null,
+          meeting: this.meeting,
         },
       },
     ).afterClosed().subscribe(

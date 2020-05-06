@@ -4,7 +4,9 @@
   </h2>
 </div>
 
-<app-class-meta class="bg-white right-bar mat-elevation-z5">
+<app-class-meta *ngIf="classroom"
+                [classroom]="classroom"
+                class="bg-white right-bar mat-elevation-z5">
 </app-class-meta>
 
 <div class="router-section">

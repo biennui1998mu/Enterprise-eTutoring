@@ -14,7 +14,7 @@
     </mat-expansion-panel-header>
 
     <p class="text-muted p1 pt0 mb-0">
-      Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eos, in?
+      {{classroom?.description}}
     </p>
   </mat-expansion-panel>
 
@@ -32,36 +32,34 @@
       <div mat-subheader>Tutor</div>
       <mat-list-item class="cursor-pointer side-link"
                      mat-list-item>
-        <img alt=""
+        <img [alt]="classroom?.tutor.name"
+             [src]="classroom?.tutor.avatar"
              class="obj-pos-center obj-fit-cover"
-             mat-list-icon
-             src="https://material.angular.io/assets/img/examples/shiba1.jpg">
-        <div mat-line>Do Hoang Nam</div>
+             mat-list-icon>
+        <div [matTooltip]="classroom?.tutor.username"
+             mat-line>
+          {{classroom?.tutor.name}}
+        </div>
       </mat-list-item>
 
       <div mat-subheader>Students</div>
       <mat-list-item class="cursor-pointer side-link"
                      mat-list-item>
-        <img alt=""
+        <img [alt]="classroom?.student.name"
+             [src]="classroom?.student.avatar"
              class="obj-pos-center obj-fit-cover"
-             mat-list-icon
-             src="https://material.angular.io/assets/img/examples/shiba1.jpg">
-        <div mat-line>Hai Son</div>
-      </mat-list-item>
-      <mat-list-item class="cursor-pointer side-link"
-                     mat-list-item>
-        <img alt=""
-             class="obj-pos-center obj-fit-cover"
-             mat-list-icon
-             src="https://material.angular.io/assets/img/examples/shiba1.jpg">
-        <div mat-line>Tuan Anh</div>
+             mat-list-icon>
+        <div [matTooltip]="classroom?.student.username"
+             mat-line>{{classroom?.student.name}}</div>
       </mat-list-item>
     </mat-list>
 
   </mat-expansion-panel>
 
   <!--  TODO: do schedule   -->
-  <mat-expansion-panel class="custom-meta">
+  <mat-expansion-panel (afterCollapse)="schedulePanelOpen = false"
+                       (afterExpand)="schedulePanelOpen = true"
+                       class="custom-meta">
     <mat-expansion-panel-header>
       <mat-panel-title>
         Schedule
@@ -71,7 +69,7 @@
       </mat-panel-description>
     </mat-expansion-panel-header>
 
-    <app-schedule-viewer></app-schedule-viewer>
+    <app-schedule-viewer [classroom]="classroom"></app-schedule-viewer>
 
   </mat-expansion-panel>
 
@@ -86,7 +84,8 @@
       </mat-panel-description>
     </mat-expansion-panel-header>
 
-    <app-meeting-viewer></app-meeting-viewer>
+    <app-meeting-viewer *ngIf="classroom"
+                        [classroom]="classroom"></app-meeting-viewer>
 
   </mat-expansion-panel>
 

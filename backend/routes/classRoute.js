@@ -61,7 +61,7 @@ router.post('/view', checkAuth, (req, res) => {
 
     Classroom.findOne({
         _id: classroomId
-    }).exec().then(classroom => {
+    }).populate('student tutor').exec().then(classroom => {
         if (!classroom) {
             return res.status(404).json({
                 message: 'No classroom found by id'

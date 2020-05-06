@@ -12,7 +12,8 @@
   <mat-form-field appearance="outline"
                   class="w100pct">
     <mat-label>Title</mat-label>
-    <input matInput
+    <input [formControl]="titleInput"
+           matInput
            placeholder="title of the meeting"
            required
            type="text">
@@ -22,7 +23,8 @@
   <mat-form-field appearance="outline"
                   class="w100pct">
     <mat-label>Description</mat-label>
-    <input matInput
+    <input [formControl]="descriptionInput"
+           matInput
            placeholder="the purpose of the meeting (optional)"
            type="text">
     <mat-error>err</mat-error>
@@ -31,7 +33,8 @@
   <mat-form-field appearance="outline"
                   class="w100pct">
     <mat-label>Location</mat-label>
-    <input matInput
+    <input [formControl]="addressInput"
+           matInput
            placeholder="location of the meeting"
            required
            type="text">
@@ -41,12 +44,14 @@
   <mat-form-field appearance="outline"
                   class="w100pct">
     <mat-label>End Date</mat-label>
-    <input [matDatepicker]="picker"
+    <input [formControl]="timeInput"
+           [matDatepicker]="picker"
            matInput
            required>
     <mat-datepicker-toggle [for]="picker"
                            matSuffix></mat-datepicker-toggle>
-    <mat-datepicker #picker></mat-datepicker>
+    <mat-datepicker #picker
+                    [disabled]="false"></mat-datepicker>
   </mat-form-field>
 </form>
 
@@ -58,21 +63,27 @@
     Cancel
   </button>
 
-  <button (click)="delete()"
-          *ngIf="data?.mode === 'update'"
-          class="ml3 mr05"
-          color="warn"
+  <!--  <button (click)="delete()"-->
+  <!--          *ngIf="data?.mode === 'update'"-->
+  <!--          class="ml3 mr05"-->
+  <!--          color="warn"-->
+  <!--          mat-flat-button>-->
+  <!--    Delete-->
+  <!--  </button>-->
+
+  <button (click)="create()"
+          *ngIf="data?.mode === 'new'"
+          [disabled]="formMeeting.invalid"
+          color="primary"
           mat-flat-button>
-    Delete
+    Create
   </button>
 
-  <button color="primary"
+  <button (click)="update()"
+          *ngIf="data?.mode === 'update'"
+          [disabled]="formMeeting.invalid"
+          color="primary"
           mat-flat-button>
-    <ng-container *ngIf="data?.mode === 'new'">
-      Create
-    </ng-container>
-    <ng-container *ngIf="data?.mode === 'update'">
-      Update
-    </ng-container>
+    Update
   </button>
 </div>

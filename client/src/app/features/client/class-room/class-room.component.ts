@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { ClassroomQuery, ClassroomService, ClassroomStore } from '../../../shared/services/state/classroom';
+import { ClassroomQuery, ClassroomService } from '../../../shared/services/state/classroom';
 import { Classroom } from '../../../shared/interface/Classroom';
-import { filter, switchMap } from 'rxjs/operators';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-class-room',
@@ -16,16 +16,16 @@ export class ClassRoomComponent implements OnInit {
   constructor(
     private classroomQuery: ClassroomQuery,
     private classroomService: ClassroomService,
-    private classroomStore: ClassroomStore,
+    private activatedRoute: ActivatedRoute,
+    private router: Router,
   ) {
-    this.classroomQuery.selectAll().pipe(
-      filter(list => list.length > 0),
-      switchMap(() => {
-        // list classroom updated on `general-layout`
-        return classroomQuery.selectActive();
-      }),
-    ).subscribe(classViewing => {
-      this.classroom = classViewing;
+    this.activatedRoute.data.subscribe(fromResolver => {
+      const classResolver = fromResolver[0] as Classroom;
+      if (!classResolver) {
+        this.router.navigate(['/client', 'dashboard']);
+        return;
+      }
+      this.classroom = classResolver;
     });
   }
 

@@ -9,10 +9,15 @@ const moment = require('moment')
 /**
  * take all meeting from classroom
  */
-router.post('/', async (req, res) => {
+router.post('/', checkAuth, async (req, res) => {
+    const userData = req.userData;
     const classroomExist = await Classroom.findOne({
-        _id: req.body.classId
-    }).exec()
+        _id: req.body.classId,
+        $or: [
+            {tutor: userData._id},
+            {student: userData._id},
+        ],
+    }).exec();
 
     if (!classroomExist) {
         return res.json({
@@ -22,16 +27,11 @@ router.post('/', async (req, res) => {
 
     const meeting = await Meeting.find({
         classId: req.body.classId
-    }).exec()
+    }).exec();
 
-    if (!meeting) {
-        return res.json({
-            message: 'no meeting was founded!'
-        })
-    }
     return res.json({
-        message: 'Meeting founded!',
-        data: meeting
+        message: 'Meeting fetched!',
+        data: meeting,
     })
 });
 
@@ -74,7 +74,7 @@ router.post('/create', checkAuth, async (req, res) => {
         _id: createdBy.toString()
     }).exec()
 
-    if(!userExist){
+    if (!userExist) {
         return res.json({
             message: 'There was a thief get in the house!'
         })
@@ -84,25 +84,25 @@ router.post('/create', checkAuth, async (req, res) => {
         _id: classroom.toString()
     }).exec()
 
-    if(!classroomExist){
+    if (!classroomExist) {
         return res.json({
             message: 'Cant found classroom!'
         })
     }
 
-    if(!title || typeof title !== 'string' || title.length === 0){
+    if (!title || typeof title !== 'string' || title.length === 0) {
         return res.json({
             message: 'title invalid'
         })
     }
 
-    if(!address || typeof address !== 'string' || address.length === 0){
+    if (!address || typeof address !== 'string' || address.length === 0) {
         return res.json({
             message: 'address invalid'
         })
     }
 
-    if(!time){
+    if (!time) {
         return res.json({
             message: 'time need input'
         })
@@ -111,13 +111,13 @@ router.post('/create', checkAuth, async (req, res) => {
     const timeParser = moment(String(time), 'x');
     const now = moment(String(Date.now), 'x');
 
-    if(!timeParser.isValid()){
+    if (!timeParser.isValid()) {
         return res.json({
             message: 'time invalid'
         })
     }
 
-    if(timeParser.isBefore(now)){
+    if (timeParser.isBefore(now)) {
         return res.json({
             message: 'time cannot happen before now'
         })
@@ -156,7 +156,8 @@ router.post('/update/:classId', (req, res) => {
 
     Meeting.update({
         _id: meetingId
-    }, {$set: {
+    }, {
+        $set: {
             updateOps,
             updatedAt: Date.now
         }

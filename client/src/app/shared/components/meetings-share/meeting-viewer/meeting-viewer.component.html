@@ -6,9 +6,11 @@
 
 <div class="ph1 flex flex-d-col justify-flex-start meetings-list">
   <button (click)="createNew()"
-      class="btn btn-block btn-outline-success tt-capitalize mb02 mt02">
+          [disabled]="classroom.status === CLASSROOM_STATUS.closed"
+          class="btn btn-block btn-outline-success tt-capitalize mb02 mt02">
     <i class="fa fa-plus mr02"></i>
     Create
   </button>
-  <app-meeting-panel></app-meeting-panel>
+  <app-meeting-panel *ngFor="let meeting of meetings"
+                     [meeting]="meeting"></app-meeting-panel>
 </div>
