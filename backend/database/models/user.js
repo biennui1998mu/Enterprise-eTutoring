@@ -26,6 +26,7 @@ const userSchema = new Schema({
     gender: {
         type: Number,
         // required: true
+        default: 0
     },
     /**
      * level of account
