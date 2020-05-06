@@ -98,6 +98,8 @@ router.post('/create', checkAuth, async (req, res) => {
  * update schedule
  */
 router.post('/update/:scheduleId', checkAuth, async (req, res) => {
+    const scheduleId = req.params.scheduleId;
+
     const staffId = req.userData._id
     const checkStaff = await User.findOne({
         _id: staffId
@@ -115,30 +117,34 @@ router.post('/update/:scheduleId', checkAuth, async (req, res) => {
         });
     }
 
-    const scheduleId = req.params.scheduleId;
-    const updateOps = {...req.body};
+    const {title, description, listDate} = req.body;
 
-    Schedule.update({
-        _id: scheduleId
-    }, {$set: {
-            updateOps,
-            updatedAt: Date.now
-        }
-    })
-        .exec()
-        .then(result => {
-            return res.json({
-                message: 'schedule updated',
-                data: result
-            });
+    if (!title || typeof title !== 'string' || title.length === 0) {
+        return res.json({
+            message: 'title invalid'
         })
-        .catch(err => {
-            console.log(err);
-            return res.status(500).json({
-                message: 'SKY FALL',
-                error: err
-            });
+    }
+
+    const updated = await Schedule.update({
+        _id: scheduleId
+    }, {
+        $set: {
+            title: title,
+            description: description,
+            listDate: listDate,
+            updatedAt: Date.now()
+        }
+    }).exec()
+
+    if (!updated) {
+        return res.json({
+            message: 'Update fail'
         });
+    }
+    return res.json({
+        message: 'schedule updated',
+        data: updated
+    });
 });
 
 /**

@@ -151,32 +151,65 @@ router.post('/create', checkAuth, async (req, res) => {
 /**
  * Update meeting
  */
-router.post('/update/:classId', (req, res) => {
+router.post('/update/:meetingId', checkAuth, async (req, res) => {
     const meetingId = req.params.meetingId;
-    const updateOps = {...req.body};
 
-    Meeting.update({
+    const {title, description, address, time} = req.body;
+
+    if (!title || typeof title !== 'string' || title.length === 0) {
+        return res.json({
+            message: 'title invalid'
+        })
+    }
+
+    if (!address || typeof address !== 'string' || address.length === 0) {
+        return res.json({
+            message: 'address invalid'
+        })
+    }
+
+    if (!time) {
+        return res.json({
+            message: 'time need input'
+        })
+    }
+
+    const timeParser = moment(String(time), 'x');
+    const now = moment(String(Date.now), 'x');
+
+    if (!timeParser.isValid()) {
+        return res.json({
+            message: 'time invalid'
+        })
+    }
+
+    if (timeParser.isBefore(now)) {
+        return res.json({
+            message: 'time cannot happen before now'
+        })
+    }
+
+    const updated = await Meeting.update({
         _id: meetingId
     }, {
         $set: {
-            updateOps,
-            updatedAt: Date.now
+            title: title,
+            description: description,
+            address: address,
+            time: time,
+            updatedAt: Date.now()
         }
-    })
-        .exec()
-        .then(result => {
-            return res.json({
-                message: 'meeting updated',
-                data: result
-            });
-        })
-        .catch(err => {
-            console.log(err);
-            return res.status(500).json({
-                message: 'SKY FALL',
-                error: err
-            });
+    }).exec()
+
+    if (!updated) {
+        return res.json({
+            message: 'Update fail'
         });
+    }
+    return res.json({
+        message: 'meeting updated',
+        data: updated
+    });
 });
 
 /**
