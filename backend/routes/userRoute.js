@@ -162,7 +162,7 @@ router.post('/signup', upload.single('avatar'), checkAuth, async (req, res) => {
         })
     }
 
-    const {username, password, name, level} = req.body;
+    const {username, password, name, level, gender} = req.body;
 
     const checkUser = await User.findOne({
         username: username
@@ -192,6 +192,12 @@ router.post('/signup', upload.single('avatar'), checkAuth, async (req, res) => {
         })
     }
 
+    if (!gender) {
+        return res.json({
+            message: 'gender invalid'
+        })
+    }
+
     if (!password && typeof password === 'string' && password.length > 1) {
         return res.json({
             message: 'Password invalid'
@@ -212,7 +218,8 @@ router.post('/signup', upload.single('avatar'), checkAuth, async (req, res) => {
         username,
         password: hashedPassword,
         name,
-        level
+        level,
+        gender
     });
 
     newUser.save()
@@ -318,7 +325,7 @@ router.post('/update', upload.single('avatar'), checkAuth, async (req, res) => {
     }
 
     const userId = req.body._id;
-    const {username, name, password, activeAt} = req.body;
+    const {username, name, password, activeAt, gender} = req.body;
     // const avatar = req.file.
 
     const findUser = await User.findById(userId).exec();
@@ -335,6 +342,10 @@ router.post('/update', upload.single('avatar'), checkAuth, async (req, res) => {
 
     if (name) {
         findUser.name = name;
+    }
+
+    if (name) {
+        findUser.gender = gender;
     }
 
     if (

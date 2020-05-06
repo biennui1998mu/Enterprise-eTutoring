@@ -20,6 +20,14 @@ const userSchema = new Schema({
         required: true
     },
     /**
+     * gender of user
+     * 1: Male, 2: Female, 0: Other
+     */
+    gender: {
+        type: Number,
+        // required: true
+    },
+    /**
      * level of account
      * 0: admin, 1: staff, 2: tutor, 3: student
      */

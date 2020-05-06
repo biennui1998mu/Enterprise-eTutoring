@@ -43,7 +43,8 @@ router.post('/view', (req, res) => {
 
     Meeting.findOne({
         _id: meetingId
-    }).exec()
+    }).populate('createdBy classroom')
+        .exec()
         .then(meeting => {
             if (!meeting) {
                 return res.json({

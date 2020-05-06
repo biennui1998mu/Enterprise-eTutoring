@@ -1,8 +1,4 @@
-import {Component, OnInit} from '@angular/core';
-import {StatisticService} from "src/app/shared/services/statistic.service";
-import {Classroom} from "src/app/shared/interface/Classroom";
-import {Message} from "src/app/shared/interface/Message";
-import {ClassroomFile} from 'src/app/shared/interface/Classroom-File';
+import {Component, Input, OnInit} from '@angular/core';
 
 @Component({
   selector: 'app-statistic-panel',
@@ -10,26 +6,19 @@ import {ClassroomFile} from 'src/app/shared/interface/Classroom-File';
   styleUrls: ['./statistic-panel.component.scss']
 })
 export class StatisticPanelComponent implements OnInit {
+  @Input()
+  title: string;
 
-  classroom: Classroom[] = [];
-  file: ClassroomFile[] = [];
-  message: Message[] = [];
+  @Input()
+  stats: string
 
-  constructor(
-    private statisticService: StatisticService
-  ) {
+  @Input()
+  panelStyle: string | string[] = 'bg-primary';
+
+  constructor() {
   }
 
   ngOnInit(): void {
-    this.statistic();
   }
 
-  statistic() {
-    this.statisticService.statistic().subscribe(result => {
-      console.log(result);
-      this.classroom = result.classroom;
-      this.message = result.message;
-      this.file = result.file;
-    });
-  }
 }
