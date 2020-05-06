@@ -24,7 +24,7 @@ export class SocketService {
   ) {
     this._socket = io(this.hostApi, {
       query: {
-        token: this.tokenService.authorizeHeader,
+        token: this.tokenService.token,
       },
     });
   }
