@@ -26,7 +26,7 @@ router.post('/', checkAuth, async (req, res) => {
     }
 
     const meeting = await Meeting.find({
-        classId: req.body.classId
+        classroom: req.body.classId
     }).exec();
 
     return res.json({
@@ -151,32 +151,49 @@ router.post('/create', checkAuth, async (req, res) => {
 /**
  * Update meeting
  */
-router.post('/update/:classId', (req, res) => {
-    const meetingId = req.params.meetingId;
-    const updateOps = {...req.body};
+router.post('/update/:id', checkAuth, async (req, res) => {
+    const meetingId = req.params.id;
+    const {title, description, address, time} = req.body;
 
-    Meeting.update({
-        _id: meetingId
-    }, {
-        $set: {
-            updateOps,
-            updatedAt: Date.now
-        }
-    })
-        .exec()
-        .then(result => {
+    try {
+        const meetingFind = await Meeting.findById(
+            meetingId,
+        ).exec();
+
+        if (!meetingFind) {
             return res.json({
-                message: 'meeting updated',
-                data: result
+                message: 'Not found the meeting!',
             });
-        })
-        .catch(err => {
-            console.log(err);
-            return res.status(500).json({
-                message: 'SKY FALL',
-                error: err
-            });
+        }
+
+        if (title && title.length > 0) {
+            meetingFind.title = title;
+        }
+
+        if (description && description.length > 0) {
+            meetingFind.description = description;
+        }
+
+        if (address && address.length > 0) {
+            meetingFind.address = address;
+        }
+
+        if (time && moment(time).isValid() && moment(time).isBefore(meetingFind.createdAt)) {
+            meetingFind.time = time;
+        }
+
+        await meetingFind.save();
+
+        return res.json({
+            message: 'meeting updated',
+            data: meetingFind
         });
+    } catch (e) {
+        return res.status(500).json({
+            message: 'SKY FALL',
+            error: e
+        });
+    }
 });
 
 /**

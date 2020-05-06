@@ -9,6 +9,6 @@ export interface Meeting<user = User, classroom = Classroom> {
   classroom: classroom;
   address: string;
   time: Date;
-  createdAt: Date;
+  createdAt?: Date;
   updatedAt?: Date;
 }

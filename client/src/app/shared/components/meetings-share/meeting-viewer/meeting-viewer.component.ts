@@ -1,9 +1,12 @@
 import { AfterViewInit, Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { MeetingInputComponent, MeetingPopupInitData } from '../meeting-input/meeting-input.component';
+import {
+  MeetingInputComponent,
+  MeetingPopupCloseData,
+  MeetingPopupInitData,
+} from '../meeting-input/meeting-input.component';
 import { Classroom, CLASSROOM_STATUS } from '../../../interface/Classroom';
 import { MeetingQuery, MeetingService } from '../../../services/state/classroom-meeting';
-import { Meeting } from '../../../interface/Meeting';
 import * as moment from 'moment';
 
 @Component({
@@ -16,7 +19,8 @@ export class MeetingViewerComponent implements OnInit, AfterViewInit {
   @Input()
   classroom: Classroom;
 
-  meetings: Meeting[] = [];
+  meetings = this.meetingQuery.selectAll();
+  meetingsLoading = this.meetingQuery.selectLoading();
   moment = moment;
   CLASSROOM_STATUS = CLASSROOM_STATUS;
 
@@ -25,9 +29,6 @@ export class MeetingViewerComponent implements OnInit, AfterViewInit {
     private meetingService: MeetingService,
     private meetingQuery: MeetingQuery,
   ) {
-    this.meetingQuery.selectAll().subscribe(meetings => {
-      this.meetings = meetings;
-    });
   }
 
   ngOnInit(): void {
@@ -38,7 +39,7 @@ export class MeetingViewerComponent implements OnInit, AfterViewInit {
   }
 
   createNew() {
-    this.matDialog.open<MeetingInputComponent, MeetingPopupInitData>(
+    this.matDialog.open<MeetingInputComponent, MeetingPopupInitData, MeetingPopupCloseData>(
       MeetingInputComponent,
       {
         height: 'max-content',
@@ -51,7 +52,9 @@ export class MeetingViewerComponent implements OnInit, AfterViewInit {
       },
     ).afterClosed().subscribe(
       choice => {
-        console.log(choice);
+        if (choice.action === 'create' && choice.meeting) {
+          this.meetingService.create(choice.meeting);
+        }
       },
     );
   }

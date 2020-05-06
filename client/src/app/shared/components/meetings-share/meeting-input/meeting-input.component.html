@@ -17,7 +17,6 @@
            placeholder="title of the meeting"
            required
            type="text">
-    <mat-error>err</mat-error>
   </mat-form-field>
 
   <mat-form-field appearance="outline"
@@ -27,7 +26,6 @@
            matInput
            placeholder="the purpose of the meeting (optional)"
            type="text">
-    <mat-error>err</mat-error>
   </mat-form-field>
 
   <mat-form-field appearance="outline"
@@ -38,7 +36,6 @@
            placeholder="location of the meeting"
            required
            type="text">
-    <mat-error>err</mat-error>
   </mat-form-field>
 
   <mat-form-field appearance="outline"
@@ -46,6 +43,7 @@
     <mat-label>End Date</mat-label>
     <input [formControl]="timeInput"
            [matDatepicker]="picker"
+           [matDatepickerFilter]="myFilter"
            matInput
            required>
     <mat-datepicker-toggle [for]="picker"
@@ -72,7 +70,7 @@
   <!--  </button>-->
 
   <button (click)="create()"
-          *ngIf="data?.mode === 'new'"
+          *ngIf="data.mode === 'new'"
           [disabled]="formMeeting.invalid"
           color="primary"
           mat-flat-button>

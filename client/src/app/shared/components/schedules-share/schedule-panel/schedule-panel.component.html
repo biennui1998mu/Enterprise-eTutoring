@@ -1,24 +1,19 @@
 <div class="card schedule-panel">
   <div class="p05 card-body">
     <h3 style="margin-bottom: 0; font-weight: bold">
-      C# advance
+      {{schedule.title}}
     </h3>
     <small class="text-muted">
-      Lorem ipsum dolor sit amet, consectetur adipisicing elit. Illum, vero?
+      {{schedule.description}}
     </small>
     <ul class="mt05 schedule-date">
-      <li class="text-info">
-        22/12/2020:
+      <li *ngFor="let time of schedule.listDate"
+          [class.date-finished]="moment(time).isAfter(moment())"
+          class="text-info">
+        {{time | date:'dd/MM/yyyy'}}:
         <br>
         <span class="text-muted">
-            12:22:32 - 12:22:32
-          </span>
-      </li>
-      <li class="text-info date-finished">
-        22/12/2020 :
-        <br>
-        <span class="text-muted">
-            12:22:32 - 12:22:32
+            {{time | date: 'hh:mm:ss'}}
           </span>
       </li>
     </ul>

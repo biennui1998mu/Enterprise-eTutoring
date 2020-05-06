@@ -1,21 +1,20 @@
 import { Injectable } from '@angular/core';
-import { FileStore } from './file.store';
+import { ScheduleStore } from './schedule.store';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { catchError, map } from 'rxjs/operators';
 import { host } from '../../../api';
-import { APIResponse } from '../../../interface/API-Response';
-import { of } from 'rxjs';
 import { TokenService } from '../../token.service';
 import { UserInterfaceService } from '../user-interface';
-import { ClassroomFile } from '../../../interface/Classroom-File';
+import { APIResponse } from '../../../interface/API-Response';
+import { of } from 'rxjs';
+import { Schedule } from '../../../interface/Schedule';
 
 @Injectable({ providedIn: 'root' })
-export class FileService {
-
-  readonly api: string = `${host}/file`;
+export class ScheduleService {
+  readonly api: string = `${host}/schedule`;
 
   constructor(
-    private store: FileStore,
+    private store: ScheduleStore,
     private tokenService: TokenService,
     private uiStateService: UserInterfaceService,
     private http: HttpClient,
@@ -24,7 +23,7 @@ export class FileService {
 
   get(classId: string) {
     this.store.setLoading(true);
-    this.http.post<APIResponse<ClassroomFile[]>>(
+    this.http.post<APIResponse<Schedule[]>>(
       `${this.api}/`,
       {
         classId,
@@ -37,14 +36,14 @@ export class FileService {
           return response.data;
         } else {
           this.uiStateService.setError(response.message);
-          return [] as ClassroomFile[];
+          return [] as Schedule[];
         }
       }),
       catchError((error: HttpErrorResponse) => {
         console.error(error);
         this.uiStateService.setError(error.message);
         this.store.reset();
-        return of([] as ClassroomFile[]);
+        return of([] as Schedule[]);
       }),
     ).subscribe(data => {
       this.store.setLoading(false);

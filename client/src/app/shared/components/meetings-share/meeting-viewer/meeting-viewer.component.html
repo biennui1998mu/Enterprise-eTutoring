@@ -11,6 +11,16 @@
     <i class="fa fa-plus mr02"></i>
     Create
   </button>
-  <app-meeting-panel *ngFor="let meeting of meetings"
+  <app-meeting-panel *ngFor="let meeting of (meetings|async)"
                      [meeting]="meeting"></app-meeting-panel>
+
+  <small *ngIf="(meetings|async).length === 0 && !(meetingsLoading|async)"
+         class="text-muted ta-center">
+    No meeting found
+  </small>
+
+  <small *ngIf="meetingsLoading|async"
+         class="text-muted ta-center">
+    Loading...
+  </small>
 </div>

@@ -6,9 +6,14 @@
 
 <div class="ph1 flex flex-d-col justify-flex-start schedules-list">
 
-  <app-schedule-panel></app-schedule-panel>
-  <app-schedule-panel></app-schedule-panel>
-  <app-schedule-panel></app-schedule-panel>
-  <app-schedule-panel></app-schedule-panel>
-
+  <app-schedule-panel *ngFor="let schedule of (schedules | async)"
+                      [schedule]="schedule"></app-schedule-panel>
+  <small *ngIf="(schedules|async).length === 0 && !(schedulesLoading|async)"
+         class="text-muted ta-center">
+    No schedule found
+  </small>
+  <small *ngIf="schedulesLoading|async"
+         class="text-muted ta-center">
+    Loading...
+  </small>
 </div>

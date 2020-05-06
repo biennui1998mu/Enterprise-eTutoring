@@ -24,7 +24,7 @@ router.post('/', async (req, res) => {
 
     Schedule.find({
         classroom: classId
-    })
+    }).populate('createdBy classroom')
         .exec()
         .then(schedule => {
             return res.json({
@@ -65,7 +65,7 @@ router.post('/create', checkAuth, async (req, res) => {
         })
     }
 
-    if(!title || typeof title !== 'string' || title.length === 0){
+    if (!title || typeof title !== 'string' || title.length === 0) {
         return res.json({
             message: 'Title is not valid'
         })
@@ -74,8 +74,8 @@ router.post('/create', checkAuth, async (req, res) => {
     const startAtParser = moment(String(startAt), 'x');
     const endAtParser = moment(String(endAt), 'x');
 
-    if(startAtParser.isValid() && endAtParser.isValid()){
-        if(endAtParser.isBefore(startAtParser)){
+    if (startAtParser.isValid() && endAtParser.isValid()) {
+        if (endAtParser.isBefore(startAtParser)) {
             return res.json({
                 message: 'endAt must after startAt!'
             })
@@ -116,13 +116,13 @@ router.post('/update/:scheduleId', checkAuth, async (req, res) => {
         _id: staffId
     })
 
-    if(!checkStaff){
+    if (!checkStaff) {
         return res.json({
             message: 'Staff dont exist!'
         });
     }
 
-    if(checkStaff.level !== 1){
+    if (checkStaff.level !== 1) {
         return res.json({
             message: 'You are not Staff!'
         });
@@ -133,7 +133,8 @@ router.post('/update/:scheduleId', checkAuth, async (req, res) => {
 
     Schedule.update({
         _id: scheduleId
-    }, {$set: {
+    }, {
+        $set: {
             updateOps,
             updatedAt: Date.now
         }
@@ -163,13 +164,13 @@ router.post('/delete/:scheduleId', checkAuth, async (req, res) => {
         _id: staffId
     })
 
-    if(!checkStaff){
+    if (!checkStaff) {
         return res.json({
             message: 'Staff dont exist!'
         });
     }
 
-    if(checkStaff.level !== 1){
+    if (checkStaff.level !== 1) {
         return res.json({
             message: 'You are not Staff!'
         });

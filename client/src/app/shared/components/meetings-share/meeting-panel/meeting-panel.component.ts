@@ -1,8 +1,14 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { MeetingInputComponent, MeetingPopupInitData } from '../meeting-input/meeting-input.component';
+import {
+  MeetingInputComponent,
+  MeetingPopupCloseData,
+  MeetingPopupInitData,
+} from '../meeting-input/meeting-input.component';
 import { MatDialog } from '@angular/material/dialog';
 import { Meeting } from '../../../interface/Meeting';
 import * as moment from 'moment';
+import { deepEquals } from '../../../tools';
+import { MeetingService } from '../../../services/state/classroom-meeting';
 
 @Component({
   selector: 'app-meeting-panel',
@@ -17,6 +23,7 @@ export class MeetingPanelComponent implements OnInit {
 
   constructor(
     private matDialog: MatDialog,
+    private meetingService: MeetingService,
   ) {
   }
 
@@ -24,7 +31,7 @@ export class MeetingPanelComponent implements OnInit {
   }
 
   editMeeting() {
-    this.matDialog.open<MeetingInputComponent, MeetingPopupInitData>(
+    this.matDialog.open<MeetingInputComponent, MeetingPopupInitData, MeetingPopupCloseData>(
       MeetingInputComponent,
       {
         height: 'max-content',
@@ -38,6 +45,15 @@ export class MeetingPanelComponent implements OnInit {
     ).afterClosed().subscribe(
       choice => {
         console.log(choice);
+        if (choice && choice.action === 'update') {
+          if (!deepEquals(choice.meeting, this.meeting)) {
+            this.meetingService.update(choice.meeting).subscribe(updated => {
+              if (updated) {
+                this.meeting = updated;
+              }
+            });
+          }
+        }
       },
     );
   }
