@@ -51,31 +51,33 @@
 </div>
 
 <div class="flex flex-d-col right-section">
-  <div class="grid brief-row">
-    <div class="flex flex-d-col">
-      <p>Start on</p>
-      <span>{{classroom.createdAt | date: 'dd/MM/yyyy - hh:mm:ss'}}</span>
-    </div>
+  <p class="fw-bold">Started on:
+    <span class="fw-normal">
+      {{classroom.createdAt | date: 'dd/MM/yyyy - hh:mm:ss'}}
+    </span>
+  </p>
 
-    <div class="flex flex-d-col">
-      <button color="primary"
-              mat-flat-button>
-        View this class schedule
-      </button>
-      <small class="text-muted">
-        You will be navigated to schedule manager
-      </small>
-      <button (click)="popupResource()"
-              color="primary"
-              mat-flat-button>
-        View this class uploaded files
-      </button>
-      <br>
-      <button color="primary"
-              mat-flat-button>
-        View this class Statistics
-      </button>
-    </div>
-  </div>
+  <button (click)="popupEdit(classroom)"
+          color="primary"
+          mat-flat-button>
+    Edit
+  </button>
+  <hr>
+  <button (click)="popupSchedule()"
+          color="primary"
+          mat-flat-button>
+    View this class schedule
+  </button>
+  <br>
+  <button (click)="popupResource()"
+          color="primary"
+          mat-flat-button>
+    View this class uploaded files
+  </button>
+  <br>
+  <button color="primary"
+          mat-flat-button>
+    View this class Statistics
+  </button>
 
 </div>

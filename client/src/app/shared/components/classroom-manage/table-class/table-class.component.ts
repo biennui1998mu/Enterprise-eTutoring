@@ -1,9 +1,10 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Classroom } from '../../../interface/Classroom';
+import { DialogAction } from '../table-info/table-info.component';
 
 @Component({
   selector: 'app-table-class',
@@ -23,6 +24,11 @@ import { Classroom } from '../../../interface/Classroom';
 export class TableClassComponent implements OnInit {
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
+
+  @Output()
+  updateClassroomDetail: EventEmitter<{
+    action: DialogAction; class: Classroom<string, string, string>
+  }> = new EventEmitter();
 
   dataSource = new MatTableDataSource<Classroom>([]);
   configTableColumns: ColumnMatMapper[] = columnMapper;
@@ -57,6 +63,10 @@ export class TableClassComponent implements OnInit {
 
   switchPage() {
     this.expandedClassInfo = null;
+  }
+
+  classroomUpdateEvent($event: { class: Classroom<string, string, string>; action: DialogAction }) {
+    this.updateClassroomDetail.emit($event);
   }
 }
 

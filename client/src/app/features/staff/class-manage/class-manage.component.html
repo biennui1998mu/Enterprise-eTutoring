@@ -1,11 +1,13 @@
 <app-filter-class (eventSearchInput)="applyFilter($event)"></app-filter-class>
 <div class="flex functionalities">
-  <button class="tt-capitalize"
+  <button (click)="openDialogCreate()"
+          class="tt-capitalize"
           color="primary"
           mat-flat-button>
     <mat-icon>add</mat-icon>
     New class
   </button>
 </div>
-<app-table-class [classrooms]="classrooms | async"
+<app-table-class (updateClassroomDetail)="updateClassInfo($event)"
+                 [classrooms]="classrooms | async"
                  [searchEvent]="eventFilter | async"></app-table-class>

@@ -37,9 +37,9 @@ tr.user-info-row:not(.table-expanded-row):active {
 }
 
 @include mat-table-columns((
-        title: (width: 220px),
-        tutor: (width: 130px),
-        student: (width: 130px),
-        createdAt: (width: 110px),
-        status: (width: 80px)
+        title: (width: 180px),
+        tutor: (width: 140px),
+        student: (width: 140px),
+        createdAt: (width: 120px),
+        status: (width: 90px)
 ));

@@ -1,15 +1,15 @@
-import {Injectable} from '@angular/core';
-import {ClassroomStore} from './classroom.store';
-import {host} from '../../../api';
-import {HttpClient} from '@angular/common/http';
-import {TokenService} from '../../token.service';
-import {UserInterfaceService} from '../user-interface';
-import {Observable, of} from 'rxjs';
-import {APIResponse} from '../../../interface/API-Response';
-import {catchError, map, tap} from 'rxjs/operators';
-import {Classroom} from '../../../interface/Classroom';
+import { Injectable } from '@angular/core';
+import { ClassroomStore } from './classroom.store';
+import { host } from '../../../api';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { TokenService } from '../../token.service';
+import { UserInterfaceService } from '../user-interface';
+import { Observable, of } from 'rxjs';
+import { APIResponse } from '../../../interface/API-Response';
+import { catchError, map, switchMap, tap } from 'rxjs/operators';
+import { Classroom } from '../../../interface/Classroom';
 
-@Injectable({providedIn: 'root'})
+@Injectable({ providedIn: 'root' })
 export class ClassroomService {
 
   private readonly api: string = `${host}/classroom`;
@@ -27,7 +27,7 @@ export class ClassroomService {
     return this.http.post<APIResponse<Classroom[]>>(
       `${this.api}/`,
       {},
-      {headers: this.tokenService.authorizeHeader},
+      { headers: this.tokenService.authorizeHeader },
     ).pipe(
       tap(response => {
         if (response.data) {
@@ -50,4 +50,73 @@ export class ClassroomService {
     );
   }
 
+  updateClass(classroom: Classroom<string, string, string>) {
+    this.http.post<APIResponse<Classroom>>(
+      `${this.api}/update/${classroom._id}`,
+      classroom,
+      { headers: this.tokenService.authorizeHeader },
+    ).pipe(
+      switchMap(res => {
+        if (res.data) {
+          this.uiStateService.setNotify(res.message);
+          return this.get();
+        } else {
+          this.uiStateService.setError(res.message);
+          return of([] as Classroom[]);
+        }
+      }),
+      catchError((error: HttpErrorResponse) => {
+        console.error(error);
+        this.uiStateService.setError(error.message);
+        return of([] as Classroom[]);
+      }),
+    ).subscribe(res => res);
+  }
+
+  changeStatusClass(classroom: Classroom<string, string, string>) {
+    this.http.post<APIResponse<Classroom>>(
+      `${this.api}/status/${classroom._id}`,
+      classroom,
+      { headers: this.tokenService.authorizeHeader },
+    ).pipe(
+      switchMap(res => {
+        if (res.data) {
+          this.uiStateService.setNotify(res.message);
+          return this.get();
+        } else {
+          this.uiStateService.setError(res.message);
+          return of([] as Classroom[]);
+        }
+      }),
+      catchError((error: HttpErrorResponse) => {
+        console.error(error);
+        this.uiStateService.setError(error.message);
+        return of([] as Classroom[]);
+      }),
+    ).subscribe(res => res);
+  }
+
+  createClass(classroom: Classroom<string, string, string>) {
+    this.http.post<APIResponse<Classroom>>(
+      `${this.api}/create`,
+      classroom,
+      { headers: this.tokenService.authorizeHeader },
+    ).pipe(
+      catchError((error: HttpErrorResponse) => {
+        console.error(error);
+        this.uiStateService.setError(error.message);
+        return of({
+          data: null,
+          message: error.message,
+        });
+      }),
+    ).subscribe(res => {
+      if (res.data) {
+        this.store.add(res.data);
+        this.uiStateService.setNotify(res.message);
+      } else {
+        this.uiStateService.setError(res.message);
+      }
+    });
+  }
 }

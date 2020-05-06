@@ -10,11 +10,12 @@ import { ClassManageComponent } from './class-manage/class-manage.component';
 import { UserShareModule } from '../../shared/components/user-share/user-share.module';
 import { MaterialsModule } from '../../shared/modules/materials/materials.module';
 import { ClassroomManageModule } from '../../shared/components/classroom-manage/classroom-manage.module';
-import {StatisticsModule} from "../../shared/components/statistics/statistics.module";
+import { ScheduleManageComponent } from './schedule-manage/schedule-manage.component';
+import { StatisticsModule } from "../../shared/components/statistics/statistics.module";
 
 
 @NgModule({
-  declarations: [StaffComponent, DashboardComponent, UserManageComponent, ClassManageComponent],
+  declarations: [StaffComponent, DashboardComponent, UserManageComponent, ClassManageComponent, ScheduleManageComponent],
   imports: [
     CommonModule,
     StaffRoutingModule,

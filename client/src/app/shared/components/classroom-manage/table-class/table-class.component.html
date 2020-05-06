@@ -26,6 +26,7 @@
           [attr.colspan]="mapFieldToColumn.length"
           mat-cell>
         <app-table-extended-cell [@detailExpand]="classroom == expandedClassInfo ? 'expanded' : 'collapsed'"
+                                 (classroomUpdate)="classroomUpdateEvent($event)"
                                  [classroom]="classroom">
         </app-table-extended-cell>
       </td>

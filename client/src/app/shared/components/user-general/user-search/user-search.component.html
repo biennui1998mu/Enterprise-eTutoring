@@ -1,0 +1,35 @@
+<small class="text-muted">
+  A class can be assigned to a single <ng-container *ngIf="userType === USER_TYPE.tutor">tutor</ng-container><ng-container *ngIf="userType === USER_TYPE.student">student</ng-container>
+</small>
+
+<mat-form-field appearance="outline">
+  <mat-label *ngIf="userType === USER_TYPE.tutor">Tutor</mat-label>
+  <mat-label *ngIf="userType === USER_TYPE.student">Student</mat-label>
+  <mat-chip-list #chipList
+                 aria-label="user selection">
+    <mat-chip (removed)="removeUser()"
+              *ngIf="formUserPassing.value"
+              color="primary">
+      {{formUserPassing.value.name}} <small class="text-muted"> - {{formUserPassing.value.username}}</small>
+      <mat-icon matChipRemove>
+        cancel
+      </mat-icon>
+    </mat-chip>
+    <input #userSearchInput
+           (matChipInputTokenEnd)="addUser($event)"
+           [formControl]="userFormSearch"
+           [matAutocomplete]="managerAutoComplete"
+           [matChipInputFor]="chipList"
+           [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+           placeholder="Search user...">
+  </mat-chip-list>
+  <mat-autocomplete #managerAutoComplete="matAutocomplete"
+                    (optionSelected)="selectedManager($event)">
+    <mat-option *ngFor="let manager of filteredUser"
+                [disabled]="formUserPassing.value"
+                [value]="manager">
+      {{manager.name}}
+      <small class="text-muted"> - {{manager.username}}</small>
+    </mat-option>
+  </mat-autocomplete>
+</mat-form-field>
