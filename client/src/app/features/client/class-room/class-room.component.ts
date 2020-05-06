@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ClassroomQuery, ClassroomService, ClassroomStore } from '../../../shared/services/state/classroom';
+import { Classroom } from '../../../shared/interface/Classroom';
+import { filter, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-class-room',
@@ -8,14 +10,23 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class ClassRoomComponent implements OnInit {
 
+  classroomId: string = this.classroomQuery.getActiveId() as string;
+  classroom: Classroom;
+
   constructor(
-    private activatedRoute: ActivatedRoute,
+    private classroomQuery: ClassroomQuery,
+    private classroomService: ClassroomService,
+    private classroomStore: ClassroomStore,
   ) {
-    activatedRoute.paramMap.subscribe(
-      params => {
-        console.log(params);
-      },
-    );
+    this.classroomQuery.selectAll().pipe(
+      filter(list => list.length > 0),
+      switchMap(() => {
+        // list classroom updated on `general-layout`
+        return classroomQuery.selectActive();
+      }),
+    ).subscribe(classViewing => {
+      this.classroom = classViewing;
+    });
   }
 
   ngOnInit(): void {

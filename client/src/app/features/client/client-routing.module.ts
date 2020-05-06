@@ -4,6 +4,7 @@ import { ClientComponent } from './client.component';
 import { ClassRoomComponent } from './class-room/class-room.component';
 import { ChatRoomComponent } from './class-room/chat-room/chat-room.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { ClassroomGuard } from '../../shared/guards/classroom.guard';
 
 
 const routes: Routes = [
@@ -11,7 +12,9 @@ const routes: Routes = [
     path: '', component: ClientComponent, children: [
       { path: 'dashboard', component: DashboardComponent },
       {
-        path: 'classroom/:room-id', component: ClassRoomComponent, children: [
+        path: 'classroom/:room-id',
+        canActivateChild: [ClassroomGuard],
+        component: ClassRoomComponent, children: [
           { path: '', pathMatch: 'full', component: ChatRoomComponent },
         ],
       },

@@ -16,20 +16,34 @@ router.post('/', checkAuth, async (req, res) => {
         _id: idUserLogin
     }).exec();
 
-    if (!checkUser || checkUser.level !== 1) {
+    if (!checkUser) {
         return res.json({
             message: 'User is not have enough ability to view all classroom || ' +
                 'it\'s mean user is not a staff'
-        })
+        });
     }
 
-    const listClass = await Classroom.find()
-        .populate('student tutor')
-        .exec()
+    let listClass;
 
-    if (!listClass) {
+    if (checkUser.level === 1 || checkUser.level === 0) {
+        // if the one who query is staff/admin => get all data
+        listClass = await Classroom.find()
+            .populate('student tutor')
+            .exec();
+    } else if (checkUser.level === 2) {
+        // tutor
+        listClass = await Classroom.find({
+            tutor: idUserLogin
+        }).populate('student tutor').exec();
+    } else if (checkUser.level === 3) {
+        // student
+        listClass = await Classroom.find({
+            student: idUserLogin
+        }).populate('student tutor').exec();
+    } else {
         return res.json({
-            message: 'No classroom found',
+            message: 'User is not have enough ability to view all classroom || ' +
+                'it\'s mean user is not a staff'
         });
     }
 
@@ -42,30 +56,27 @@ router.post('/', checkAuth, async (req, res) => {
 /**
  * take classroom info
  */
-router.post('/view', (req, res) => {
-    const classroomId = req.body.classroomId;
+router.post('/view', checkAuth, (req, res) => {
+    const classroomId = req.body._id;
 
     Classroom.findOne({
         _id: classroomId
+    }).exec().then(classroom => {
+        if (!classroom) {
+            return res.status(404).json({
+                message: 'No classroom found by id'
+            })
+        }
+        return res.json({
+            message: 'Get classroom info success!',
+            data: classroom
+        })
+    }).catch(err => {
+        return res.status(500).json({
+            message: 'SKY FALL',
+            error: err
+        })
     })
-        .exec()
-        .then(classroom => {
-            if (!classroom) {
-                return res.json({
-                    message: 'No classroom found by id'
-                })
-            }
-            return res.json({
-                message: 'classroom info!',
-                data: classroom
-            })
-        })
-        .catch(err => {
-            return res.status(500).json({
-                message: 'SKY FALL',
-                error: err
-            })
-        })
 });
 
 /**

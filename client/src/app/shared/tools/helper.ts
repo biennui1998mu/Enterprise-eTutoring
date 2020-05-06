@@ -329,3 +329,17 @@ export function parseCurrentStatus(currentUnparsed: string | boolean): boolean {
   }
   return current;
 }
+
+export function signatureName(title: string) {
+  const splitName = title.split(/[\s\-]/g);
+  let firstChar: string;
+  let secondChar: string;
+  if (splitName.length > 1) {
+    firstChar = splitName[0][0];
+    secondChar = splitName[1][0];
+  } else {
+    firstChar = title[0];
+    secondChar = title[1];
+  }
+  return (firstChar + secondChar).toUpperCase();
+}

@@ -50,6 +50,28 @@ export class ClassroomService {
     );
   }
 
+  getOne(id: string): Observable<Classroom> {
+    return this.http.post<APIResponse<Classroom>>(
+      `${this.api}/view`,
+      { _id: id },
+      { headers: this.tokenService.authorizeHeader },
+    ).pipe(
+      map(response => {
+        if (response.data) {
+          this.uiStateService.setNotify(response.message);
+        } else {
+          this.uiStateService.setError(response.message);
+        }
+        return response.data;
+      }),
+      catchError(error => {
+        console.error(error);
+        this.uiStateService.setError(error.message);
+        return of(null as Classroom);
+      }),
+    );
+  }
+
   updateClass(classroom: Classroom<string, string, string>) {
     this.http.post<APIResponse<Classroom>>(
       `${this.api}/update/${classroom._id}`,
@@ -118,5 +140,13 @@ export class ClassroomService {
         this.uiStateService.setError(res.message);
       }
     });
+  }
+
+  setActiveClass(classroom: Classroom) {
+    this.store.setActive(classroom._id);
+  }
+
+  removeActiveClass(classroom: Classroom) {
+    this.store.removeActive(classroom._id);
   }
 }
