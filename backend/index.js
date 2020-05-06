@@ -115,8 +115,8 @@ io.use(async function (socket, next) {
      * socket listen event user join room
      */
     socket.on("user-join-room-chat", async function (classroomId) {
-        const checkClass = await Classroom.findOne({_id: classroomId});
-
+        const checkClass = await Classroom.findOne({_id: classroomId}).exec();
+        console.log(checkClass);
         if (!checkClass) {
             return false
         }

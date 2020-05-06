@@ -8,6 +8,7 @@ import { Message } from '../../../interface/Message';
 import { catchError, map, tap } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { SOCKET_SEND_EVENT, SocketService } from '../../socket.service';
+import { UserQuery } from '../user';
 
 @Injectable({ providedIn: 'root' })
 export class MessageService {
@@ -19,10 +20,12 @@ export class MessageService {
     private tokenService: TokenService,
     private httpClient: HttpClient,
     private socketService: SocketService,
+    private userQuery: UserQuery,
   ) {
     this.socketService.messageEvent.subscribe(
       message => {
         // listen live from socket event
+        console.log(message);
         this.addMessage(message);
       },
     );
@@ -34,13 +37,18 @@ export class MessageService {
       { classId },
       { headers: this.tokenService.authorizeHeader },
     ).pipe(
+      tap(res => {
+        if (res.data) {
+          this.socketService.socketEmit(SOCKET_SEND_EVENT.join_room_chat, classId);
+        }
+      }),
       map(response => response.data || [] as Message[]),
       catchError(error => {
         console.error(error);
         return of([] as Message[]);
       }),
     ).subscribe(messages => {
-      this.store.update(messages);
+      this.store.set(messages);
     });
   }
 
@@ -57,6 +65,7 @@ export class MessageService {
       map(response => response.data),
       tap(message => {
         if (message) {
+          message.byUser = this.userQuery.getValue();
           this.addMessage(message);
           this.socketService.socketEmit(
             SOCKET_SEND_EVENT.send_message, message,

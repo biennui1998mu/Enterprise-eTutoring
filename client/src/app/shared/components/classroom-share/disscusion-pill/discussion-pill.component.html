@@ -1,0 +1,5 @@
+<div [innerHTML]="message.content | markdown | safeHtml:'html'"
+     class="chat-bubble"></div>
+<img [alt]="message.byUser.name"
+     [src]="message.byUser.avatar"
+     class="br50 obj-fit-cover obj-pos-center chat-avatar">

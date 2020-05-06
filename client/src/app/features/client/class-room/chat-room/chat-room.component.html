@@ -1,15 +1,16 @@
 <div *ngIf="classroom"
      class="ofy-scroll pv1 flex flex-d-col discussion-section">
 
-  <app-disscusion-pill class="me"></app-disscusion-pill>
+  <app-discussion-pill *ngFor="let message of (messages|async)"
+                       [class.friend]="me._id !== message.byUser._id"
+                       [class.me]="me._id === message.byUser._id"
+                       [message]="message">
+  </app-discussion-pill>
 
-  <app-disscusion-pill class="friend"></app-disscusion-pill>
-
-  <app-disscusion-pill class="friend"></app-disscusion-pill>
-  <app-disscusion-pill class="me"></app-disscusion-pill>
-  <app-disscusion-pill class="me"></app-disscusion-pill>
-  <app-disscusion-pill class="me"></app-disscusion-pill>
-  <app-disscusion-pill class="friend"></app-disscusion-pill>
+  <small *ngIf="messagesLoading|async"
+         class="ta-center text-muted">
+    Loading
+  </small>
 
 </div>
 <app-class-chat-input *ngIf="classroom"
