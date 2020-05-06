@@ -14,7 +14,7 @@ router.post('/', (req, res) => {
     })
         .populate('classroom byUser quote')
         .exec()
-        .then( messages => {
+        .then(messages => {
             return res.json({
                 message: 'classroom\'s message',
                 data: messages
@@ -37,7 +37,7 @@ router.post('/create', checkAuth, async (req, res) => {
     let classroomExist = await Classroom.findOne({
         _id: classroom
     })
-    if(!classroomExist || !classroom || typeof classroom !== 'string' || classroom.length === 0){
+    if (!classroomExist || !classroom || typeof classroom !== 'string' || classroom.length === 0) {
         return res.json({
             message: 'Classroom is not valid'
         })
@@ -46,13 +46,13 @@ router.post('/create', checkAuth, async (req, res) => {
     let userExist = await User.findOne({
         _id: byUser
     })
-    if(!userExist || !byUser || typeof byUser !== 'string' || byUser.length === 0){
+    if (!userExist || !byUser || typeof byUser !== 'string' || byUser.length === 0) {
         return res.json({
             message: 'User is not valid'
         })
     }
 
-    if(!content || typeof content !== 'string' || content.length === 0){
+    if (!content || typeof content !== 'string' || content.length === 0) {
         return res.json({
             message: 'content of message invalid'
         })
@@ -61,8 +61,8 @@ router.post('/create', checkAuth, async (req, res) => {
     const message = new Message({
         classroom,
         byUser,
-        quote,
-        content
+        content,
+        quote
     });
 
     message.save()

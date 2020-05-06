@@ -47,6 +47,7 @@ export class SocketService {
       SOCKET_RECEIVE_EVENT.receive_message,
       function (message: Message) {
         // user receive message
+        console.log(message);
         _._messageEvent.next(message);
       });
   }
