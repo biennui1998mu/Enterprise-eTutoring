@@ -20,7 +20,7 @@
     </small>
     <hr class="mv05">
     <button (click)="editMeeting()"
-            [disabled]="moment(meeting.time).isAfter(moment())"
+            [disabled]="moment(meeting.time).isBefore(moment())"
             class="btn btn-sm btn-block btn-outline-warning tt-capitalize">
       <i class="fa fa-edit mr02"></i>
       Edit

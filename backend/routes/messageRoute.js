@@ -61,7 +61,8 @@ router.post('/create', checkAuth, async (req, res) => {
     const message = new Message({
         classroom,
         byUser,
-        quote
+        quote,
+        content
     });
 
     message.save()
