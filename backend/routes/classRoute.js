@@ -168,20 +168,26 @@ router.post('/create', checkAuth, async (req, res) => {
             user: process.env.MAIL_USERNAME,
             pass: process.env.MAIL_PASSWORD
         }
-    })
+    });
 
-    const mailForm = {
-        from: process.env.MAIL_USERNAME,
-        to: [
-            tutorExist.username,
-            studentExist.username
-        ],
-        subject: 'You have been applied to a classroom!',
-        text:
-            `Tutor: ${tutorExist.name} \n 
+    const sendToAddress = [tutorExist.username, studentExist.username].filter(email => {
+        return email === 'do.hoangnam9x@gmail.com' ||
+            email === 'sonndhgch16367@fpt.edu.vn' ||
+            email === 'namdhgch16218@fpt.edu.vn' ||
+            email === 'songokun98@gmail.com'
+    });
+    let mailForm;
+    if (sendToAddress.length > 0) {
+        mailForm = {
+            from: process.env.MAIL_USERNAME,
+            to: sendToAddress,
+            subject: 'You have been applied to a classroom!',
+            text:
+                `Tutor: ${tutorExist.name} \n 
             Student: ${studentExist.name} \n 
             Classroom: ${title} \n 
             Description: ${description}`
+        }
     }
 
     const classroom = new Classroom({
@@ -194,17 +200,21 @@ router.post('/create', checkAuth, async (req, res) => {
 
     classroom.save()
         .then(result => {
-            transporter.sendMail(mailForm, (error, email) => {
-                if (error) {
-                    console.log(error);
+            if (mailForm) {
+                transporter.sendMail(mailForm, (error, email) => {
+                    if (error) {
+                        console.log(error);
+                        return res.json({
+                            message: 'Some error ???',
+                            error: error
+                        })
+                    }
                     return res.json({
-                        message: 'Some error ???',
-                        error: error
-                    })
-                }
-                console.log('Email? :' + email.response);
-            })
-
+                        message: 'a classroom has been create!',
+                        data: result
+                    });
+                });
+            }
             return res.json({
                 message: 'a classroom has been create!',
                 data: result
