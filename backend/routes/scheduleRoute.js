@@ -45,7 +45,7 @@ router.post('/', async (req, res) => {
  */
 router.post('/create', checkAuth, async (req, res) => {
     const createdBy = req.userData._id;
-    const {title, description, classroom, listDate, startAt, endAt} = req.body;
+    const {title, description, classroom, listDate} = req.body;
 
     let classroomExist = await Classroom.findOne({
         _id: classroom.toString()
@@ -71,25 +71,12 @@ router.post('/create', checkAuth, async (req, res) => {
         })
     }
 
-    const startAtParser = moment(String(startAt), 'x');
-    const endAtParser = moment(String(endAt), 'x');
-
-    if(startAtParser.isValid() && endAtParser.isValid()){
-        if(endAtParser.isBefore(startAtParser)){
-            return res.json({
-                message: 'endAt must after startAt!'
-            })
-        }
-    }
-
     const schedule = new Schedule({
         title,
         description,
         createdBy,
         classroom,
-        listDate,
-        startAt,
-        endAt
+        listDate
     });
 
     schedule.save()
@@ -108,7 +95,7 @@ router.post('/create', checkAuth, async (req, res) => {
 });
 
 /**
- * Delete schedule
+ * update schedule
  */
 router.post('/update/:scheduleId', checkAuth, async (req, res) => {
     const staffId = req.userData._id

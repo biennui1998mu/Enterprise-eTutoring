@@ -26,20 +26,6 @@ const scheduleSchema = new Schema({
     listDate: [{
         type: Date,
     }],
-    /**
-     * classroom start at
-     */
-    startAt: {
-        type: Date,
-        required: true
-    },
-    /**
-     * classroom end at
-     */
-    endAt: {
-        type: Date,
-        required: true
-    },
     createdAt: {
         type: Date,
         default: Date.now
