@@ -8,6 +8,7 @@ export function createInitialState(): User {
     indicator: null,
     username: null,
     name: null,
+    gender: null,
     avatar: null,
     level: null,
     updatedAt: null,

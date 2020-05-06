@@ -1,2 +1,48 @@
-<app-statistic-panel></app-statistic-panel>
+<app-statistic-panel
+  [stats]="totalClassroom"
+  [title]="'Total Classroom'">
+</app-statistic-panel>
+<app-statistic-panel
+  [stats]="totalFile"
+  [title]="'Total File'">
+</app-statistic-panel>
+<app-statistic-panel
+  [stats]="totalMessage"
+  [title]="'Total Message'">
+</app-statistic-panel>
+<app-statistic-panel
+  [panelStyle]="'bg-warning'"
+  [stats]="totalStaff"
+  [title]="'Total Staff'">
+</app-statistic-panel>
+<app-statistic-panel
+  [panelStyle]="'bg-warning'"
+  [stats]="totalTutor"
+  [title]="'Total Tutor'">
+</app-statistic-panel>
+<app-statistic-panel
+  [panelStyle]="'bg-warning'"
+  [stats]="totalStudent"
+  [title]="'Total Student'">
+</app-statistic-panel>
+<app-statistic-panel
+  [panelStyle]="'bg-success'"
+  [stats]="message7days"
+  [title]="'Message sent 7 days'">
+</app-statistic-panel>
+<app-statistic-panel
+  [panelStyle]="'bg-success'"
+  [stats]="classroom7days"
+  [title]="'Classroom created 7 days'">
+</app-statistic-panel>
+<app-statistic-panel
+  [panelStyle]="'bg-success'"
+  [stats]="messagePerStudent"
+  [title]="'Message per Student'">
+</app-statistic-panel>
+<app-statistic-panel
+  [panelStyle]="'bg-success'"
+  [stats]="messagePerTutor"
+  [title]="'Message per Tutor'">
+</app-statistic-panel>
 

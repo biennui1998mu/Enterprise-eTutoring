@@ -7,6 +7,11 @@ export interface User {
   username: string;
   password?: string;
   name: string;
+  /**
+   * gender of user
+   * 1: Male, 2: Female, 0: Other
+   */
+  gender?: USER_GENDER;
   avatar: string;
   /**
    * level of account
@@ -31,4 +36,10 @@ export enum USER_TYPE {
   staff,
   tutor,
   student
+}
+
+export enum USER_GENDER {
+  other,
+  male,
+  female
 }
