@@ -1,0 +1,9 @@
+{
+  "name": "EnterpriseeTutoring",
+  "scripts": {
+    "deploy": "npm run deploy:client && npm run deploy:server",
+    "deploy:client": "cd client && npm run build",
+    "deploy:server": "cd backend && npm run start"
+  },
+  "version": "1.0.0"
+}
