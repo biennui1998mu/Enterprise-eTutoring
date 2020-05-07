@@ -91,6 +91,7 @@ io.use(async function (socket, next) {
             function (err, decoded) {
                 if (err) return next(new Error('Authentication error'));
                 socket.decoded = decoded;
+                const username = decoded.username;
                 // show token connect
                 console.log('Đăng nhập mới: ' + username);
                 next();
