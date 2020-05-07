@@ -1,4 +1,4 @@
-# STOP-B
+# eTutoring
 Create a file .env by .env.example
 
 In backend termial - run: npm run dev
