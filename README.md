@@ -1,5 +1,7 @@
 # Enterprise-eTutoring
-Create a file .env by .env.example in backend folder
+In backend folder, create a file .env by .env.example 
+
+In frontend folder, install npm
 
 In backend terminal - run: npm run dev
 
