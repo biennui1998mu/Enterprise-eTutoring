@@ -7,6 +7,7 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
 const Classroom = require('./database/models/classroom');
+const path = require('path');
 
 mongoose.Promise = global.Promise;
 mongoose.set('useFindAndModify', false);
@@ -46,6 +47,14 @@ app.use(bodyParser.urlencoded({
 app.use(bodyParser.json());
 
 app.use(cookieParser());
+// compiled angular directory (declared in angular.json - row 20)
+const _publicDirPath = path.join(__dirname, '/public');
+const oneHourMs = 60 * 1000 * 60;
+const staticFiles = express.static(_publicDirPath, {
+    maxAge: oneHourMs * 3, // cache strategy -> store cache for 3 hours
+});
+
+app.use(staticFiles);
 
 //routes handle request
 app.use('/api/classroom', classRoutes);
@@ -55,6 +64,12 @@ app.use('/api/message', messageRoutes);
 app.use('/api/schedule', scheduleRoutes);
 app.use('/api/user', userRoutes);
 app.use('/api/statistic', statisticRoutes);
+
+app.get('*', function(req, res){
+    // redirect all get-routes to angular
+    const pathToFile = path.join(_publicDirPath, 'index.html');
+    res.sendFile(pathToFile);
+});
 
 app.use((req, res, next) => {
     console.log(req);
