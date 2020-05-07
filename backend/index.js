@@ -49,7 +49,7 @@ app.use(cookieParser());
 
 //routes handle request
 app.use('/classroom', classRoutes);
-app.use('/files', fileRoute);
+app.use('/file', fileRoute);
 app.use('/meeting', meetingRoutes);
 app.use('/message', messageRoutes);
 app.use('/schedule', scheduleRoutes);
@@ -117,7 +117,6 @@ io.use(async function (socket, next) {
      */
     socket.on("user-join-room-chat", async function (classroomId) {
         const checkClass = await Classroom.findOne({_id: classroomId}).exec();
-        console.log(checkClass);
         if (!checkClass) {
             return false
         }

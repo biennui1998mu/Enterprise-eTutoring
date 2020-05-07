@@ -4,6 +4,8 @@ const checkAuth = require('../middleware/check-auth');
 const File = require('../database/models/file');
 const User = require('../database/models/user');
 const Classroom = require('../database/models/classroom');
+const fs = require('fs');
+const path = require('path');
 
 /**
  * https://github.com/expressjs/multer
@@ -13,10 +15,15 @@ const multer = require('multer');
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        return cb(null, './uploads/files/')
+        const pathDownload = path.join(__dirname, '../uploads/files/' + req.userData._id + '/')
+        if (!fs.existsSync(pathDownload)) {
+            // create folder if not exist
+            fs.mkdirSync(pathDownload);
+        }
+        return cb(null, pathDownload)
     },
     filename: function (req, file, cb) {
-        return cb(null, file.originalname + Date.now)
+        return cb(null, Date.now() + '-' + file.originalname);
     }
 })
 
@@ -44,16 +51,32 @@ router.post('/', checkAuth, async (req, res) => {
     }
 
     const classroomId = req.body.classroom;
+    let searchCondition = {
+        _id: classroomId,
+    };
+
+    if (userExist.level !== 0 && userExist.level !== 1) {
+        // if not admin or staff
+        // => student or tutor => filter class
+        searchCondition.$or = [
+            {tutor: userId},
+            {student: userId}
+        ];
+    }
+
+    const findClass = await Classroom.findOne(searchCondition).exec();
+
+    if (!findClass) {
+        return res.json({
+            message: 'Classroom does not invalid',
+            data: [],
+        })
+    }
+
     const allFile = await File.find({
         classroom: classroomId
     });
 
-    if (allFile.length === 0 || !allFile) {
-        return res.json({
-            message: 'No files founded',
-            data: []
-        })
-    }
     return res.json({
         message: 'List files in classroom!',
         data: allFile
@@ -93,15 +116,15 @@ router.post('/search', async (req, res) => {
 /**
  * Create files
  */
-router.post('/create', upload.single, checkAuth, async (req, res) => {
+router.post('/create', checkAuth, upload.single('file'), async (req, res) => {
     const byUser = req.userData._id;
-    const classroom = req.body
+    const classroom = req.body.classroom;
 
     const classroomExist = await Classroom.findOne({
         _id: classroom
     }).exec()
 
-    if(!classroomExist){
+    if (!classroomExist) {
         return res.json({
             message: 'Classroom does not exist!'
         })
@@ -109,7 +132,7 @@ router.post('/create', upload.single, checkAuth, async (req, res) => {
 
     const newFile = await new File({
         name: req.file.originalname,
-        url: req.file.path,
+        url: '/uploads/files/' + req.userData._id + '/' + req.file.filename,
         type: req.file.mimetype,
         size: req.file.size,
         classroom,
@@ -118,7 +141,7 @@ router.post('/create', upload.single, checkAuth, async (req, res) => {
 
     const saved = await newFile.save();
 
-    if(!saved){
+    if (!saved) {
         return res.json({
             message: 'saved fail'
         });
@@ -133,7 +156,7 @@ router.post('/create', upload.single, checkAuth, async (req, res) => {
 /**
  * download file
  */
-router.post('/download', checkAuth, async (req,res) => {
+router.post('/download', checkAuth, async (req, res) => {
     const userId = req.userData._id;
     const fileId = req.body.fileId;
     const classroomId = req.body.classroomId;
@@ -142,7 +165,7 @@ router.post('/download', checkAuth, async (req,res) => {
         _id: userId
     })
 
-    if(!checkUser){
+    if (!checkUser) {
         return res.json({
             message: 'User dont exist!'
         })
@@ -152,7 +175,7 @@ router.post('/download', checkAuth, async (req,res) => {
         _id: classroomId
     })
 
-    if(!checkClassroom){
+    if (!checkClassroom) {
         return res.json({
             message: 'File dont exist!'
         })
@@ -162,19 +185,19 @@ router.post('/download', checkAuth, async (req,res) => {
         _id: fileId
     })
 
-    if(!checkFile){
+    if (!checkFile) {
         return res.json({
             message: 'File dont exist!'
         })
     }
 
-    if(checkFile.classroom !== classroomId){
+    if (checkFile.classroom !== classroomId) {
         return res.json({
             message: 'File is not in classroom!'
         })
     }
 
-    if(checkUser._id !== checkClassroom.student && checkUser._id !== checkClassroom.tutor){
+    if (checkUser._id !== checkClassroom.student && checkUser._id !== checkClassroom.tutor) {
         return res.json({
             message: 'User is not in classroom!'
         })

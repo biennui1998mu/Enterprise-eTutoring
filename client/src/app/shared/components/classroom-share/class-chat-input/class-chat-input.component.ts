@@ -18,27 +18,22 @@ export class ClassChatInputComponent implements OnInit {
   @ViewChild('inputFile')
   inputFile: ElementRef<HTMLInputElement>;
 
+  @ViewChild('chatInput')
+  chatInput: ElementRef<HTMLDivElement>;
+
   chatForm: FormGroup;
 
   contentInput: FormControl = new FormControl(
     '',
     [Validators.required, Validators.minLength(1)],
   );
-  fileInput: FormControl = new FormControl(
-    null as FileUploadInfo,
-    [Validators.maxLength(5)],
-  );
 
-  isReadingFile = false;
-
-  filePreview: {
-    info: FileUploadInfo,
-    base64: string,
-  } = null;
+  isFileUploading = false;
 
   constructor(
     private formBuilder: FormBuilder,
     private messageService: MessageService,
+    private fileService: FileService,
     private userQuery: UserQuery,
   ) {
   }
@@ -55,9 +50,9 @@ export class ClassChatInputComponent implements OnInit {
     if (this.chatForm.valid) {
       const message: Message<any, any> = this.chatForm.value;
       this.messageService.sendMessage(message).subscribe(
-        value => {
-          console.log(value);
-          this.contentInput.setValue(null);
+        () => {
+          this.contentInput.setValue('');
+          this.chatInput.nativeElement.innerHTML = '';
         },
       );
     }
@@ -76,7 +71,7 @@ export class ClassChatInputComponent implements OnInit {
         // Limit 1 files upload each time
         return this.outputFileUploadError('1 files is the maximum upload each time.');
       }
-      this.fileFormReset();
+      this.isFileUploading = true;
 
       if (!IsFileSmallerThan(target.files.item(0), 3000)) {
         return this.outputFileUploadError('File must be smaller than 3MB each.');
@@ -89,7 +84,6 @@ export class ClassChatInputComponent implements OnInit {
 
       if (fileInfo.type === 'image' && fileInfo.extension !== 'svg') {
         getPreviewBase64(fileInfo.selfInstance).then(base64 => {
-          this.isReadingFile = false;
           if (base64) {
             this.outputFileUploadSuccess(fileInfo, base64);
           } else {
@@ -105,30 +99,20 @@ export class ClassChatInputComponent implements OnInit {
   outputFileUploadError(message: string) {
     // TODO Output error
     console.log(message);
-    this.filePreview = null;
+    this.isFileUploading = false;
     this.inputFile.nativeElement.value = null;
-    this.fileInput.setValue(null);
-    this.isReadingFile = false;
   }
 
   outputFileUploadSuccess(file: FileUploadInfo, base64?: string) {
-    this.filePreview = {
-      info: file,
-      base64: base64,
-    };
-    this.fileInput.setValue(file);
-    this.isReadingFile = false;
     this.inputFile.nativeElement.value = null;
-  }
+    const formData = new FormData();
+    formData.append('classroom', this.classroom._id);
+    formData.append('file', file.selfInstance, file.filename);
+    this.fileService.uploadFile(formData).subscribe(fileResponse => {
+      this.isFileUploading = false;
+      if (fileResponse) {
 
-  fileFormReset() {
-    this.filePreview = null;
-    this.fileInput.setValue(null);
-    this.isReadingFile = true;
-  }
-
-  deleteFileUpload() {
-    this.fileInput.setValue(null);
-    this.filePreview = null;
+      }
+    })
   }
 }

@@ -1,11 +1,11 @@
-<div *ngIf="fileInput.value" class="p1 flex ofx-auto file-list">
-  <app-file-icon (fileIsDelete)="deleteFileUpload()"
-                 [fileName]="filePreview?.info.filename"
-                 [fileSize]="filePreview?.info.size"
-                 [fileType]="filePreview?.info.type"
-                 [isAbleDelete]="true"
-                 [preview]="filePreview?.base64"></app-file-icon>
-</div>
+<!--<div *ngIf="fileInput.value" class="p1 flex ofx-auto file-list">-->
+<!--  <app-file-icon (fileIsDelete)="deleteFileUpload()"-->
+<!--                 [fileName]="filePreview?.info.filename"-->
+<!--                 [fileSize]="filePreview?.info.size"-->
+<!--                 [fileType]="filePreview?.info.type"-->
+<!--                 [isAbleDelete]="true"-->
+<!--                 [preview]="filePreview?.base64"></app-file-icon>-->
+<!--</div>-->
 
 <div class="wrapper-input">
   <div #chatInput
@@ -32,7 +32,9 @@
        matTooltip="Send file">
   <input #inputFile
          (change)="fileUpload($event)"
+         [disabled]="isFileUploading"
          hidden
          type="file">
-  <mat-icon>cloud_upload</mat-icon>
+  <mat-icon *ngIf="!isFileUploading">cloud_upload</mat-icon>
+  <mat-icon *ngIf="isFileUploading">hourglass_empty</mat-icon>
 </label>

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { ClassroomQuery, ClassroomService } from '../../../../shared/services/state/classroom';
 import { ActivatedRoute } from '@angular/router';
 import { Classroom } from '../../../../shared/interface/Classroom';
@@ -11,13 +11,16 @@ import { tap } from 'rxjs/operators';
   templateUrl: './chat-room.component.html',
   styleUrls: ['./chat-room.component.scss'],
 })
-export class ChatRoomComponent implements OnInit {
+export class ChatRoomComponent {
+
+  @ViewChild('chatPanel')
+  chatPanel: ElementRef<HTMLDivElement>;
 
   classroomId: string = this.classroomQuery.getActiveId() as string;
   classroom: Classroom;
 
-  messages = this.messageQuery.selectAll().pipe(tap(s => {
-    console.log(s)
+  messages = this.messageQuery.selectAll().pipe(tap(() => {
+    setTimeout(() => this.scrollToBottom(), 10);
   }));
   messagesLoading = this.messageQuery.selectLoading();
 
@@ -43,7 +46,14 @@ export class ChatRoomComponent implements OnInit {
     return this.userQuery.getValue();
   }
 
-  ngOnInit(): void {
+  /**
+   * trigger this to scroll the chat to bottom (after every chat)
+   */
+  private scrollToBottom() {
+    if (this.chatPanel) {
+      console.log(this.chatPanel.nativeElement.scrollTop);
+      this.chatPanel.nativeElement.scrollTop = this.chatPanel.nativeElement.scrollHeight;
+      console.log(this.chatPanel.nativeElement.scrollTop);
+    }
   }
-
 }

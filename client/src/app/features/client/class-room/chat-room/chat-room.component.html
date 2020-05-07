@@ -1,4 +1,5 @@
 <div *ngIf="classroom"
+     #chatPanel
      class="ofy-scroll pv1 flex flex-d-col discussion-section">
 
   <app-discussion-pill *ngFor="let message of (messages|async)"

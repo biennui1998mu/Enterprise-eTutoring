@@ -6,7 +6,7 @@ export interface ClassroomFile<classroomType = Classroom, userType = User> {
   name: string;
   url: string;
   classroom: classroomType;
-  byUser: userType;
+  byUser?: userType;
   type: string;
   createdAt?: Date;
   updatedAt?: Date;
