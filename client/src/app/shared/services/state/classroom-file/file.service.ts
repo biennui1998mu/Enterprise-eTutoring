@@ -4,7 +4,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { catchError, map } from 'rxjs/operators';
 import { host } from '../../../api';
 import { APIResponse } from '../../../interface/API-Response';
-import { of } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { TokenService } from '../../token.service';
 import { UserInterfaceService } from '../user-interface';
 import { ClassroomFile } from '../../../interface/Classroom-File';
@@ -27,7 +27,7 @@ export class FileService {
     this.http.post<APIResponse<ClassroomFile[]>>(
       `${this.api}/`,
       {
-        classId,
+        classroom: classId,
       },
       { headers: this.tokenService.authorizeHeader },
     ).pipe(
@@ -50,5 +50,30 @@ export class FileService {
       this.store.setLoading(false);
       this.store.set(data);
     });
+  }
+
+  uploadFile(formData: FormData): Observable<ClassroomFile> {
+    return this.http.post<APIResponse<ClassroomFile>>(
+      `${this.api}/create`,
+      formData,
+      { headers: this.tokenService.authorizeHeader },
+    ).pipe(
+      map(response => {
+        if (response.data) {
+          this.uiStateService.setNotify(response.message);
+          // add to state
+          this.store.add(response.data, { prepend: true });
+          return response.data;
+        } else {
+          this.uiStateService.setError(response.message);
+          return null as ClassroomFile;
+        }
+      }),
+      catchError((error: HttpErrorResponse) => {
+        console.error(error);
+        this.uiStateService.setError(error.message);
+        return of(null as ClassroomFile);
+      }),
+    );
   }
 }
