@@ -1,5 +1,5 @@
 # Enterprise-eTutoring
-Create a file .env by .env.example
+Create a file .env by .env.example in backend folder
 
 In backend termial - run: npm run dev
 
