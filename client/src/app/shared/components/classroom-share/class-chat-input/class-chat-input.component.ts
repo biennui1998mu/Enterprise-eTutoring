@@ -57,6 +57,7 @@ export class ClassChatInputComponent implements OnInit {
       this.messageService.sendMessage(message).subscribe(
         value => {
           console.log(value);
+          this.contentInput.setValue(null);
         },
       );
     }

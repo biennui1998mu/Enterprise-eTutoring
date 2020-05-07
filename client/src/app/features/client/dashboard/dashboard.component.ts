@@ -34,8 +34,8 @@ export class DashboardComponent implements OnInit {
       this.classroom = result.classroom.length;
       this.message = result.message.length;
       this.file = result.file.length;
-      this.messagePerClass = result.message.length / result.classroom.length;
-      this.filePerClass = result.file.length / result.classroom.length;
+      this.messagePerClass = (result.message.length / result.classroom.length).toFixed(2);
+      this.filePerClass = (result.file.length / result.classroom.length).toFixed(2);
     });
   }
 
@@ -45,8 +45,8 @@ export class DashboardComponent implements OnInit {
       this.classroom = result.classroom.length;
       this.message = result.message.length;
       this.file = result.file.length;
-      this.messagePerClass = result.message.length / result.classroom.length;
-      this.filePerClass = result.file.length / result.classroom.length;
+      this.messagePerClass = (result.message.length / result.classroom.length).toFixed(2);
+      this.filePerClass = (result.file.length / result.classroom.length).toFixed(2);
     });
   }
 }

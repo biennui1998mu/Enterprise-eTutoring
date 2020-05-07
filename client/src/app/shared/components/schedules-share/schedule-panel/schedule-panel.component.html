@@ -8,7 +8,7 @@
     </small>
     <ul class="mt05 schedule-date">
       <li *ngFor="let time of schedule.listDate"
-          [class.date-finished]="moment(time).isAfter(moment())"
+          [class.date-finished]="moment(time).isBefore(moment())"
           class="text-info">
         {{time | date:'dd/MM/yyyy'}}:
         <br>

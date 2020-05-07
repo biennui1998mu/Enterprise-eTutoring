@@ -42,8 +42,8 @@ export class DashboardComponent implements OnInit {
       this.totalStudent = result.totalStudent.length;
       this.message7days = result.message7days.length;
       this.classroom7days = result.classroom7days.length;
-      this.messagePerStudent = result.totalMessage.length / result.totalStudent.length;
-      this.messagePerTutor = result.totalMessage.length / result.totalTutor.length;
+      this.messagePerStudent = (result.totalMessage.length / result.totalStudent.length).toFixed(2);
+      this.messagePerTutor = (result.totalMessage.length / result.totalTutor.length).toFixed(2);
     });
   }
 }
