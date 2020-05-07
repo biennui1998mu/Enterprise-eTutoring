@@ -3,6 +3,6 @@ In backend folder, create a file .env by .env.example
 
 In frontend and backend folder, install npm
 
-In backend terminal - run: npm run dev
+To run the web application: 
 
-In frontend terminal - run: ng serve
+in terminal of folder run: npm run deploy
