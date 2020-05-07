@@ -1,19 +1,20 @@
-<div [matTooltip]="fileName"
-     [ngStyle]="getStyle()"
-     class="content br06 cursor-pointer of-hidden user-select-none grid place-item-center">
+<a [href]="urlDownload"
+   [matTooltip]="file.name"
+   class="content br06 cursor-pointer of-hidden user-select-none grid place-item-center"
+   target="_blank">
   <i *ngIf="!isImage"
-     [ngClass]="getIcon()"
+     [ngClass]="getIcon"
      class="text-muted fa fa-2x"></i>
 
-  <div class="file-info">
-    <div class="fw-bold overflow-hidden text-overflow-ellipsis whitespace-nowrap file-name">
-      {{fileName}}
+  <div class="file-info text-decoration-none">
+    <div class="fw-bold overflow-hidden text-overflow-ellipsis whitespace-nowrap text-info file-name">
+      {{file.name}}
     </div>
     <small class="text-muted file-size">
-      {{getSize()}}
+      {{getSize}}
     </small>
   </div>
-</div>
+</a>
 
 <div (click)="notifyDelete()"
      *ngIf="isAbleDelete"

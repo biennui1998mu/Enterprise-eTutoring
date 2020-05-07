@@ -10,7 +10,6 @@ export class ClassMetaComponent implements OnInit {
 
   @Input()
   classroom: Classroom;
-
   schedulePanelOpen = false;
 
   constructor() {

@@ -156,55 +156,35 @@ router.post('/create', checkAuth, upload.single('file'), async (req, res) => {
 /**
  * download file
  */
-router.post('/download', checkAuth, async (req, res) => {
-    const userId = req.userData._id;
-    const fileId = req.body.fileId;
-    const classroomId = req.body.classroomId;
+router.get('/download/:fileId/:classId',
+    async (req, res) => {
+        const fileId = req.params.fileId;
+        const classroomId = req.params.classId;
 
-    const checkUser = await User.findOne({
-        _id: userId
-    })
+        const checkClassroom = await Classroom.findOne({
+            _id: classroomId,
+        }).populate('student tutor').exec();
 
-    if (!checkUser) {
-        return res.json({
-            message: 'User dont exist!'
-        })
+        if (!checkClassroom) {
+            return res.status(404).json({
+                message: 'File dont exist!'
+            })
+        }
+
+        const checkFile = await File.findOne({
+            _id: fileId,
+            classroom: classroomId,
+        }).exec();
+
+        if (!checkFile) {
+            return res.status(404).json({
+                message: 'File dont exist!'
+            })
+        }
+
+        const pathFile = path.join(__dirname, '..' + checkFile.url);
+        return res.download(pathFile, checkFile.name);
     }
-
-    const checkClassroom = await Classroom.findOne({
-        _id: classroomId
-    })
-
-    if (!checkClassroom) {
-        return res.json({
-            message: 'File dont exist!'
-        })
-    }
-
-    const checkFile = await File.findOne({
-        _id: fileId
-    })
-
-    if (!checkFile) {
-        return res.json({
-            message: 'File dont exist!'
-        })
-    }
-
-    if (checkFile.classroom !== classroomId) {
-        return res.json({
-            message: 'File is not in classroom!'
-        })
-    }
-
-    if (checkUser._id !== checkClassroom.student && checkUser._id !== checkClassroom.tutor) {
-        return res.json({
-            message: 'User is not in classroom!'
-        })
-    }
-
-    const url = `${process.env.PROTOCOL}://${process.env.HOST_NAME}:${process.env.PORT}/`
-    return res.download(url + checkFile.url);
-})
+)
 
 module.exports = router;

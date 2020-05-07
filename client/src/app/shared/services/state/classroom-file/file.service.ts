@@ -76,4 +76,8 @@ export class FileService {
       }),
     );
   }
+
+  downloadFile(file: ClassroomFile) {
+    return `${this.api}/download/${file._id}/${file.classroom}`;
+  }
 }

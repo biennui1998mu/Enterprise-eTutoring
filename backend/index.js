@@ -48,15 +48,16 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 
 //routes handle request
-app.use('/classroom', classRoutes);
-app.use('/file', fileRoute);
-app.use('/meeting', meetingRoutes);
-app.use('/message', messageRoutes);
-app.use('/schedule', scheduleRoutes);
-app.use('/user', userRoutes);
-app.use('/statistic', statisticRoutes);
+app.use('/api/classroom', classRoutes);
+app.use('/api/file', fileRoute);
+app.use('/api/meeting', meetingRoutes);
+app.use('/api/message', messageRoutes);
+app.use('/api/schedule', scheduleRoutes);
+app.use('/api/user', userRoutes);
+app.use('/api/statistic', statisticRoutes);
 
 app.use((req, res, next) => {
+    console.log(req);
     const error = new Error('not found');
     error.status = 404;
     next(error);

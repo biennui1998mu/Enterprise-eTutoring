@@ -136,20 +136,7 @@ export function extractInfo(file: File, option?: {
         break;
     }
   }
-  const splitMime = file.type.split('/');
-  if (splitMime.length < 2) {
-    // MIME part is not correct format
-    // must be <type>/<identify>
-    return null;
-  }
-  const typeFile = mimeMapper[splitMime[0]];
-  if (!typeFile) {
-    return null;
-  }
-  const mimeInfo = typeFile[splitMime[1]];
-  if (!mimeInfo) {
-    return null;
-  }
+  const mimeInfo = extractMimeInfo(file.type);
 
   let { type, extension, pseudoExtension } = mimeInfo;
   if (option?.specifiedType) {
@@ -170,6 +157,25 @@ export function extractInfo(file: File, option?: {
     extension,
     selfInstance: file,
   };
+}
+
+export function extractMimeInfo(fileType: string):
+  { type: string, extension: string, pseudoExtension?: boolean } {
+  const splitMime = fileType.split('/');
+  if (splitMime.length < 2) {
+    // MIME part is not correct format
+    // must be <type>/<identify>
+    return null;
+  }
+  const typeFile = mimeMapper[splitMime[0]];
+  if (!typeFile) {
+    return null;
+  }
+  const mimeInfo = typeFile[splitMime[1]];
+  if (!mimeInfo) {
+    return null;
+  }
+  return mimeInfo;
 }
 
 /**

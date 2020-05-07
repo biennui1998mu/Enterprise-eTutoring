@@ -6,6 +6,7 @@ import { MessageService } from '../../../services/state/classroom-message';
 import { UserQuery } from '../../../services/state/user';
 import { Message } from '../../../interface/Message';
 import { FileService } from '../../../services/state/classroom-file';
+import { UserInterfaceService } from '../../../services/state/user-interface';
 
 @Component({
   selector: 'app-class-chat-input',
@@ -35,6 +36,7 @@ export class ClassChatInputComponent implements OnInit {
     private formBuilder: FormBuilder,
     private messageService: MessageService,
     private fileService: FileService,
+    private uiStateService: UserInterfaceService,
     private userQuery: UserQuery,
   ) {
   }
@@ -98,10 +100,9 @@ export class ClassChatInputComponent implements OnInit {
   }
 
   outputFileUploadError(message: string) {
-    // TODO Output error
-    console.log(message);
     this.isFileUploading = false;
     this.inputFile.nativeElement.value = null;
+    this.uiStateService.setError(message);
   }
 
   outputFileUploadSuccess(file: FileUploadInfo, base64?: string) {
@@ -111,9 +112,7 @@ export class ClassChatInputComponent implements OnInit {
     formData.append('file', file.selfInstance, file.filename);
     this.fileService.uploadFile(formData).subscribe(fileResponse => {
       this.isFileUploading = false;
-      if (fileResponse) {
-
-      }
-    })
+      console.log(fileResponse);
+    });
   }
 }

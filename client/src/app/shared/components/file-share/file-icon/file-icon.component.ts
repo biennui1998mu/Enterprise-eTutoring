@@ -1,33 +1,17 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { KBToMB } from '../../../tools';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { ByteToKB, extractMimeInfo, KBToMB } from '../../../tools';
+import { ClassroomFile } from '../../../interface/Classroom-File';
+import { FileService } from '../../../services/state/classroom-file';
 
 @Component({
   selector: 'app-file-icon',
   templateUrl: './file-icon.component.html',
   styleUrls: ['./file-icon.component.scss'],
 })
-export class FileIconComponent implements OnInit {
+export class FileIconComponent {
 
   @Input()
-  fileName: string;
-
-  @Input()
-  fileType: string;
-
-  @Input()
-  fileExtension: string;
-
-  @Input()
-  /**
-   * in KB
-   */
-  fileSize: number;
-
-  @Input()
-  preview: string;
-
-  @Input()
-  source: string;
+  file: ClassroomFile;
 
   @Input()
   isAbleDelete: boolean;
@@ -35,24 +19,18 @@ export class FileIconComponent implements OnInit {
   @Output()
   fileIsDelete: EventEmitter<boolean> = new EventEmitter();
 
-  constructor() {
+  constructor(
+    private fileService: FileService,
+  ) {
   }
 
   get isImage() {
-    return this.fileType === 'image' &&
-      this.fileExtension !== 'svg' &&
-      this.preview;
+    return extractMimeInfo(this.file.type).type === 'image';
   }
 
-  ngOnInit(): void {
-  }
-
-  notifyDelete() {
-    this.fileIsDelete.emit(true);
-  }
-
-  getIcon() {
-    switch (this.fileType) {
+  get getIcon() {
+    const mimeInfo = extractMimeInfo(this.file.type);
+    switch (mimeInfo.type) {
       case 'Microsoft Word':
         return 'fa-file-word';
       case 'Microsoft Excel':
@@ -68,23 +46,19 @@ export class FileIconComponent implements OnInit {
     }
   }
 
-  getStyle() {
-    if (this.isImage) {
-      return {
-        backgroundImage: `url('${this.preview}')`,
-      };
-    }
-
-    return {};
+  get urlDownload() {
+    return this.fileService.downloadFile(this.file);
   }
 
-  getSize() {
-    if (this.fileSize) {
-      if (this.fileSize > 1000) {
-        return `${KBToMB(this.fileSize).toFixed(2)}MB`;
-      }
-      return `${this.fileSize.toFixed(2)}KB`;
+  get getSize() {
+    const byteToKB = ByteToKB(this.file.size);
+    if (byteToKB > 1000) {
+      return `${KBToMB(byteToKB).toFixed(2)}MB`;
     }
-    return '0KB';
+    return `${byteToKB.toFixed(2)}KB`;
+  }
+
+  notifyDelete() {
+    this.fileIsDelete.emit(true);
   }
 }

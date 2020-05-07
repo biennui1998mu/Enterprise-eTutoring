@@ -1,19 +1,20 @@
-import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {TokenService} from './token.service';
-import {map} from 'rxjs/operators';
-import {APIResponse} from '../interface/API-Response';
-import {Classroom} from '../interface/Classroom';
-import {ClassroomFile} from '../interface/Classroom-File';
-import {Message} from '../interface/Message';
-import {User} from '../interface/User';
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { TokenService } from './token.service';
+import { map } from 'rxjs/operators';
+import { APIResponse } from '../interface/API-Response';
+import { Classroom } from '../interface/Classroom';
+import { ClassroomFile } from '../interface/Classroom-File';
+import { Message } from '../interface/Message';
+import { User } from '../interface/User';
+import { host } from '../api';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class StatisticService {
 
-  private url = 'http://localhost:3000';
+  readonly api: string = `${host}/statistic`;
 
   constructor(
     private http: HttpClient,
@@ -32,9 +33,9 @@ export class StatisticService {
       message7days: Message[],
       classroom7days: Classroom[]
     }>>(
-      `${this.url}/statistic/staff`,
+      `${this.api}/staff`,
       {},
-      {headers: this.tokenService.authorizeHeader}
+      { headers: this.tokenService.authorizeHeader },
     ).pipe(
       map(result => {
         if (result) {
@@ -48,10 +49,10 @@ export class StatisticService {
             totalTutor: [],
             totalStudent: [],
             message7days: [],
-            classroom7days: []
+            classroom7days: [],
           };
         }
-      })
+      }),
     );
   }
 
@@ -61,9 +62,9 @@ export class StatisticService {
       message: Message[],
       file: ClassroomFile[]
     }>>(
-      `${this.url}/statistic/tutor`,
+      `${this.api}/tutor`,
       {},
-      {headers: this.tokenService.authorizeHeader}
+      { headers: this.tokenService.authorizeHeader },
     ).pipe(
       map(result => {
         if (result) {
@@ -72,10 +73,10 @@ export class StatisticService {
           return {
             classroom: [],
             file: [],
-            message: []
+            message: [],
           };
         }
-      })
+      }),
     );
   }
 
@@ -85,9 +86,9 @@ export class StatisticService {
       message: Message[],
       file: ClassroomFile[]
     }>>(
-      `${this.url}/statistic/student`,
+      `${this.api}/student`,
       {},
-      {headers: this.tokenService.authorizeHeader}
+      { headers: this.tokenService.authorizeHeader },
     ).pipe(
       map(result => {
         if (result) {
@@ -96,10 +97,10 @@ export class StatisticService {
           return {
             classroom: [],
             file: [],
-            message: []
+            message: [],
           };
         }
-      })
+      }),
     );
   }
 }

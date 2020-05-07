@@ -5,19 +5,6 @@
 </label>
 
 <div class="ph1 grid file-list">
-  <app-file-icon></app-file-icon>
-  <app-file-icon></app-file-icon>
-  <app-file-icon></app-file-icon>
-  <app-file-icon></app-file-icon>
-  <app-file-icon></app-file-icon>
-  <app-file-icon></app-file-icon>
-  <app-file-icon></app-file-icon>
-  <app-file-icon></app-file-icon>
-  <app-file-icon></app-file-icon>
-  <app-file-icon></app-file-icon>
-  <app-file-icon></app-file-icon>
-  <app-file-icon></app-file-icon>
-  <app-file-icon></app-file-icon>
-  <app-file-icon></app-file-icon>
-  <app-file-icon></app-file-icon>
+  <app-file-icon *ngFor="let file of displayFiles"
+                 [file]="file"></app-file-icon>
 </div>
