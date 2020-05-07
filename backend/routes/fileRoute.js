@@ -178,12 +178,17 @@ router.get('/download/:fileId/:classId',
 
         if (!checkFile) {
             return res.status(404).json({
-                message: 'File dont exist!'
+                message: 'File does exist!'
             })
         }
 
         const pathFile = path.join(__dirname, '..' + checkFile.url);
-        return res.download(pathFile, checkFile.name);
+        if (fs.existsSync(pathFile)) {
+            return res.download(pathFile, checkFile.name);
+        }
+        return res.json({
+            message: 'File does not exist or it might have been deleted'
+        });
     }
 )
 

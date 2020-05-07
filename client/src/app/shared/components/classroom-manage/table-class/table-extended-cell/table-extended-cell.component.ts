@@ -4,6 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ResourceMetaComponent } from '../../../resource-share/resource-meta/resource-meta.component';
 import { ScheduleViewerComponent } from '../../../schedules-share/schedule-viewer/schedule-viewer.component';
 import { DialogAction, PopupClassInfo, TableInfoComponent } from '../../table-info/table-info.component';
+import { USER_TYPE } from '../../../../interface/User';
 
 @Component({
   selector: 'app-table-extended-cell',

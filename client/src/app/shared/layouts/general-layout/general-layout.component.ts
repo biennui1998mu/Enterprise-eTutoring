@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { ClassroomQuery, ClassroomService } from '../../services/state/classroom';
 import { Classroom, CLASSROOM_STATUS } from '../../interface/Classroom';
 import { signatureName } from '../../tools';
-import { UserQuery } from '../../services/state/user';
+import { UserQuery, UserService } from '../../services/state/user';
 import { USER_TYPE } from '../../interface/User';
 
 @Component({
@@ -23,6 +23,7 @@ export class GeneralLayoutComponent {
     private classroomService: ClassroomService,
     private classroomQuery: ClassroomQuery,
     public userQuery: UserQuery,
+    private userService: UserService,
   ) {
     // update the list class
     this.classroomService.get().subscribe();
@@ -34,5 +35,9 @@ export class GeneralLayoutComponent {
 
   signatureClassroom(classroom: Classroom) {
     return signatureName(classroom.title);
+  }
+
+  logout() {
+    this.userService.logout();
   }
 }

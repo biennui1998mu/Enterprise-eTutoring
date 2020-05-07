@@ -13,14 +13,13 @@
         <mat-icon mat-list-icon>home</mat-icon>
         <div mat-line>Dashboard</div>
       </a>
-      <a [routerLinkActiveOptions]="{exact: true}"
-         class="cursor-pointer side-link"
-         mat-list-item
-         routerLink="/staff/settings"
-         routerLinkActive="active">
-        <mat-icon mat-list-icon>settings</mat-icon>
-        <div mat-line>Settings</div>
-      </a>
+      <mat-list-item (click)="logout()"
+                     class="cursor-pointer side-link">
+        <mat-icon fontIcon="fa-sign-out-alt"
+                  fontSet="fas"
+                  mat-list-icon></mat-icon>
+        <div mat-line>Logout</div>
+      </mat-list-item>
 
       <mat-divider class="mv1"></mat-divider>
 

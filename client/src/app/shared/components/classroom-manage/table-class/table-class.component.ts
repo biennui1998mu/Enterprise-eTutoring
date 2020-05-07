@@ -5,6 +5,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Classroom } from '../../../interface/Classroom';
 import { DialogAction } from '../table-info/table-info.component';
+import { ClassroomService } from '../../../services/state/classroom';
 
 @Component({
   selector: 'app-table-class',
@@ -37,7 +38,9 @@ export class TableClassComponent implements OnInit {
   );
   expandedClassInfo: Classroom = null;
 
-  constructor() {
+  constructor(
+    private classroomService: ClassroomService,
+  ) {
   }
 
   @Input()
@@ -65,8 +68,22 @@ export class TableClassComponent implements OnInit {
     this.expandedClassInfo = null;
   }
 
-  classroomUpdateEvent($event: { class: Classroom<string, string, string>; action: DialogAction }) {
+  classroomUpdateEvent($event: {
+    class: Classroom<string, string, string>;
+    action: DialogAction
+  }) {
     this.updateClassroomDetail.emit($event);
+  }
+
+  toggleClassRow(classroom: Classroom) {
+    if (classroom === this.expandedClassInfo) {
+      // already expanded, then collapse
+      this.classroomService.removeActiveClass(this.expandedClassInfo);
+      this.expandedClassInfo = null;
+      return;
+    }
+    this.expandedClassInfo = classroom;
+    this.classroomService.setActiveClass(this.expandedClassInfo);
   }
 }
 

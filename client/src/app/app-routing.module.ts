@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { DashboardComponent } from './dashboard/dashboard.component';
 import { ClientGuard, StaffGuard } from './shared/guards';
 import { GuestGuard } from './shared/guards/guest.guard';
 
@@ -25,7 +24,6 @@ const routes: Routes = [
     path: 'admin',
     loadChildren: () => import('./features/admin/admin.module').then(m => m.AdminModule),
   },
-  { path: 'dashboard', component: DashboardComponent },
   { path: '**', redirectTo: '/login' },
 ];
 

@@ -1,6 +1,5 @@
-import { Component, Inject, Input, Optional } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { ClassroomFile } from '../../../interface/Classroom-File';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { USER_TYPE } from '../../../interface/User';
 import { Classroom } from '../../../interface/Classroom';
 import { FileQuery, FileService } from '../../../services/state/classroom-file';
@@ -13,13 +12,11 @@ import { filter, map, tap } from 'rxjs/operators';
   styleUrls: ['./resource-meta.component.scss'],
 })
 export class ResourceMetaComponent {
-  @Input()
   classroom: Classroom = this.classroomQuery.getActive();
 
   displayFiles: ClassroomFile[] = [];
 
   constructor(
-    @Optional() @Inject(MAT_DIALOG_DATA) public data: PopupFileInfo,
     private fileService: FileService,
     private fileQuery: FileQuery,
     private classroomQuery: ClassroomQuery,
@@ -52,11 +49,6 @@ export class ResourceMetaComponent {
     } else {
       this.displayFiles = [];
     }
-  }
-
-  get authorized() {
-    return this.data.level === USER_TYPE.admin ||
-      this.data.level === USER_TYPE.staff;
   }
 
   getFileExtension(file: ClassroomFile) {
