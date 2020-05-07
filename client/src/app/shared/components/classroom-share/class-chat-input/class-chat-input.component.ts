@@ -5,6 +5,7 @@ import { Classroom } from '../../../interface/Classroom';
 import { MessageService } from '../../../services/state/classroom-message';
 import { UserQuery } from '../../../services/state/user';
 import { Message } from '../../../interface/Message';
+import {FileService} from "../../../services/state/classroom-file";
 
 @Component({
   selector: 'app-class-chat-input',
